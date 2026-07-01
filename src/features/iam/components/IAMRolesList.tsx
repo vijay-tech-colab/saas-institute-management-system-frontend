@@ -3,8 +3,10 @@
 import React, { useState } from 'react';
 import { 
   Plus, Search, Filter, SlidersHorizontal, Download, 
-  Trash2, Copy, ShieldCheck, MoreVertical, Eye, Edit2
+  Trash2, Copy, ShieldCheck, MoreVertical, Eye, Edit2, DownloadCloud, FileText, Loader2
 } from 'lucide-react';
+import { AnimatePresence } from "framer-motion";
+import { ExportProgressModal } from '@/components/ui/export-progress';
 import { PageHeader, SearchInput, FilterChips } from '@/features/subscriptions/components/shared/UIComponents';
 import { DataTablePagination } from "@/components/ui/pagination";
 import { ActionTooltip } from "@/components/ui/tooltip";
@@ -31,6 +33,9 @@ export function IAMRolesList() {
   const [editingRole, setEditingRole] = useState<any>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [rolesToDelete, setRolesToDelete] = useState<string[]>([]);
+  
+  // Export states
+  const [exportModalType, setExportModalType] = useState<'export' | 'report' | null>(null);
 
   const filteredRoles = rolesData.filter(role => {
     const matchesSearch = role.displayName.toLowerCase().includes(search.toLowerCase()) || 
@@ -95,6 +100,14 @@ export function IAMRolesList() {
     setIsDeleteModalOpen(true);
   };
 
+  const handleExport = () => {
+    setExportModalType('export');
+  };
+
+  const handleReport = () => {
+    setExportModalType('report');
+  };
+
   return (
     <div className="flex-1 w-full flex flex-col min-h-0">
       <PageHeader
@@ -117,26 +130,43 @@ export function IAMRolesList() {
           </div>
           
           <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-            {selectedRoles.size > 0 ? (
-              <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold text-slate-600 bg-slate-100 px-2 py-1 rounded-md">
-                {selectedRoles.size} selected
-              </span>
-              <button 
-                onClick={() => openDeleteModal(Array.from(selectedRoles))}
-                className="p-1 hover:bg-indigo-100 rounded text-indigo-600" title="Delete Selected"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-              <button className="p-1 hover:bg-indigo-100 rounded text-indigo-600" title="Export Selected">
-                <Download className="w-4 h-4" />
-              </button>
-            </div>
-            ) : null}
-            
             <FilterChips options={filters} selected={filter} onChange={setFilter} />
           </div>
         </div>
+
+        {/* Bulk Actions Bar */}
+        <AnimatePresence>
+          {selectedRoles.size > 0 && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="bg-indigo-50 border-b border-indigo-100 px-4 py-3 flex items-center justify-between overflow-hidden"
+            >
+              <span className="text-sm font-bold text-indigo-900">{selectedRoles.size} roles selected</span>
+              <div className="flex items-center gap-2">
+                <button 
+                  onClick={handleExport}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 text-slate-700 text-xs font-bold rounded-lg hover:bg-slate-50 transition-colors shadow-sm"
+                >
+                  <DownloadCloud className="w-3.5 h-3.5 text-slate-500" />
+                  Export (CSV)
+                </button>
+                <button 
+                  onClick={handleReport}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-indigo-200 text-indigo-700 text-xs font-bold rounded-lg hover:bg-indigo-50 transition-colors shadow-sm"
+                >
+                  <FileText className="w-3.5 h-3.5 text-indigo-500" />
+                  Report (PDF)
+                </button>
+                <div className="w-px h-4 bg-indigo-200 mx-1"></div>
+                <button onClick={() => openDeleteModal(Array.from(selectedRoles))} className="px-3 py-1.5 bg-white border border-rose-200 text-rose-700 text-xs font-bold rounded-lg hover:bg-rose-50 transition-colors shadow-sm">
+                  Delete
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Table Data */}
         <div className="flex-1 overflow-auto">
@@ -255,6 +285,13 @@ export function IAMRolesList() {
         onClose={() => setIsDeleteModalOpen(false)}
         onConfirm={handleDeleteConfirm}
         count={rolesToDelete.length}
+      />
+
+      <ExportProgressModal 
+        isOpen={!!exportModalType}
+        onClose={() => setExportModalType(null)}
+        type={exportModalType || 'export'}
+        totalRows={selectedRoles.size}
       />
     </div>
   );

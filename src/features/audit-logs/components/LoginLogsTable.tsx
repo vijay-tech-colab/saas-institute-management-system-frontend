@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { SearchInput, FilterChips, PageHeader } from '@/features/subscriptions/components/shared/UIComponents';
 import { StatusBadge } from '@/features/subscriptions/components/shared/StatusBadge';
 import { format } from 'date-fns';
-import { Download, Filter, Eye, Monitor, MapPin } from 'lucide-react';
+import { Download, Filter, Eye, Monitor, MapPin, DownloadCloud, FileText, Loader2 } from 'lucide-react';
 import { DataTablePagination } from "@/components/ui/pagination";
 import { TableSkeleton } from "@/components/ui/skeleton";
 import { ActionTooltip } from "@/components/ui/tooltip";
@@ -12,7 +12,8 @@ import { mockLoginLogs } from '../data/mock-data';
 import { LoginLog } from '../types';
 
 import { Checkbox } from "@/components/ui/checkbox";
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ExportProgressModal } from '@/components/ui/export-progress';
 import { LoginDetailsModal } from './LoginDetailsModal';
 
 export function LoginLogsTable() {
@@ -21,6 +22,9 @@ export function LoginLogsTable() {
   const [selectedLog, setSelectedLog] = useState<LoginLog | null>(null);
   const [selectedLogs, setSelectedLogs] = useState<Set<string>>(new Set());
   const [isTableLoading, setIsTableLoading] = useState(true);
+
+  // Export states
+  const [exportModalType, setExportModalType] = useState<'export' | 'report' | null>(null);
 
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
@@ -54,6 +58,14 @@ export function LoginLogsTable() {
     const timer = setTimeout(() => setIsTableLoading(false), 600);
     return () => clearTimeout(timer);
   }, [pageIndex, pageSize, search, statusFilter]);
+
+  const handleExport = () => {
+    setExportModalType('export');
+  };
+
+  const handleReport = () => {
+    setExportModalType('report');
+  };
 
   return (
     <div className="flex-1 w-full flex flex-col min-h-0">
@@ -93,6 +105,36 @@ export function LoginLogsTable() {
             onChange={setStatusFilter}
           />
         </div>
+
+        {/* Bulk Actions Bar */}
+        <AnimatePresence>
+          {selectedLogs.size > 0 && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="bg-indigo-50 border-b border-indigo-100 px-4 py-3 flex items-center justify-between overflow-hidden"
+            >
+              <span className="text-sm font-bold text-indigo-900">{selectedLogs.size} logs selected</span>
+              <div className="flex items-center gap-2">
+                <button 
+                  onClick={handleExport}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 text-slate-700 text-xs font-bold rounded-lg hover:bg-slate-50 transition-colors shadow-sm"
+                >
+                  <DownloadCloud className="w-3.5 h-3.5 text-slate-500" />
+                  Export (CSV)
+                </button>
+                <button 
+                  onClick={handleReport}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-indigo-200 text-indigo-700 text-xs font-bold rounded-lg hover:bg-indigo-50 transition-colors shadow-sm"
+                >
+                  <FileText className="w-3.5 h-3.5 text-indigo-500" />
+                  Report (PDF)
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Table */}
         <div className="flex-1 overflow-auto">
@@ -210,6 +252,13 @@ export function LoginLogsTable() {
         isOpen={!!selectedLog}
         onClose={() => setSelectedLog(null)}
         log={selectedLog}
+      />
+
+      <ExportProgressModal 
+        isOpen={!!exportModalType}
+        onClose={() => setExportModalType(null)}
+        type={exportModalType || 'export'}
+        totalRows={selectedLogs.size}
       />
     </div>
   );

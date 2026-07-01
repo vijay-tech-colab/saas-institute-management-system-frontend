@@ -13,6 +13,7 @@ import { DataTablePagination } from "@/components/ui/pagination";
 import { TableSkeleton } from "@/components/ui/skeleton";
 import { ActionTooltip } from "@/components/ui/tooltip";
 import { Checkbox } from "@/components/ui/checkbox";
+import { EmptyState } from '@/components/ui/empty-state';
 import { motion } from "framer-motion";
 import { PageHeader, SearchInput, FilterChips, Modal, Toggle } from './shared/UIComponents';
 import { StatusBadge } from './shared/StatusBadge';
@@ -353,17 +354,22 @@ export function CouponManagement() {
             <tbody>
               {isTableLoading ? (
                 <TableSkeleton columns={9} rows={pageSize} />
-              ) : (
+              ) : filtered.length > 0 ? (
                 paginatedData.map((c, i) => <CouponRow key={c.id} coupon={c} index={i} selected={selectedCoupons.has(c.id)} onToggle={() => toggleSelect(c.id)} />)
+              ) : (
+                <tr>
+                  <td colSpan={10} className="p-8">
+                    <EmptyState 
+                      icon={Tag}
+                      title="No coupons found"
+                      description="No no coupons found found."
+                    />
+                  </td>
+                </tr>
               )}
             </tbody>
           </table>
-          {!isTableLoading && filtered.length === 0 && (
-            <div className="text-center py-16 text-slate-400">
-              <Tag className="w-10 h-10 mx-auto mb-3 opacity-30" />
-              <p className="font-semibold text-slate-500">No coupons found</p>
-            </div>
-          )}
+          
         </div>
         <div className="border-t border-slate-100 bg-white shrink-0 mt-auto">
           <DataTablePagination

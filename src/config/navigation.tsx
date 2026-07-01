@@ -96,13 +96,14 @@ const superAdminNav: NavGroupConfig[] = [
     title: 'Analytics & Support',
     items: [
       { 
-        label: 'Analytics', 
-        href: '/dashboard/analytics', 
+        label: 'Reports & Analytics', 
+        href: '/dashboard/reports', 
         icon: <FileBarChart />,
         subItems: [
           { label: 'Overview', href: '/dashboard/analytics' },
           { label: 'Revenue & Growth', href: '/dashboard/analytics/revenue' },
           { label: 'Institute Statistics', href: '/dashboard/analytics/institutes' },
+          { label: 'Report Management', href: '/dashboard/reports' },
         ]
       },
       { 

@@ -15,7 +15,9 @@ import { DataTablePagination } from '@/components/ui/pagination';
 import { TableSkeleton } from '@/components/ui/skeleton';
 import { ActionTooltip } from '@/components/ui/tooltip';
 import { Checkbox } from "@/components/ui/checkbox";
-
+import { EmptyState } from '@/components/ui/empty-state';
+import { FileText, DownloadCloud, Loader2 } from 'lucide-react';
+import { ExportProgressModal } from '@/components/ui/export-progress';
 export function TenantList() {
   const router = useRouter();
   const [search, setSearch] = useState('');
@@ -26,6 +28,9 @@ export function TenantList() {
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [isTableLoading, setIsTableLoading] = useState(true);
+  
+  // Export states
+  const [exportModalType, setExportModalType] = useState<'export' | 'report' | null>(null);
 
   React.useEffect(() => {
     setIsTableLoading(true);
@@ -87,6 +92,14 @@ export function TenantList() {
   const suspendedTenants = mockTenants.filter(t => t.status === 'suspended').length;
   const trialTenants = mockTenants.filter(t => t.status === 'trial').length;
 
+  const handleExport = () => {
+    setExportModalType('export');
+  };
+
+  const handleReport = () => {
+    setExportModalType('report');
+  };
+
   return (
     <div className="flex-1 w-full flex flex-col min-h-0">
       <PageHeader
@@ -132,22 +145,36 @@ export function TenantList() {
           />
         </div>
 
-        {/* Bulk Actions Bar */}
         <AnimatePresence>
           {selectedTenants.size > 0 && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="bg-blue-50 border-b border-blue-100 px-4 py-3 flex items-center justify-between overflow-hidden"
+              className="bg-indigo-50 border-b border-indigo-100 px-4 py-3 flex items-center justify-between overflow-hidden"
             >
-              <span className="text-sm font-semibold text-blue-900">{selectedTenants.size} institutes selected</span>
+              <span className="text-sm font-bold text-indigo-900">{selectedTenants.size} institutes selected</span>
               <div className="flex items-center gap-2">
-                <button className="px-3 py-1.5 bg-white border border-blue-200 text-blue-700 text-xs font-bold rounded-lg hover:bg-blue-50 transition-colors shadow-sm">
-                  Send Message
+                <button 
+                  onClick={handleExport}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 text-slate-700 text-xs font-bold rounded-lg hover:bg-slate-50 transition-colors shadow-sm"
+                >
+                  <DownloadCloud className="w-3.5 h-3.5 text-slate-500" />
+                  Export (CSV)
+                </button>
+                <button 
+                  onClick={handleReport}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-indigo-200 text-indigo-700 text-xs font-bold rounded-lg hover:bg-indigo-50 transition-colors shadow-sm"
+                >
+                  <FileText className="w-3.5 h-3.5 text-indigo-500" />
+                  Report (PDF)
+                </button>
+                <div className="w-px h-4 bg-indigo-200 mx-1"></div>
+                <button className="px-3 py-1.5 bg-white border border-indigo-200 text-indigo-700 text-xs font-bold rounded-lg hover:bg-indigo-50 transition-colors shadow-sm">
+                  Message
                 </button>
                 <button className="px-3 py-1.5 bg-white border border-rose-200 text-rose-700 text-xs font-bold rounded-lg hover:bg-rose-50 transition-colors shadow-sm">
-                  Suspend Selected
+                  Suspend
                 </button>
               </div>
             </motion.div>
@@ -190,7 +217,7 @@ export function TenantList() {
             <tbody>
               {isTableLoading ? (
                 <TableSkeleton columns={7} rows={pageSize} />
-              ) : (
+              ) : paginatedData.length > 0 ? (
                 paginatedData.map((tenant, i) => (
                   <motion.tr
                     key={tenant.id}
@@ -255,16 +282,21 @@ export function TenantList() {
                     </td>
                   </motion.tr>
                 ))
+              ) : (
+                <tr>
+                  <td colSpan={7} className="p-8">
+                    <EmptyState 
+                      icon={Store}
+                      title="No institutes found"
+                      description="Try adjusting your filters or search query to find what you're looking for."
+                      actionLabel="Reset Filters"
+                      onAction={() => { setSearch(''); setFilter('all'); }}
+                    />
+                  </td>
+                </tr>
               )}
             </tbody>
           </table>
-          {!isTableLoading && sortedTenants.length === 0 && (
-            <div className="text-center py-16 text-slate-400">
-              <Store className="w-10 h-10 mx-auto mb-3 opacity-30" />
-              <p className="font-semibold text-slate-500">No institutes found</p>
-              <p className="text-sm mt-1">Try adjusting your filters or search query.</p>
-            </div>
-          )}
         </div>
 
         {/* Pagination */}
@@ -278,6 +310,13 @@ export function TenantList() {
           />
         </div>
       </div>
+
+      <ExportProgressModal 
+        isOpen={!!exportModalType}
+        onClose={() => setExportModalType(null)}
+        type={exportModalType || 'export'}
+        totalRows={selectedTenants.size}
+      />
     </div>
   );
 }

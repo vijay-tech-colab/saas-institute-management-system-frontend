@@ -1,8 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Crown, Users, HardDrive, Store, Check, Plus, CreditCard, IndianRupee, Settings2, Trash2, Edit2, PlayCircle, PauseCircle, Copy, CheckCircle2, ShieldCheck, Filter, Search, XCircle, Zap, GitBranch, MoreHorizontal, AlertCircle, Loader2, Package, Activity, Eye, Database } from 'lucide-react';
+import { Crown, Users, HardDrive, Store, Check, Plus, CreditCard, IndianRupee, Settings2, Trash2, Edit2, PlayCircle, PauseCircle, Copy, CheckCircle2, ShieldCheck, Filter, Search, XCircle, Zap, GitBranch, MoreHorizontal, AlertCircle, Loader2, Package, Activity, Eye, Database, DownloadCloud, FileText } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { AnimatePresence } from 'framer-motion';
+import { ExportProgressModal } from '@/components/ui/export-progress';
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { EmptyState } from '@/components/ui/empty-state';
 
 import { PageHeader, SearchInput, FilterChips, Modal } from './shared/UIComponents';
 import { StatusBadge } from './shared/StatusBadge';
@@ -277,6 +280,9 @@ export function PlansManagement() {
   const [pageSize, setPageSize] = useState(10);
   const [isTableLoading, setIsTableLoading] = useState(true);
 
+  // Export states
+  const [exportModalType, setExportModalType] = useState<'export' | 'report' | null>(null);
+
   React.useEffect(() => {
     setIsTableLoading(true);
     const timer = setTimeout(() => setIsTableLoading(false), 600);
@@ -312,6 +318,14 @@ export function PlansManagement() {
   const activePlans = mockPlans.filter(p => p.status !== 'inactive').length;
   const totalSubscribers = mockPlans.reduce((sum, p) => sum + p.subscribersCount, 0);
   const avgMonthlyPrice = Math.round(mockPlans.reduce((sum, p) => sum + p.monthlyPrice, 0) / (totalPlans || 1));
+
+  const handleExport = () => {
+    setExportModalType('export');
+  };
+
+  const handleReport = () => {
+    setExportModalType('report');
+  };
 
   return (
     <div className="flex-1 w-full flex flex-col min-h-0">
@@ -366,6 +380,40 @@ export function PlansManagement() {
           </div>
         </div>
 
+        {/* Bulk Actions Bar */}
+        <AnimatePresence>
+          {selectedPlans.length > 0 && viewMode === 'table' && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="bg-indigo-50 border-b border-indigo-100 px-4 py-3 flex items-center justify-between overflow-hidden"
+            >
+              <span className="text-sm font-bold text-indigo-900">{selectedPlans.length} plans selected</span>
+              <div className="flex items-center gap-2">
+                <button 
+                  onClick={handleExport}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 text-slate-700 text-xs font-bold rounded-lg hover:bg-slate-50 transition-colors shadow-sm"
+                >
+                  <DownloadCloud className="w-3.5 h-3.5 text-slate-500" />
+                  Export (CSV)
+                </button>
+                <button 
+                  onClick={handleReport}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-indigo-200 text-indigo-700 text-xs font-bold rounded-lg hover:bg-indigo-50 transition-colors shadow-sm"
+                >
+                  <FileText className="w-3.5 h-3.5 text-indigo-500" />
+                  Report (PDF)
+                </button>
+                <div className="w-px h-4 bg-indigo-200 mx-1"></div>
+                <button className="px-3 py-1.5 bg-white border border-rose-200 text-rose-700 text-xs font-bold rounded-lg hover:bg-rose-50 transition-colors shadow-sm">
+                  Delete
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         <div className="flex-1 overflow-auto bg-slate-50/30">
           {/* Plans Grid */}
           {viewMode === 'grid' && (
@@ -387,10 +435,14 @@ export function PlansManagement() {
                     />
                   ))}
                   {filtered.length === 0 && (
-                    <div className="col-span-1 sm:col-span-2 xl:col-span-3 text-center py-16 text-slate-400">
-                      <Search className="w-10 h-10 mx-auto mb-3 opacity-30" />
-                      <p className="font-semibold text-slate-500">No plans found</p>
-                      <p className="text-sm mt-1">Try adjusting your search or filters</p>
+                    <div className="col-span-1 sm:col-span-2 xl:col-span-3">
+                      <EmptyState 
+                        icon={Search}
+                        title="No plans found"
+                        description="Try adjusting your search or filters to find what you're looking for."
+                        actionLabel="Reset Filters"
+                        onAction={() => { setSearch(''); setFilter('all'); }}
+                      />
                     </div>
                   )}
                 </>
@@ -420,7 +472,7 @@ export function PlansManagement() {
                 <tbody>
                   {isTableLoading ? (
                     <TableSkeleton columns={12} rows={pageSize} />
-                  ) : (
+                  ) : paginatedData.length > 0 ? (
                     paginatedData.map((plan, i) => (
                       <motion.tr
                         key={plan.id}
@@ -464,6 +516,18 @@ export function PlansManagement() {
                         </td>
                       </motion.tr>
                     ))
+                  ) : (
+                    <tr>
+                      <td colSpan={12} className="p-8">
+                        <EmptyState 
+                          icon={Package}
+                          title="No plans found"
+                          description="No pricing plans match your criteria."
+                          actionLabel="Create Plan"
+                          onAction={() => setShowCreateModal(true)}
+                        />
+                      </td>
+                    </tr>
                   )}
                 </tbody>
               </table>
@@ -487,6 +551,13 @@ export function PlansManagement() {
       <Modal isOpen={showCreateModal} onClose={() => setShowCreateModal(false)} title="Create New Plan" size="lg">
         <CreatePlanForm onClose={() => setShowCreateModal(false)} />
       </Modal>
+
+      <ExportProgressModal 
+        isOpen={!!exportModalType}
+        onClose={() => setExportModalType(null)}
+        type={exportModalType || 'export'}
+        totalRows={selectedPlans.length}
+      />
     </div>
   );
 }

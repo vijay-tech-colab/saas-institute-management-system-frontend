@@ -6,7 +6,8 @@ import { SystemHealthWidget } from "./super-admin/SystemHealthWidget"
 import { SecurityCenterWidget } from "./super-admin/SecurityCenterWidget"
 import { AIInsightsPanel } from "./super-admin/AIInsightsPanel"
 import { RecentActivitySidebar } from "./super-admin/RecentActivitySidebar"
-import { Grid, Calendar as CalendarIcon, Plus, FileText, Mail, Database, ChevronDown, X, Info, AlertTriangle, ShieldAlert, Sparkles } from "lucide-react"
+import { Grid, Calendar as CalendarIcon, Plus, FileText, Mail, Database, ChevronDown, X, Info, AlertTriangle, ShieldAlert, Sparkles, MonitorPlay } from "lucide-react"
+import { DashboardEmptyState, ErrorState } from "@/components/ui/dashboard-states"
 
 type BannerType = { type: 'info' | 'warning' | 'error' | 'success', text: string };
 
@@ -22,6 +23,10 @@ export function SuperAdminDashboard() {
   const [isBannerVisible, setIsBannerVisible] = useState(true);
   const [bannerMessage, setBannerMessage] = useState<BannerType | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  
+  // Dashboard State Toggles for Demonstration
+  const [isNewAccount, setIsNewAccount] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     setBannerMessage(BANNER_MESSAGES[Math.floor(Math.random() * BANNER_MESSAGES.length)]);
@@ -145,33 +150,73 @@ export function SuperAdminDashboard() {
                         <Database className="w-4 h-4 text-slate-400 group-hover:text-rose-500" />
                         Backup Database
                       </button>
+                      
+                      <div className="h-px bg-slate-100 my-1 mx-3"></div>
+                      <div className="px-3 py-2">
+                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Simulate States</p>
+                        <div className="flex flex-col gap-1">
+                          <button 
+                            onClick={() => { setIsNewAccount(!isNewAccount); setHasError(false); setIsActionsOpen(false); }}
+                            className={`w-full flex items-center justify-between px-3 py-2 text-xs font-semibold rounded-lg transition-colors ${isNewAccount ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-50'}`}
+                          >
+                            <span className="flex items-center gap-2"><MonitorPlay className="w-3.5 h-3.5" /> Empty State</span>
+                            {isNewAccount && <div className="w-2 h-2 rounded-full bg-blue-500"></div>}
+                          </button>
+                          <button 
+                            onClick={() => { setHasError(!hasError); setIsNewAccount(false); setIsActionsOpen(false); }}
+                            className={`w-full flex items-center justify-between px-3 py-2 text-xs font-semibold rounded-lg transition-colors ${hasError ? 'bg-rose-50 text-rose-700' : 'text-slate-600 hover:bg-slate-50'}`}
+                          >
+                            <span className="flex items-center gap-2"><AlertTriangle className="w-3.5 h-3.5" /> Error State</span>
+                            {hasError && <div className="w-2 h-2 rounded-full bg-rose-500"></div>}
+                          </button>
+                        </div>
+                      </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
               </div>
             </div>
           </div>
+          
+          {hasError ? (
+            <div className="flex-1 mt-6">
+              <ErrorState 
+                onRetry={() => {
+                  setHasError(false);
+                  // Reload simulation could go here
+                }} 
+              />
+            </div>
+          ) : isNewAccount ? (
+            <div className="flex-1 mt-6">
+              <DashboardEmptyState onPrimaryAction={() => setIsNewAccount(false)} />
+            </div>
+          ) : (
+            <>
+              <TopKPIs />
 
-          <TopKPIs />
+              <BusinessAnalytics />
 
-          <BusinessAnalytics />
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <SystemHealthWidget />
-            <SecurityCenterWidget />
-          </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <SystemHealthWidget />
+                <SecurityCenterWidget />
+              </div>
+            </>
+          )}
 
         </div>
 
         {/* Right Column (Sidebar Content) */}
-        <div className="w-full xl:w-80 2xl:w-96 shrink-0 flex flex-col gap-6">
-          <div className="h-64 shrink-0">
-            <AIInsightsPanel />
+        {(!isNewAccount && !hasError) && (
+          <div className="w-full xl:w-80 2xl:w-96 shrink-0 flex flex-col gap-6">
+            <div className="h-64 shrink-0">
+              <AIInsightsPanel />
+            </div>
+            <div className="flex-1">
+              <RecentActivitySidebar />
+            </div>
           </div>
-          <div className="flex-1">
-            <RecentActivitySidebar />
-          </div>
-        </div>
+        )}
 
       </div>
     </div>

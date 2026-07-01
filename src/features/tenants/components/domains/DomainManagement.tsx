@@ -10,7 +10,7 @@ import { DataTablePagination } from '@/components/ui/pagination';
 import { TableSkeleton } from '@/components/ui/skeleton';
 import { ActionTooltip } from '@/components/ui/tooltip';
 import { Checkbox } from "@/components/ui/checkbox";
-
+import { EmptyState } from '@/components/ui/empty-state';
 export function DomainManagement() {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('all');
@@ -132,7 +132,7 @@ export function DomainManagement() {
             <tbody>
               {isTableLoading ? (
                 <TableSkeleton columns={5} rows={pageSize} />
-              ) : (
+              ) : paginatedData.length > 0 ? (
                 paginatedData.map((domain, i) => (
                   <motion.tr
                     key={domain.id}
@@ -196,15 +196,21 @@ export function DomainManagement() {
                     </td>
                   </motion.tr>
                 ))
+              ) : (
+                <tr>
+                  <td colSpan={6} className="p-8">
+                    <EmptyState 
+                      icon={Globe}
+                      title="No domains found"
+                      description="No domains or subdomains match your current filters."
+                      actionLabel="Reset Filters"
+                      onAction={() => { setSearch(''); setFilter('all'); }}
+                    />
+                  </td>
+                </tr>
               )}
             </tbody>
           </table>
-          {!isTableLoading && filtered.length === 0 && (
-            <div className="text-center py-16 text-slate-400">
-              <Globe className="w-10 h-10 mx-auto mb-3 opacity-30" />
-              <p className="font-semibold text-slate-500">No domains found</p>
-            </div>
-          )}
         </div>
 
         {/* Pagination */}

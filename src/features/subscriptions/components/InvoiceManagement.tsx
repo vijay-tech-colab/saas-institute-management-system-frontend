@@ -14,6 +14,7 @@ import { DataTablePagination } from "@/components/ui/pagination";
 import { TableSkeleton } from "@/components/ui/skeleton";
 import { ActionTooltip } from "@/components/ui/tooltip";
 import { Checkbox } from "@/components/ui/checkbox";
+import { EmptyState } from '@/components/ui/empty-state';
 import { motion } from "framer-motion";
 
 import { PageHeader, SearchInput, FilterChips, Modal } from './shared/UIComponents';
@@ -285,7 +286,7 @@ export function InvoiceManagement() {
             <tbody>
               {isTableLoading ? (
                 <TableSkeleton columns={12} rows={pageSize} />
-              ) : (
+              ) : filtered.length > 0 ? (
                 paginatedData.map((inv, i) => (
                   <motion.tr
                     key={inv.id}
@@ -334,15 +335,20 @@ export function InvoiceManagement() {
                     </td>
                   </motion.tr>
                 ))
+              ) : (
+                <tr>
+                  <td colSpan={10} className="p-8">
+                    <EmptyState 
+                      icon={FileText}
+                      title="No invoices found"
+                      description="No no invoices found found."
+                    />
+                  </td>
+                </tr>
               )}
             </tbody>
           </table>
-          {!isTableLoading && filtered.length === 0 && (
-            <div className="text-center py-16 text-slate-400">
-              <FileText className="w-10 h-10 mx-auto mb-3 opacity-30" />
-              <p className="font-semibold text-slate-500">No invoices found</p>
-            </div>
-          )}
+          
         </div>
         <div className="border-t border-slate-100 bg-white shrink-0 mt-auto">
           <DataTablePagination

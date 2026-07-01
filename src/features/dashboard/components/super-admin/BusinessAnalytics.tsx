@@ -3,7 +3,9 @@ import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   BarChart, Bar, Legend
 } from 'recharts';
-import { Calendar, Filter } from 'lucide-react';
+import { Calendar, Filter, LineChart, BarChart2 } from 'lucide-react';
+import { EmptyState } from '@/components/ui/empty-state';
+import { ChartSkeleton, RefreshIndicator } from '@/components/ui/dashboard-states';
 
 const revenueData = [
   { name: 'Jan', mrr: 40000, arr: 480000 },
@@ -35,9 +37,54 @@ const growthData = [
 
 export function BusinessAnalytics() {
   const [dateRange, setDateRange] = useState('This Year');
+  const [isLoading, setIsLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [revenue, setRevenue] = useState(revenueData);
+  const [growth, setGrowth] = useState(growthData);
+
+  React.useEffect(() => {
+    // Initial load
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+
+    // Background refresh simulation every 15s
+    const refreshTimer = setInterval(() => {
+      setIsRefreshing(true);
+      setTimeout(() => {
+        // Randomly update the last data point to simulate live data
+        setRevenue(prev => {
+          const newData = [...prev];
+          const lastIdx = newData.length - 1;
+          newData[lastIdx] = {
+            ...newData[lastIdx],
+            mrr: newData[lastIdx].mrr + Math.floor(Math.random() * 2000) - 500,
+            arr: newData[lastIdx].arr + Math.floor(Math.random() * 24000) - 6000,
+          };
+          return newData;
+        });
+        setGrowth(prev => {
+          const newData = [...prev];
+          const lastIdx = newData.length - 1;
+          newData[lastIdx] = {
+            ...newData[lastIdx],
+            students: newData[lastIdx].students + Math.floor(Math.random() * 50),
+          };
+          return newData;
+        });
+        setIsRefreshing(false);
+      }, 1000); // 1s sync time
+    }, 15000);
+
+    return () => {
+      clearTimeout(timer);
+      clearInterval(refreshTimer);
+    };
+  }, []);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
+      <RefreshIndicator isRefreshing={isRefreshing} />
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-bold text-slate-900 tracking-tight">Business Analytics</h2>
         <div className="flex items-center gap-2">
@@ -74,29 +121,40 @@ export function BusinessAnalytics() {
             </div>
           </div>
           <div className="flex-1 w-full min-h-0">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={revenueData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="colorMrrNew" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#6366f1" stopOpacity={0.4}/>
-                    <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
-                  </linearGradient>
-                  <linearGradient id="colorArrNew" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#818cf8" stopOpacity={0.2}/>
-                    <stop offset="95%" stopColor="#818cf8" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#64748b', fontWeight: 600 }} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#64748b', fontWeight: 600 }} tickFormatter={(value) => `₹${value / 1000}k`} dx={-10} />
-                <Tooltip 
-                  contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)' }}
-                  formatter={(value: any, name: any) => [`₹${Number(value).toLocaleString()}`, String(name).toUpperCase()]}
-                />
-                <Area type="monotone" dataKey="arr" stroke="#818cf8" strokeWidth={2} fillOpacity={1} fill="url(#colorArrNew)" />
-                <Area type="monotone" dataKey="mrr" stroke="#4f46e5" strokeWidth={3} fillOpacity={1} fill="url(#colorMrrNew)" />
-              </AreaChart>
-            </ResponsiveContainer>
+            {isLoading ? (
+              <ChartSkeleton height={300} />
+            ) : revenue.length > 0 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={revenue} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="colorMrrNew" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#6366f1" stopOpacity={0.4}/>
+                      <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
+                    </linearGradient>
+                    <linearGradient id="colorArrNew" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#818cf8" stopOpacity={0.2}/>
+                      <stop offset="95%" stopColor="#818cf8" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                  <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#64748b', fontWeight: 600 }} dy={10} />
+                  <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#64748b', fontWeight: 600 }} tickFormatter={(value) => `₹${value / 1000}k`} dx={-10} />
+                  <Tooltip 
+                    contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)' }}
+                    formatter={(value: any, name: any) => [`₹${Number(value).toLocaleString()}`, String(name).toUpperCase()]}
+                  />
+                  <Area type="monotone" dataKey="arr" stroke="#818cf8" strokeWidth={2} fillOpacity={1} fill="url(#colorArrNew)" />
+                  <Area type="monotone" dataKey="mrr" stroke="#4f46e5" strokeWidth={3} fillOpacity={1} fill="url(#colorMrrNew)" />
+                </AreaChart>
+              </ResponsiveContainer>
+            ) : (
+              <EmptyState 
+                icon={LineChart} 
+                title="No Revenue Data" 
+                description="There is no revenue data available for the selected period." 
+                isWidget
+              />
+            )}
           </div>
         </div>
 
@@ -109,21 +167,32 @@ export function BusinessAnalytics() {
             </div>
           </div>
           <div className="flex-1 w-full min-h-0">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={growthData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#64748b', fontWeight: 600 }} dy={10} />
-                <YAxis yAxisId="left" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#64748b', fontWeight: 600 }} dx={-10} />
-                <YAxis yAxisId="right" orientation="right" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#64748b', fontWeight: 600 }} tickFormatter={(v) => `${v/1000}k`} dx={10} />
-                <Tooltip 
-                  contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
-                  cursor={{ fill: '#f8fafc' }}
-                />
-                <Legend iconType="circle" wrapperStyle={{ fontSize: '11px', fontWeight: 600, paddingTop: '20px' }} />
-                <Bar yAxisId="left" dataKey="institutes" name="Institutes" fill="#10b981" radius={[4, 4, 0, 0]} maxBarSize={40} />
-                <Bar yAxisId="right" dataKey="students" name="Students" fill="#0ea5e9" radius={[4, 4, 0, 0]} maxBarSize={40} />
-              </BarChart>
-            </ResponsiveContainer>
+            {isLoading ? (
+              <ChartSkeleton height={300} />
+            ) : growth.length > 0 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={growth} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                  <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#64748b', fontWeight: 600 }} dy={10} />
+                  <YAxis yAxisId="left" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#64748b', fontWeight: 600 }} dx={-10} />
+                  <YAxis yAxisId="right" orientation="right" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#64748b', fontWeight: 600 }} tickFormatter={(v) => `${v/1000}k`} dx={10} />
+                  <Tooltip 
+                    contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
+                    cursor={{ fill: '#f8fafc' }}
+                  />
+                  <Legend iconType="circle" wrapperStyle={{ fontSize: '11px', fontWeight: 600, paddingTop: '20px' }} />
+                  <Bar yAxisId="left" dataKey="institutes" name="Institutes" fill="#10b981" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                  <Bar yAxisId="right" dataKey="students" name="Students" fill="#0ea5e9" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <EmptyState 
+                icon={BarChart2} 
+                title="No Adoption Data" 
+                description="There is no platform adoption data available for the selected period." 
+                isWidget
+              />
+            )}
           </div>
         </div>
 

@@ -10,10 +10,14 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="min-h-screen flex w-full bg-slate-50 font-sans text-slate-900">
-      <DashboardSidebar />
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <DashboardHeader />
-        <main className="flex-1 overflow-y-auto">
+      <div className="print:hidden shrink-0">
+        <DashboardSidebar />
+      </div>
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden print:overflow-visible">
+        <div className="print:hidden">
+          <DashboardHeader />
+        </div>
+        <main className="flex-1 overflow-y-auto print:overflow-visible">
           <RouteGuard>
             {children}
           </RouteGuard>

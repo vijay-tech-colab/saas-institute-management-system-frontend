@@ -7,12 +7,14 @@ import { StatusBadge } from '@/features/subscriptions/components/shared/StatusBa
 import { MessageSquare, Clock, CheckCircle2, ExternalLink, Filter, Plus } from 'lucide-react';
 import { mockTenants } from '../../data/mock-data';
 import { format, subDays } from 'date-fns';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { DownloadCloud, FileText, Loader2 } from 'lucide-react';
+import { ExportProgressModal } from '@/components/ui/export-progress';
 import { DataTablePagination } from '@/components/ui/pagination';
 import { TableSkeleton } from '@/components/ui/skeleton';
 import { ActionTooltip } from '@/components/ui/tooltip';
 import { Checkbox } from "@/components/ui/checkbox";
-
+import { EmptyState } from '@/components/ui/empty-state';
 export function SupportTickets() {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('all');
@@ -20,6 +22,9 @@ export function SupportTickets() {
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [isTableLoading, setIsTableLoading] = React.useState(true);
+
+  // Export states
+  const [exportModalType, setExportModalType] = useState<'export' | 'report' | null>(null);
 
   React.useEffect(() => {
     setIsTableLoading(true);
@@ -67,6 +72,14 @@ export function SupportTickets() {
     setSelectedTickets(next);
   };
 
+  const handleExport = () => {
+    setExportModalType('export');
+  };
+
+  const handleReport = () => {
+    setExportModalType('report');
+  };
+
   return (
     <div className="flex-1 w-full flex flex-col min-h-0">
       <PageHeader
@@ -109,6 +122,43 @@ export function SupportTickets() {
           />
         </div>
 
+        {/* Bulk Actions Bar */}
+        <AnimatePresence>
+          {selectedTickets.size > 0 && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="bg-indigo-50 border-b border-indigo-100 px-4 py-3 flex items-center justify-between overflow-hidden"
+            >
+              <span className="text-sm font-bold text-indigo-900">{selectedTickets.size} tickets selected</span>
+              <div className="flex items-center gap-2">
+                <button 
+                  onClick={handleExport}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 text-slate-700 text-xs font-bold rounded-lg hover:bg-slate-50 transition-colors shadow-sm"
+                >
+                  <DownloadCloud className="w-3.5 h-3.5 text-slate-500" />
+                  Export (CSV)
+                </button>
+                <button 
+                  onClick={handleReport}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-indigo-200 text-indigo-700 text-xs font-bold rounded-lg hover:bg-indigo-50 transition-colors shadow-sm"
+                >
+                  <FileText className="w-3.5 h-3.5 text-indigo-500" />
+                  Report (PDF)
+                </button>
+                <div className="w-px h-4 bg-indigo-200 mx-1"></div>
+                <button className="px-3 py-1.5 bg-white border border-indigo-200 text-indigo-700 text-xs font-bold rounded-lg hover:bg-indigo-50 transition-colors shadow-sm">
+                  Assign Agent
+                </button>
+                <button className="px-3 py-1.5 bg-white border border-rose-200 text-rose-700 text-xs font-bold rounded-lg hover:bg-rose-50 transition-colors shadow-sm">
+                  Close Tickets
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Table Body */}
         <div className="flex-1 overflow-auto bg-white">
           <table className="w-full">
@@ -132,7 +182,7 @@ export function SupportTickets() {
             <tbody>
               {isTableLoading ? (
                 <TableSkeleton columns={7} rows={pageSize} />
-              ) : (
+              ) : paginatedData.length > 0 ? (
                 paginatedData.map((ticket, i) => (
                   <motion.tr
                     key={ticket.id}
@@ -174,15 +224,20 @@ export function SupportTickets() {
                     </td>
                   </motion.tr>
                 ))
+              ) : (
+                <tr>
+                  <td colSpan={8} className="p-8">
+                    <EmptyState 
+                      icon={MessageSquare}
+                      title="No tickets found"
+                      description="There are currently no support tickets matching your criteria."
+                      actionLabel="Create Ticket"
+                    />
+                  </td>
+                </tr>
               )}
             </tbody>
           </table>
-          {!isTableLoading && filtered.length === 0 && (
-            <div className="text-center py-16 text-slate-400">
-              <MessageSquare className="w-10 h-10 mx-auto mb-3 opacity-30" />
-              <p className="font-semibold text-slate-500">No tickets found</p>
-            </div>
-          )}
         </div>
 
         {/* Pagination */}
@@ -196,6 +251,13 @@ export function SupportTickets() {
           />
         </div>
       </div>
+
+      <ExportProgressModal 
+        isOpen={!!exportModalType}
+        onClose={() => setExportModalType(null)}
+        type={exportModalType || 'export'}
+        totalRows={selectedTickets.size}
+      />
     </div>
   );
 }

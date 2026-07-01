@@ -12,7 +12,7 @@ import { DataTablePagination } from '@/components/ui/pagination';
 import { TableSkeleton } from '@/components/ui/skeleton';
 import { ActionTooltip } from '@/components/ui/tooltip';
 import { Checkbox } from "@/components/ui/checkbox";
-
+import { EmptyState } from '@/components/ui/empty-state';
 const REASON_OPTIONS = [
   { label: 'All Reasons', value: 'all' },
   { label: 'Payment Overdue', value: 'payment' },
@@ -139,7 +139,7 @@ export function SuspendedTenants() {
             <tbody>
               {isTableLoading ? (
                 <TableSkeleton columns={7} rows={pageSize} />
-              ) : (
+              ) : paginatedData.length > 0 ? (
                 paginatedData.map((tenant, i) => (
                   <motion.tr
                     key={tenant.id}
@@ -196,15 +196,21 @@ export function SuspendedTenants() {
                     </td>
                   </motion.tr>
                 ))
+              ) : (
+                <tr>
+                  <td colSpan={8} className="p-8">
+                    <EmptyState 
+                      icon={Ban}
+                      title="No suspended institutes found"
+                      description="There are currently no suspended institutes matching your criteria."
+                      actionLabel="Reset Filters"
+                      onAction={() => { setSearch(''); setFilter('all'); }}
+                    />
+                  </td>
+                </tr>
               )}
             </tbody>
           </table>
-          {!isTableLoading && filtered.length === 0 && (
-            <div className="text-center py-16 text-slate-400">
-              <Ban className="w-10 h-10 mx-auto mb-3 opacity-30" />
-              <p className="font-semibold text-slate-500">No suspended institutes found</p>
-            </div>
-          )}
         </div>
 
         {/* Pagination */}

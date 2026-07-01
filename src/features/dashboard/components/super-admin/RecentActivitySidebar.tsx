@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ListSkeleton, LiveStatusBadge } from '@/components/ui/dashboard-states';
 import { Building, CreditCard, Ticket, AlertTriangle, ChevronRight, UserPlus, FileText } from 'lucide-react';
 
 const MOCK_EVENTS = [
@@ -20,10 +21,17 @@ const INITIAL_ACTIVITIES = [
 ];
 
 export function RecentActivitySidebar() {
+  const [isLoading, setIsLoading] = useState(true);
   const [activities, setActivities] = useState(INITIAL_ACTIVITIES);
 
   useEffect(() => {
+    // Initial load simulation
+    const initTimer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1200);
+
     const interval = setInterval(() => {
+      if (isLoading) return;
       setActivities(prev => {
         const randomEvent = MOCK_EVENTS[Math.floor(Math.random() * MOCK_EVENTS.length)];
         const newEvent = {
@@ -38,69 +46,74 @@ export function RecentActivitySidebar() {
       });
     }, 4000); // Add a new log every 4 seconds
 
-    return () => clearInterval(interval);
-  }, []);
+    return () => {
+      clearInterval(interval);
+      clearTimeout(initTimer);
+    };
+  }, [isLoading]);
 
   return (
     <div className="bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition-shadow flex flex-col h-[600px] xl:h-full relative overflow-hidden">
       {/* Small live indicator */}
-      <div className="absolute top-0 right-0 p-6 flex items-center gap-2 pointer-events-none z-10">
-        <span className="relative flex h-2 w-2">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-        </span>
-        <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Live</span>
-      </div>
+      {!isLoading && (
+        <div className="absolute top-0 right-0 p-6 flex items-center gap-2 pointer-events-none z-10">
+          <LiveStatusBadge />
+        </div>
+      )}
 
       <div className="p-6 border-b border-slate-100 flex items-center justify-between shrink-0">
         <h3 className="font-bold text-slate-900">Recent Activity</h3>
       </div>
       <div className="flex-1 overflow-y-auto p-6 space-y-0 relative">
-        <AnimatePresence initial={false}>
-          {activities.map((activity, idx) => {
-            const Icon = activity.icon;
-            const isLast = idx === activities.length - 1;
-            
-            return (
-              <motion.div 
-                key={activity.id}
-                initial={{ opacity: 0, height: 0, y: -20 }}
-                animate={{ opacity: 1, height: 'auto', y: 0 }}
-                exit={{ opacity: 0, height: 0, scale: 0.95 }}
-                transition={{ duration: 0.4, ease: "easeOut" }}
-                className="overflow-hidden"
-              >
-                <div className="flex gap-4 relative group cursor-pointer pb-6">
-                  {!isLast && (
-                    <div className="absolute top-8 bottom-0 left-4 w-px bg-slate-100 group-hover:bg-indigo-100 transition-colors"></div>
-                  )}
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 z-10 transition-transform group-hover:scale-110 ${
-                    activity.color === 'emerald' ? 'bg-emerald-100 text-emerald-600' :
-                    activity.color === 'blue' ? 'bg-blue-100 text-blue-600' :
-                    activity.color === 'rose' ? 'bg-rose-100 text-rose-600' :
-                    activity.color === 'indigo' ? 'bg-indigo-100 text-indigo-600' :
-                    'bg-amber-100 text-amber-600'
-                  }`}>
-                    <Icon className="w-4 h-4" />
+        {isLoading ? (
+          <ListSkeleton count={6} />
+        ) : (
+          <AnimatePresence initial={false}>
+            {activities.map((activity, idx) => {
+              const Icon = activity.icon;
+              const isLast = idx === activities.length - 1;
+              
+              return (
+                <motion.div 
+                  key={activity.id}
+                  initial={{ opacity: 0, height: 0, y: -20 }}
+                  animate={{ opacity: 1, height: 'auto', y: 0 }}
+                  exit={{ opacity: 0, height: 0, scale: 0.95 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  className="overflow-hidden"
+                >
+                  <div className="flex gap-4 relative group cursor-pointer pb-6">
+                    {!isLast && (
+                      <div className="absolute top-8 bottom-0 left-4 w-px bg-slate-100 group-hover:bg-indigo-100 transition-colors"></div>
+                    )}
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 z-10 transition-transform group-hover:scale-110 ${
+                      activity.color === 'emerald' ? 'bg-emerald-100 text-emerald-600' :
+                      activity.color === 'blue' ? 'bg-blue-100 text-blue-600' :
+                      activity.color === 'rose' ? 'bg-rose-100 text-rose-600' :
+                      activity.color === 'indigo' ? 'bg-indigo-100 text-indigo-600' :
+                      'bg-amber-100 text-amber-600'
+                    }`}>
+                      <Icon className="w-4 h-4" />
+                    </div>
+                    <div className="flex-1 min-w-0 pt-1">
+                      <p className="text-sm font-semibold text-slate-900 truncate group-hover:text-indigo-600 transition-colors">{activity.title}</p>
+                      <p className="text-xs text-slate-500 truncate">{activity.desc}</p>
+                      <p className="text-[10px] font-bold text-slate-400 mt-1 uppercase tracking-wider flex items-center gap-1.5">
+                        {activity.time === 'Just now' && (
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        )}
+                        {activity.time}
+                      </p>
+                    </div>
+                    <div className="pt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <ChevronRight className="w-4 h-4 text-slate-400" />
+                    </div>
                   </div>
-                  <div className="flex-1 min-w-0 pt-1">
-                    <p className="text-sm font-semibold text-slate-900 truncate group-hover:text-indigo-600 transition-colors">{activity.title}</p>
-                    <p className="text-xs text-slate-500 truncate">{activity.desc}</p>
-                    <p className="text-[10px] font-bold text-slate-400 mt-1 uppercase tracking-wider flex items-center gap-1.5">
-                      {activity.time === 'Just now' && (
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                      )}
-                      {activity.time}
-                    </p>
-                  </div>
-                  <div className="pt-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <ChevronRight className="w-4 h-4 text-slate-400" />
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
-        </AnimatePresence>
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
+        )}
       </div>
     </div>
   );

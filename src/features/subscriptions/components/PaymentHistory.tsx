@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Download, CreditCard, RefreshCcw, CheckCircle2, XCircle, Clock, AlertCircle, Filter, RotateCcw, RefreshCw } from 'lucide-react';
+import { Download, CreditCard, RefreshCcw, CheckCircle2, XCircle, Clock, AlertCircle, Filter, RotateCcw, RefreshCw, DownloadCloud, FileText, Loader2 } from 'lucide-react';
+import { AnimatePresence } from "framer-motion";
+import { ExportProgressModal } from '@/components/ui/export-progress';
 import { DataTablePagination } from "@/components/ui/pagination";
 import { TableSkeleton } from "@/components/ui/skeleton";
 import { ActionTooltip } from "@/components/ui/tooltip";
@@ -12,6 +14,7 @@ import { StatusBadge } from './shared/StatusBadge';
 import { StatCard } from './shared/StatCard';
 import { mockPayments } from '../data/mock-data';
 import type { PaymentStatus } from '../types';
+import { EmptyState } from '@/components/ui/empty-state';
 
 const FILTER_OPTIONS = [
   { label: 'All', value: 'all' },
@@ -35,6 +38,9 @@ export function PaymentHistory() {
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [isTableLoading, setIsTableLoading] = useState(true);
+
+  // Export states
+  const [exportModalType, setExportModalType] = useState<'export' | 'report' | null>(null);
 
   React.useEffect(() => {
     setIsTableLoading(true);
@@ -69,7 +75,16 @@ export function PaymentHistory() {
   const failed = mockPayments.filter(p => p.status === 'failed');
   const refunded = mockPayments.filter(p => p.status === 'refunded');
   const pending = mockPayments.filter(p => p.status === 'pending');
+
   const totalRevenue = successful.reduce((s, p) => s + p.amount, 0);
+
+  const handleExport = () => {
+    setExportModalType('export');
+  };
+
+  const handleReport = () => {
+    setExportModalType('report');
+  };
 
   return (
     <div className="flex-1 w-full flex flex-col min-h-0">
@@ -111,6 +126,41 @@ export function PaymentHistory() {
             onChange={setFilter} 
           />
         </div>
+
+        {/* Bulk Actions Bar */}
+        <AnimatePresence>
+          {selectedPayments.size > 0 && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="bg-indigo-50 border-b border-indigo-100 px-4 py-3 flex items-center justify-between overflow-hidden"
+            >
+              <span className="text-sm font-bold text-indigo-900">{selectedPayments.size} payments selected</span>
+              <div className="flex items-center gap-2">
+                <button 
+                  onClick={handleExport}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 text-slate-700 text-xs font-bold rounded-lg hover:bg-slate-50 transition-colors shadow-sm"
+                >
+                  <DownloadCloud className="w-3.5 h-3.5 text-slate-500" />
+                  Export (CSV)
+                </button>
+                <button 
+                  onClick={handleReport}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-indigo-200 text-indigo-700 text-xs font-bold rounded-lg hover:bg-indigo-50 transition-colors shadow-sm"
+                >
+                  <FileText className="w-3.5 h-3.5 text-indigo-500" />
+                  Report (PDF)
+                </button>
+                <div className="w-px h-4 bg-indigo-200 mx-1"></div>
+                <button className="px-3 py-1.5 bg-white border border-indigo-200 text-indigo-700 text-xs font-bold rounded-lg hover:bg-indigo-50 transition-colors shadow-sm">
+                  Send Receipt
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         <div className="flex-1 overflow-auto bg-white">
           <table className="w-full">
             <thead>
@@ -131,7 +181,7 @@ export function PaymentHistory() {
             <tbody>
               {isTableLoading ? (
                 <TableSkeleton columns={8} rows={pageSize} />
-              ) : (
+              ) : filtered.length > 0 ? (
                 paginatedData.map((pay, i) => (
                   <motion.tr
                     key={pay.id}
@@ -174,15 +224,20 @@ export function PaymentHistory() {
                     </td>
                   </motion.tr>
                 ))
+              ) : (
+                <tr>
+                  <td colSpan={10} className="p-8">
+                    <EmptyState
+                      icon={CreditCard}
+                      title="No payments found"
+                      description="No no payments found found."
+                    />
+                  </td>
+                </tr>
               )}
             </tbody>
           </table>
-          {!isTableLoading && filtered.length === 0 && (
-            <div className="text-center py-16 text-slate-400">
-              <CreditCard className="w-10 h-10 mx-auto mb-3 opacity-30" />
-              <p className="font-semibold text-slate-500">No payments found</p>
-            </div>
-          )}
+          
         </div>
         <div className="border-t border-slate-100 bg-white shrink-0 mt-auto">
           <DataTablePagination
@@ -194,6 +249,13 @@ export function PaymentHistory() {
           />
         </div>
       </div>
+
+      <ExportProgressModal 
+        isOpen={!!exportModalType}
+        onClose={() => setExportModalType(null)}
+        type={exportModalType || 'export'}
+        totalRows={selectedPayments.size}
+      />
     </div>
   );
 }

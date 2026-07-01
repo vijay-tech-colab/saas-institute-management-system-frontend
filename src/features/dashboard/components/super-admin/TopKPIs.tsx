@@ -6,8 +6,9 @@ import {
   CreditCard, CreditCardIcon
 } from 'lucide-react';
 import { AreaChart, Area, ResponsiveContainer } from 'recharts';
+import { WidgetSkeleton, AnimatedCounter } from '@/components/ui/dashboard-states';
 
-const kpiData = [
+const initialKpiData = [
   { id: '1', title: 'Total Institutes', value: '2,458', change: '+12.5%', isUp: true, icon: Building, color: 'indigo', chartData: [30, 40, 35, 50, 49, 60, 70, 91, 125] },
   { id: '2', title: 'Active Institutes', value: '2,190', change: '+8.2%', isUp: true, icon: Building2, color: 'emerald', chartData: [40, 30, 45, 55, 60, 50, 70, 80, 110] },
   { id: '3', title: 'Suspended', value: '45', change: '-2.4%', isUp: false, icon: AlertTriangle, color: 'rose', chartData: [20, 18, 25, 20, 15, 22, 10, 5, 2] },
@@ -29,9 +30,55 @@ const colorMap = {
 };
 
 export function TopKPIs() {
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [data, setData] = React.useState(initialKpiData);
+
+  // Simulate initial loading and live updates
+  React.useEffect(() => {
+    // Initial fetch simulation
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+
+    // Live update simulation every 5 seconds
+    const interval = setInterval(() => {
+      setData(prev => prev.map(kpi => {
+        // Randomly fluctuate values slightly for simulation
+        if (kpi.id === '1' || kpi.id === '2' || kpi.id === '8') {
+          // Parse number, add small random int
+          const currentVal = parseFloat(kpi.value.replace(/,/g, ''));
+          const newVal = currentVal + Math.floor(Math.random() * 3);
+          return { ...kpi, value: newVal.toString() };
+        }
+        if (kpi.id === '4') {
+          // Revenue fluctuation
+          const currentVal = parseFloat(kpi.value.replace(/[^0-9.-]+/g, ""));
+          const newVal = currentVal + Math.floor(Math.random() * 5000) - 1000;
+          return { ...kpi, value: `₹${newVal.toLocaleString('en-IN')}` };
+        }
+        return kpi;
+      }));
+    }, 5000);
+
+    return () => {
+      clearTimeout(timer);
+      clearInterval(interval);
+    };
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <WidgetSkeleton key={i} />
+        ))}
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-      {kpiData.map((kpi) => {
+      {data.map((kpi) => {
         const Icon = kpi.icon;
         const colors = colorMap[kpi.color as keyof typeof colorMap];
         const chartData = kpi.chartData.map((val, idx) => ({ value: val, index: idx }));
@@ -49,7 +96,21 @@ export function TopKPIs() {
             </div>
             
             <div className="relative z-10">
-              <h3 className="text-2xl font-bold text-slate-800 tracking-tight">{kpi.value}</h3>
+              <h3 className="text-2xl font-bold text-slate-800 tracking-tight">
+                {kpi.value.includes('₹') || kpi.value.includes('M') || kpi.value.includes('k') || kpi.value.includes('%') ? (
+                  // For formatted strings (k, M, %, ₹) we could parse, but for simplicity we render AnimatedCounter where easily parseable
+                  // Since some have M, k, %, we will just render string for complex ones, or use AnimatedCounter for raw numbers
+                  kpi.value.match(/^[0-9,]+$/) ? (
+                    <AnimatedCounter value={parseFloat(kpi.value.replace(/,/g, ''))} />
+                  ) : kpi.value.includes('₹') && kpi.value.match(/[0-9,]+/) ? (
+                    <AnimatedCounter prefix="₹" value={parseFloat(kpi.value.replace(/[^0-9.-]+/g, ""))} />
+                  ) : (
+                    kpi.value
+                  )
+                ) : (
+                  <AnimatedCounter value={parseFloat(kpi.value.replace(/,/g, ''))} />
+                )}
+              </h3>
               <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mt-1">{kpi.title}</p>
             </div>
 
