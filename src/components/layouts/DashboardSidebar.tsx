@@ -405,7 +405,7 @@ export function DashboardSidebar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] z-40"
+              className="fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] z-[100]"
               onClick={() => setIsMobileOpen(false)}
             />
           )}
@@ -417,7 +417,7 @@ export function DashboardSidebar() {
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "spring", damping: 28, stiffness: 300 }}
-              className="fixed inset-y-0 left-0 z-50"
+              className="fixed inset-y-0 left-0 z-[110]"
             >
               {sidebarContent}
             </motion.div>
