@@ -8,6 +8,8 @@ import { useAtom, useAtomValue } from "jotai"
 import { userAtom } from "@/store/user-store"
 import { isMobileSidebarOpenAtom } from "@/store/layout-store"
 import { getNavigationByRole } from "@/config/navigation"
+import { useConfirm } from "@/hooks/use-confirm"
+import { useToast } from "@/hooks/use-toast"
 import { motion, AnimatePresence } from "framer-motion"
 import {
   ChevronsUpDown,
@@ -117,6 +119,9 @@ export function DashboardSidebar() {
   const [selectedBranch, setSelectedBranch] = useState(BRANCHES[0])
   const pathname = usePathname()
   const branchSwitcherRef = useRef<HTMLDivElement>(null)
+  
+  const confirm = useConfirm()
+  const toast = useToast()
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -136,6 +141,23 @@ export function DashboardSidebar() {
   const toggleMenu = (key: string) => {
     setExpandedMenus((prev) => ({ ...prev, [key]: !prev[key] }))
   }
+
+  const handleLogout = async () => {
+    const isConfirmed = await confirm({
+      title: "Log out",
+      description: "Are you sure you want to log out of your account?",
+      type: "danger",
+      confirmText: "Log out",
+    });
+
+    if (isConfirmed) {
+      toast.info({
+        title: "Logging out...",
+        description: "Clearing session data and redirecting.",
+      });
+      // Redirect or clear store logic would go here
+    }
+  };
 
   const sidebarWidth = isCollapsed ? SIDEBAR_WIDTH_COLLAPSED : SIDEBAR_WIDTH_EXPANDED
 
@@ -360,7 +382,7 @@ export function DashboardSidebar() {
       {/* ───── User Profile Card ───── */}
       <div className={`${isCollapsed ? 'px-2 pb-2 pt-1' : 'p-3'}`}>
         <Tooltip label={user.name} show={isCollapsed}>
-          <button className={`w-full flex items-center rounded-xl transition-all duration-200 cursor-pointer group bg-gradient-to-r from-slate-50 to-slate-100/50 hover:from-indigo-50/60 hover:to-violet-50/40 border border-slate-200/60 hover:border-indigo-200/80 hover:shadow-sm ${isCollapsed ? "justify-center p-1.5" : "justify-between p-2"}`}>
+          <button onClick={handleLogout} className={`w-full flex items-center rounded-xl transition-all duration-200 cursor-pointer group bg-gradient-to-r from-slate-50 to-slate-100/50 hover:from-indigo-50/60 hover:to-violet-50/40 border border-slate-200/60 hover:border-indigo-200/80 hover:shadow-sm ${isCollapsed ? "justify-center p-1.5" : "justify-between p-2"}`}>
             <div className="flex items-center gap-3 overflow-hidden">
               <div className="relative flex-shrink-0">
                 <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center text-slate-600 overflow-hidden">

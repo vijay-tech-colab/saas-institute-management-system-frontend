@@ -182,3 +182,8 @@ html {
   scrollbar-color: #cbd5e1 transparent;
 }
 
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}

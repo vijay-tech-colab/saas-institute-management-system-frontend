@@ -18,13 +18,51 @@ interface StatCardProps {
   suffix?: string;
   sparklineData?: number[];
   delay?: number;
+  isLoading?: boolean;
 }
 
 export function StatCard({
   title, value, subtitle, trend, trendLabel,
   icon, iconColor = 'text-blue-600', iconBg = 'bg-blue-50',
   prefix = '', suffix = '', delay = 0,
+  isLoading: externalIsLoading,
 }: StatCardProps) {
+  const [internalLoading, setInternalLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    if (externalIsLoading !== undefined) {
+      setInternalLoading(externalIsLoading);
+      return;
+    }
+    // Simulate loading for 1.2s plus any staggered delay
+    const timer = setTimeout(() => setInternalLoading(false), 1200 + (delay * 1000));
+    return () => clearTimeout(timer);
+  }, [externalIsLoading, delay]);
+
+  const isLoading = externalIsLoading !== undefined ? externalIsLoading : internalLoading;
+
+  if (isLoading) {
+    return (
+      <div className="bg-white px-4 py-3.5 rounded-xl border border-slate-100 shadow-sm flex items-center justify-between relative overflow-hidden h-[88px]">
+        {/* Shimmer effect */}
+        <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-slate-50/50 to-transparent z-10" />
+        
+        <div className="flex items-center gap-3.5 relative z-0">
+          <div className="w-10 h-10 rounded-lg bg-slate-100 animate-pulse flex-shrink-0" />
+          <div className="space-y-2.5">
+            <div className="h-2.5 w-16 bg-slate-100 rounded-full animate-pulse" />
+            <div className="h-5 w-24 bg-slate-200 rounded-md animate-pulse" />
+          </div>
+        </div>
+        
+        <div className="flex flex-col items-end gap-2 relative z-0">
+          <div className="h-4 w-12 bg-slate-100 rounded-md animate-pulse" />
+          <div className="h-2 w-14 bg-slate-50 rounded-full animate-pulse" />
+        </div>
+      </div>
+    );
+  }
+
   const isPositive = trend !== undefined && trend > 0;
   const isNegative = trend !== undefined && trend < 0;
 

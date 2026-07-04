@@ -5,6 +5,8 @@ import { Crown, Users, HardDrive, Store, Check, Plus, CreditCard, IndianRupee, S
 import { useRouter } from 'next/navigation';
 import { AnimatePresence } from 'framer-motion';
 import { ExportProgressModal } from '@/components/ui/export-progress';
+import { useConfirm } from '@/hooks/use-confirm';
+import { useToast } from '@/hooks/use-toast';
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -283,6 +285,31 @@ export function PlansManagement() {
   // Export states
   const [exportModalType, setExportModalType] = useState<'export' | 'report' | null>(null);
 
+  const confirm = useConfirm();
+  const toast = useToast();
+
+  const handleDeletePlan = async (plan: Plan) => {
+    console.log("Delete button clicked for plan:", plan.name);
+    try {
+      const isConfirmed = await confirm({
+        title: "Delete Plan",
+        description: `Are you sure you want to delete the "${plan.name}" plan? This action cannot be undone.`,
+        type: "danger",
+        confirmText: "Delete",
+      });
+      console.log("Dialog result:", isConfirmed);
+
+      if (isConfirmed) {
+        toast.success({
+          title: "Plan Deleted",
+          description: `The plan "${plan.name}" has been successfully deleted.`,
+        });
+      }
+    } catch (err) {
+      console.error("Error showing confirm dialog:", err);
+    }
+  };
+
   React.useEffect(() => {
     setIsTableLoading(true);
     const timer = setTimeout(() => setIsTableLoading(false), 600);
@@ -431,7 +458,7 @@ export function PlansManagement() {
                       onView={(p) => router.push(`/dashboard/subscriptions/plans/${p.id}`)}
                       onEdit={(p) => alert(`Edit: ${p.name}`)}
                       onDuplicate={(p) => alert(`Duplicate: ${p.name}`)}
-                      onDelete={(p) => alert(`Delete: ${p.name}`)}
+                      onDelete={handleDeletePlan}
                     />
                   ))}
                   {filtered.length === 0 && (
@@ -511,7 +538,7 @@ export function PlansManagement() {
                           <div className="flex items-center gap-1.5">
                             <ActionTooltip icon={Eye} tooltip="View Plan" onClick={() => router.push(`/dashboard/subscriptions/plans/${plan.id}`)} />
                             <ActionTooltip icon={Edit2} tooltip="Edit Plan" onClick={() => alert(`Edit: ${plan.name}`)} />
-                            <ActionTooltip icon={Trash2} tooltip="Delete Plan" variant="danger" onClick={() => alert(`Delete: ${plan.name}`)} />
+                            <ActionTooltip icon={Trash2} tooltip="Delete Plan" variant="danger" onClick={() => handleDeletePlan(plan)} />
                           </div>
                         </td>
                       </motion.tr>
