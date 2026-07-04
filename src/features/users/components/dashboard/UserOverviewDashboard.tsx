@@ -4,6 +4,7 @@ import React from 'react';
 import { PageHeader } from '@/features/subscriptions/components/shared/UIComponents';
 import { StatCard } from '@/features/subscriptions/components/shared/StatCard';
 import { StatusBadge } from '@/features/subscriptions/components/shared/StatusBadge';
+import { TableOverlayLoader } from '@/components/ui/loaders';
 import { Users, Activity, ShieldBan, ShieldAlert, TrendingUp, Calendar, ChevronRight, Store, ArrowUpRight, Filter, Download, RefreshCcw } from 'lucide-react';
 import { mockUsers } from '../../data/mock-data';
 import { format } from 'date-fns';
@@ -154,6 +155,13 @@ function SubscriptionDistribution() {
 }
 
 export function UserOverviewDashboard() {
+  const [isRefreshing, setIsRefreshing] = React.useState(false);
+
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    setTimeout(() => setIsRefreshing(false), 1500);
+  };
+
   return (
     <div className="flex-1 w-full flex flex-col min-h-0 space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -177,20 +185,26 @@ export function UserOverviewDashboard() {
             <Download className="w-4 h-4 text-slate-400" /> Export
           </button>
           
-          <button className="p-2.5 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100 transition-colors group shadow-sm shadow-blue-100">
-            <RefreshCcw className="w-4 h-4 group-hover:rotate-180 transition-transform duration-500" />
+          <button 
+            onClick={handleRefresh}
+            disabled={isRefreshing}
+            className="p-2.5 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100 transition-colors group shadow-sm shadow-blue-100 disabled:opacity-50"
+          >
+            <RefreshCcw className={`w-4 h-4 transition-transform duration-500 ${isRefreshing ? 'animate-spin' : 'group-hover:rotate-180'}`} />
           </button>
         </div>
       </div>
 
       <AnalyticsCardsGrid />
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 relative">
+        {isRefreshing && <TableOverlayLoader />}
         <UserGrowthChart />
         <RecentActivityList />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 relative">
+        {isRefreshing && <TableOverlayLoader />}
         <div className="lg:col-span-2 bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-8 text-white relative overflow-hidden shadow-lg">
           <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/20 blur-3xl rounded-full -translate-y-1/2 translate-x-1/2"></div>
           

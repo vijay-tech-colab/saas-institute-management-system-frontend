@@ -1,5 +1,6 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import Link from "next/link"
+import { DetailSkeleton } from "@/components/ui/skeleton"
 import { 
   Users, 
   GraduationCap, 
@@ -24,6 +25,22 @@ import {
 } from "lucide-react"
 
 export function AdminDashboard() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate data fetching
+    const timer = setTimeout(() => setIsLoading(false), 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="pb-10">
+        <DetailSkeleton />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8 animate-in fade-in duration-500 pb-10">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">

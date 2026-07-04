@@ -56,8 +56,12 @@ const createPlanSchema = z.object({
 
 type CreatePlanFormData = z.infer<typeof createPlanSchema>;
 
+import { ButtonLoader } from '@/components/ui/loaders';
+import { LinearProgress } from '@/components/ui/progress';
+
 function CreatePlanForm({ onClose }: { onClose: () => void }) {
   const [isLoading, setIsLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   const {
     register,
@@ -79,9 +83,13 @@ function CreatePlanForm({ onClose }: { onClose: () => void }) {
 
   const onSubmit = async (data: CreatePlanFormData) => {
     setIsLoading(true);
+    setProgress(0);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Simulate API call with progress
+      for (let i = 0; i <= 100; i += 20) {
+        setProgress(i);
+        await new Promise((resolve) => setTimeout(resolve, 300));
+      }
       console.log("Plan Data:", data);
       onClose();
     } catch (error) {
@@ -103,6 +111,11 @@ function CreatePlanForm({ onClose }: { onClose: () => void }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
+      {isLoading && (
+        <div className="mb-4">
+          <LinearProgress value={progress} color="blue" showLabel />
+        </div>
+      )}
       <div className="grid grid-cols-2 gap-4">
         <div className="col-span-2 space-y-1.5">
           <Label htmlFor="name" required>Plan Name</Label>
@@ -154,7 +167,7 @@ function CreatePlanForm({ onClose }: { onClose: () => void }) {
       </div>
       <div className="flex gap-3 pt-2">
         <button type="submit" disabled={isLoading} className="flex-1 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 active:scale-[0.98] transition-all disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center">
-          {isLoading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : "Create Plan"}
+          {isLoading ? <ButtonLoader text="Creating..." /> : "Create Plan"}
         </button>
         <button type="button" onClick={onClose} disabled={isLoading} className="flex-1 py-2.5 bg-slate-100 text-slate-700 text-sm font-semibold rounded-xl hover:bg-slate-200 active:scale-[0.98] transition-all disabled:opacity-70 disabled:cursor-not-allowed">
           Cancel

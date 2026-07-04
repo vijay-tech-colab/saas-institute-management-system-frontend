@@ -53,7 +53,7 @@ export function ActionTooltip({
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              onClick?.(e as any);
+              onClick?.();
             }}
             className={cn(
               "flex items-center justify-center p-1.5 rounded-lg border transition-all active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1",
