@@ -27,12 +27,17 @@ export function RouteGuard({ children }: { children: React.ReactNode }) {
       });
     });
     
-    if (pathname === '/dashboard') {
+    if (pathname === '/dashboard' || pathname.startsWith('/dashboard/help-support')) {
       return true;
     } 
     
     // Explicitly allow platform settings for super admin (since it's not in the main nav array to prevent duplication)
     if (pathname.startsWith('/dashboard/platform-settings') && user.role === 'SUPER_ADMIN') {
+      return true;
+    }
+    
+    // Explicitly allow settings for all users who have access to dashboard
+    if (pathname.startsWith('/dashboard/settings')) {
       return true;
     }
     

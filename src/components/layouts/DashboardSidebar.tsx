@@ -338,7 +338,7 @@ export function DashboardSidebar() {
         ) : (
           <NavItem href="/dashboard/settings" icon={<Settings />} label="Settings" active={pathname === "/dashboard/settings"} isCollapsed={isCollapsed} />
         )}
-        <NavItem href="/dashboard/support" icon={<HelpCircle />} label="Help & Support" active={pathname === "/dashboard/support"} isCollapsed={isCollapsed} />
+        <NavItem href="/dashboard/help-support" icon={<HelpCircle />} label="Help & Support" active={pathname === "/dashboard/help-support"} isCollapsed={isCollapsed} />
         <div className="hidden lg:block">
           <Tooltip label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"} show={isCollapsed}>
             <button onClick={() => setIsCollapsed(!isCollapsed)} className={`w-full flex items-center p-2.5 rounded-xl text-slate-400 hover:bg-slate-50 hover:text-slate-600 transition-all duration-200 cursor-pointer ${isCollapsed ? "justify-center" : "gap-3"}`}>
