@@ -47,12 +47,12 @@ export function SplashScreen() {
             scale: 1.05,
             transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } 
           }}
-          className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-slate-900 overflow-hidden"
+          className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-white overflow-hidden"
         >
           {/* ─── High-Performance Background ─── */}
           <div className="absolute inset-0 pointer-events-none">
             {/* Dark grid background */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:32px_32px]"></div>
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#0000000a_1px,transparent_1px),linear-gradient(to_bottom,#0000000a_1px,transparent_1px)] bg-[size:32px_32px]"></div>
             
             {/* Center radial glow (static, cheap for GPU) */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] md:w-[40vw] md:h-[40vw] rounded-full bg-blue-500/20 blur-[120px] pointer-events-none"></div>
@@ -106,13 +106,13 @@ export function SplashScreen() {
               variants={textVariants}
               initial="hidden"
               animate="visible"
-              className="flex text-5xl font-black tracking-tighter text-white mb-4"
+              className="flex text-5xl font-black tracking-tighter text-slate-900 mb-4"
             >
               {title.split("").map((char, index) => (
                 <motion.span 
                   key={index} 
                   variants={letterVariants}
-                  className={index >= 6 ? "text-blue-500" : "text-white"}
+                  className={index >= 6 ? "text-blue-600" : "text-slate-900"}
                 >
                   {char}
                 </motion.span>
@@ -125,7 +125,7 @@ export function SplashScreen() {
                 initial={{ y: "100%", opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.8, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                className="text-slate-400 font-medium tracking-[0.2em] text-[11px] uppercase flex items-center justify-center gap-2"
+                className="text-slate-500 font-medium tracking-[0.2em] text-[11px] uppercase flex items-center justify-center gap-2"
               >
                 Initializing Workspace
                 <motion.span
@@ -143,7 +143,7 @@ export function SplashScreen() {
             initial={{ opacity: 0, scaleX: 0 }}
             animate={{ opacity: 1, scaleX: 1 }}
             transition={{ delay: 0.4, duration: 0.8, ease: "easeOut" }}
-            className="absolute bottom-16 w-64 h-1 bg-slate-800/50 rounded-full overflow-hidden backdrop-blur-md"
+            className="absolute bottom-16 w-64 h-1 bg-slate-200/50 rounded-full overflow-hidden backdrop-blur-md"
           >
             <motion.div 
               animate={{ x: ["-100%", "100%"] }}

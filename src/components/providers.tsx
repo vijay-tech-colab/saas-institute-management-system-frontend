@@ -24,9 +24,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <JotaiProvider>
       <QueryClientProvider client={queryClient}>
         <SplashScreen />
-        {children}
         <Toaster />
         <ConfirmDialogProvider />
+        {children}
       </QueryClientProvider>
     </JotaiProvider>
   )
