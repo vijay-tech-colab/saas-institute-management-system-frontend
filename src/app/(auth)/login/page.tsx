@@ -67,7 +67,7 @@ export default function LoginPage() {
           <LoginForm />
 
           <p className="mt-8 text-sm text-slate-500">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link href="/register" className="font-semibold text-indigo-600 hover:text-indigo-700 hover:underline cursor-pointer transition-colors">
               Sign up for a 14-day free trial
             </Link>

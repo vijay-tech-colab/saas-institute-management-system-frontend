@@ -19,13 +19,13 @@ export function NewExportModal({ isOpen, onClose }: NewExportModalProps) {
       <div className="flex border-b border-slate-100 p-2 gap-2 bg-slate-50/50">
         <button
           onClick={() => setActiveTab('manual')}
-          className={`flex-1 py-2 text-sm font-bold rounded-lg transition-colors ${activeTab === 'manual' ? 'bg-white shadow-sm text-blue-600' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-700'}`}
+          className={`flex-1 py-2 text-sm font-bold rounded-lg transition-colors ${activeTab === 'manual' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-700'}`}
         >
           Manual Export
         </button>
         <button
           onClick={() => setActiveTab('schedule')}
-          className={`flex-1 py-2 text-sm font-bold rounded-lg transition-colors ${activeTab === 'schedule' ? 'bg-white shadow-sm text-blue-600' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-700'}`}
+          className={`flex-1 py-2 text-sm font-bold rounded-lg transition-colors ${activeTab === 'schedule' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-700'}`}
         >
           Scheduled Exports
         </button>
@@ -79,7 +79,7 @@ export function NewExportModal({ isOpen, onClose }: NewExportModalProps) {
                     key={fmt.id}
                     onClick={() => setExportFormat(fmt.id)}
                     className={`flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all ${
-                      exportFormat === fmt.id ? 'border-blue-600 bg-blue-50 text-blue-700 shadow-sm shadow-blue-100' : 'border-slate-100 bg-white text-slate-500 hover:border-slate-300'
+                      exportFormat === fmt.id ? 'border-indigo-600 bg-indigo-50 text-indigo-700 shadow-sm shadow-indigo-100' : 'border-slate-100 bg-white text-slate-500 hover:border-slate-300'
                     }`}
                   >
                     {fmt.icon}
@@ -93,17 +93,17 @@ export function NewExportModal({ isOpen, onClose }: NewExportModalProps) {
               <button onClick={onClose} className="px-5 py-2.5 text-sm font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors">
                 Cancel
               </button>
-              <button className="px-6 py-2.5 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-colors shadow-sm shadow-blue-200 flex items-center gap-2">
+              <button className="px-6 py-2.5 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-colors shadow-sm shadow-indigo-200 flex items-center gap-2">
                 <Download className="w-4 h-4" /> Generate Export
               </button>
             </div>
           </div>
         ) : (
           <div className="space-y-6">
-            <div className="bg-slate-900 rounded-2xl p-6 text-white overflow-hidden relative">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/20 blur-3xl rounded-full -translate-y-1/2 translate-x-1/2"></div>
+            <div className="bg-slate-900 rounded-xl p-6 text-white overflow-hidden relative">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/20 blur-3xl rounded-full -translate-y-1/2 translate-x-1/2"></div>
               <div className="relative z-10 flex items-center gap-3 mb-6">
-                <div className="p-2.5 bg-blue-500/20 rounded-xl border border-blue-400/30">
+                <div className="p-2.5 bg-indigo-500/20 rounded-xl border border-blue-400/30">
                   <CalendarClock className="w-5 h-5 text-blue-300" />
                 </div>
                 <h2 className="text-base font-bold text-white">Scheduled Reports</h2>
@@ -148,3 +148,4 @@ export function NewExportModal({ isOpen, onClose }: NewExportModalProps) {
     </Modal>
   );
 }
+

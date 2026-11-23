@@ -60,7 +60,7 @@ export function RoleDetailsHub({ roleId }: { roleId: string }) {
   return (
     <div className="flex-1 w-full flex flex-col min-h-0 bg-slate-50/70 p-4 sm:p-6 xl:p-8">
       <div className="mx-auto flex w-full flex-col gap-5 h-full">
-        <header className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6 shrink-0">
+        <header className="relative overflow-hidden rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6 shrink-0">
           <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-indigo-100/70 blur-3xl" />
           <div className="relative flex flex-col gap-5">
             <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-start">
@@ -149,7 +149,7 @@ export function RoleDetailsHub({ roleId }: { roleId: string }) {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {/* Basic Info Card */}
                   <div className="md:col-span-1 space-y-6">
-                    <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
+                    <div className="bg-white border border-slate-100 rounded-xl p-6 shadow-sm">
                       <h3 className="text-sm font-bold text-slate-900 mb-4 flex items-center gap-2">
                         <FileText className="w-4 h-4 text-indigo-500" /> Basic Information
                       </h3>
@@ -178,7 +178,7 @@ export function RoleDetailsHub({ roleId }: { roleId: string }) {
 
                   {/* Audit Logs Card */}
                   <div className="md:col-span-2">
-                    <div className="bg-white border border-slate-100 rounded-2xl shadow-sm overflow-hidden flex flex-col h-full">
+                    <div className="bg-white border border-slate-100 rounded-xl shadow-sm overflow-hidden flex flex-col h-full">
                       <div className="px-6 py-4 border-b border-slate-100">
                         <h3 className="text-sm font-bold text-slate-900">Recent Audit Logs</h3>
                       </div>
@@ -217,7 +217,7 @@ export function RoleDetailsHub({ roleId }: { roleId: string }) {
 
               {/* USERS TAB */}
               {activeTab === 'users' && (
-                <div className="bg-white border border-slate-100 rounded-2xl shadow-sm flex flex-col flex-1 overflow-hidden">
+                <div className="bg-white border border-slate-100 rounded-xl shadow-sm flex flex-col flex-1 overflow-hidden">
                   <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
                     <div>
                       <h3 className="text-sm font-bold text-slate-900">Users with this Role</h3>
@@ -305,3 +305,4 @@ export function RoleDetailsHub({ roleId }: { roleId: string }) {
     </div>
   );
 }
+

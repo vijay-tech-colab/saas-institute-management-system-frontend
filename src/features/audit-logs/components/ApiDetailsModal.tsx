@@ -19,7 +19,7 @@ export function ApiDetailsModal({ log, isOpen, onClose }: ApiDetailsModalProps) 
         <div>
           <div className="flex items-center gap-3 mb-2">
             <span className={`px-2.5 py-1 text-xs font-bold rounded-lg ${
-              log.method === 'GET' ? 'bg-blue-100 text-blue-700' :
+              log.method === 'GET' ? 'bg-indigo-100 text-indigo-700' :
               log.method === 'POST' ? 'bg-emerald-100 text-emerald-700' :
               log.method === 'DELETE' ? 'bg-rose-100 text-rose-700' :
               log.method === 'PUT' ? 'bg-amber-100 text-amber-700' :
@@ -141,3 +141,4 @@ export function ApiDetailsModal({ log, isOpen, onClose }: ApiDetailsModalProps) 
     </Modal>
   );
 }
+

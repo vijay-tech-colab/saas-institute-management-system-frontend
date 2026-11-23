@@ -27,7 +27,7 @@ export function LoginDetailsModal({ log, isOpen, onClose }: LoginDetailsModalPro
               {log.status}
             </span>
             <span className={`px-2.5 py-1 text-xs font-bold rounded-lg flex items-center gap-1 ${
-              log.riskLevel === 'Low' ? 'bg-blue-100 text-blue-700' :
+              log.riskLevel === 'Low' ? 'bg-indigo-100 text-indigo-700' :
               log.riskLevel === 'Medium' ? 'bg-amber-100 text-amber-700' :
               log.riskLevel === 'High' ? 'bg-orange-100 text-orange-700' :
               'bg-rose-100 text-rose-700'
@@ -93,7 +93,7 @@ export function LoginDetailsModal({ log, isOpen, onClose }: LoginDetailsModalPro
               <User className="w-4 h-4" /> User Info
             </h4>
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-sm shrink-0">
+              <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-sm shrink-0">
                 {log.user.name.charAt(0)}
               </div>
               <div>
@@ -141,3 +141,4 @@ export function LoginDetailsModal({ log, isOpen, onClose }: LoginDetailsModalPro
     </Modal>
   );
 }
+

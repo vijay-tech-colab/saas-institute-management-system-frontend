@@ -12,6 +12,8 @@ export interface Message {
   isMe: boolean;
 }
 
+export type MessageCategory = 'General' | 'Finance' | 'IT Support' | 'Domain & SSL' | 'Subscriptions' | 'IAM & Security';
+
 export interface Conversation {
   id: string;
   subject: string;
@@ -22,6 +24,6 @@ export interface Conversation {
   lastMessageTime: string;
   status: MessageStatus;
   priority: Priority;
-  category: 'Academics' | 'Finance' | 'IT Support' | 'General';
+  category: MessageCategory;
   messages: Message[];
 }

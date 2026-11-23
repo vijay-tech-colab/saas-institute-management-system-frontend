@@ -122,7 +122,7 @@ export function IAMRolesList() {
         </button>
       </PageHeader>
 
-      <div className="bg-white border border-slate-100 rounded-2xl shadow-sm flex flex-col flex-1 overflow-hidden min-h-0 mb-6">
+      <div className="bg-white border border-slate-100 rounded-xl shadow-sm flex flex-col flex-1 overflow-hidden min-h-0 mb-6">
         {/* Toolbar */}
         <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row gap-4 justify-between items-center bg-slate-50/30">
           <div className="w-full sm:w-auto">
@@ -197,7 +197,7 @@ export function IAMRolesList() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     onClick={() => navigateToDetails(role.id)}
-                    className={`border-b border-slate-50 hover:bg-blue-50/30 transition-colors cursor-pointer ${selectedRoles.has(role.id) ? 'bg-indigo-50/50 border-indigo-100' : ''}`}
+                    className={`border-b border-slate-50 hover:bg-indigo-50/30 transition-colors cursor-pointer ${selectedRoles.has(role.id) ? 'bg-indigo-50/50 border-indigo-100' : ''}`}
                   >
                     <td className="py-3.5 px-4 text-center align-middle" onClick={(e) => e.stopPropagation()}>
                       <div className="flex items-center justify-center">
@@ -296,3 +296,4 @@ export function IAMRolesList() {
     </div>
   );
 }
+

@@ -34,16 +34,21 @@ export function SuspendedTenants() {
     return () => clearTimeout(timer);
   }, [pageIndex, pageSize, search, filter]);
 
-  const reasons = ['payment', 'policy', 'manual'];
+  const reasons = ['payment', 'policy', 'manual'] as const;
 
-  const suspendedTenants = mockTenants.map((t, i) => ({
-    ...t,
-    status: 'suspended' as const,
-    suspendedOn: subDays(new Date(), Math.floor(Math.random() * 30) + 1).toISOString(),
-    reason: reasons[i % 3] as 'payment' | 'policy' | 'manual',
-    daysSuspended: Math.floor(Math.random() * 30) + 1,
-    owingAmount: t.plan === 'Enterprise' ? 49900 : t.plan === 'Pro' ? 19900 : 9900,
-  }));
+  const suspendedTenants = React.useMemo(() => {
+    return mockTenants.map((t, i) => {
+      const days = ((i * 7) % 28) + 1;
+      return {
+        ...t,
+        status: 'suspended' as const,
+        suspendedOn: subDays(new Date('2026-03-01T00:00:00Z'), days).toISOString(),
+        reason: reasons[i % 3],
+        daysSuspended: days,
+        owingAmount: t.plan === 'Enterprise' ? 49900 : t.plan === 'Pro' ? 19900 : 9900,
+      };
+    });
+  }, []);
 
   const paymentCount = suspendedTenants.filter(t => t.reason === 'payment').length;
   const policyCount = suspendedTenants.filter(t => t.reason === 'policy').length;

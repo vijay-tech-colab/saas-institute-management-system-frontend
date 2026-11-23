@@ -168,7 +168,7 @@ function CreateInvoiceForm({ onClose }: { onClose: () => void }) {
       </div>
 
       <div className="flex gap-3 pt-2">
-        <button type="submit" disabled={isLoading} className="flex-1 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 active:scale-[0.98] transition-all disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center">
+        <button type="submit" disabled={isLoading} className="flex-1 py-2.5 bg-indigo-600 text-white text-sm font-semibold rounded-xl hover:bg-indigo-700 active:scale-[0.98] transition-all disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center">
           {isLoading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : "Create Invoice"}
         </button>
         <button type="button" onClick={onClose} disabled={isLoading} className="flex-1 py-2.5 bg-slate-100 text-slate-700 text-sm font-semibold rounded-xl hover:bg-slate-200 active:scale-[0.98] transition-all disabled:opacity-70 disabled:cursor-not-allowed">
@@ -233,7 +233,7 @@ export function InvoiceManagement() {
         <button className="flex items-center gap-2 px-4 py-2 text-sm bg-slate-100 text-slate-700 font-semibold rounded-xl hover:bg-slate-200 transition-all">
           <Download className="w-4 h-4" /> Export CSV
         </button>
-        <button onClick={() => setShowCreate(true)} className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all shadow-sm shadow-blue-200 active:scale-95">
+        <button onClick={() => setShowCreate(true)} className="flex items-center gap-2 px-4 py-2 text-sm bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-all shadow-sm shadow-indigo-200 active:scale-95">
           <Plus className="w-4 h-4" /> New Invoice
         </button>
       </PageHeader>
@@ -241,13 +241,13 @@ export function InvoiceManagement() {
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <StatCard title="Total Revenue" value={totalRevenue} prefix="₹" icon={<CheckCircle2 size={20} />} iconColor="text-emerald-600" iconBg="bg-emerald-50" trend={7.2} trendLabel="vs last month" />
-        <StatCard title="Paid Invoices" value={paid.length} icon={<CheckCircle2 size={20} />} iconColor="text-blue-600" iconBg="bg-blue-50" />
+        <StatCard title="Paid Invoices" value={paid.length} icon={<CheckCircle2 size={20} />} iconColor="text-indigo-600" iconBg="bg-indigo-50" />
         <StatCard title="Unpaid Invoices" value={unpaid.length} icon={<Clock size={20} />} iconColor="text-amber-600" iconBg="bg-amber-50" />
         <StatCard title="Overdue" value={overdue.length} icon={<AlertCircle size={20} />} iconColor="text-red-600" iconBg="bg-red-50" />
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-slate-100 rounded-2xl shadow-sm flex flex-col flex-1 overflow-hidden min-h-0">
+      <div className="bg-white border border-slate-100 rounded-xl shadow-sm flex flex-col flex-1 overflow-hidden min-h-0">
         <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shrink-0 bg-slate-50/50">
           <div className="flex items-center gap-3">
             <SearchInput value={search} onChange={setSearch} placeholder="Search invoice or institute..." className="w-full sm:w-80" />
@@ -293,7 +293,7 @@ export function InvoiceManagement() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: i * 0.04 }}
-                    className={`border-b hover:bg-blue-50/20 transition-colors group cursor-pointer ${selectedInvoices.has(inv.id) ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
+                    className={`border-b hover:bg-indigo-50/20 transition-colors group cursor-pointer ${selectedInvoices.has(inv.id) ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
                     onClick={() => toggleSelect(inv.id)}
                   >
                     <td className="py-3.5 px-4 text-center align-middle">
@@ -367,3 +367,4 @@ export function InvoiceManagement() {
     </div>
   );
 }
+

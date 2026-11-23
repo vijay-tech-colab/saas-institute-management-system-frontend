@@ -79,7 +79,7 @@ export function BackupManagement() {
         description="Manage automated and manual database/file backups for all tenants."
         breadcrumbs={[{ label: 'Tenants' }, { label: 'Backups' }]}
       >
-        <button className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all active:scale-95 shadow-sm shadow-blue-200">
+        <button className="flex items-center gap-2 px-4 py-2 text-sm bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-all active:scale-95 shadow-sm shadow-indigo-200">
           <Database className="w-4 h-4" /> Run Manual Backup
         </button>
       </PageHeader>
@@ -87,12 +87,12 @@ export function BackupManagement() {
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
         <StatCard title="Total Backup Storage" value={`${totalSize} GB`} icon={<HardDrive size={20} />} iconColor="text-slate-600" iconBg="bg-slate-100" />
-        <StatCard title="Manual Backups" value={manualCount} icon={<Database size={20} />} iconColor="text-blue-600" iconBg="bg-blue-50" />
+        <StatCard title="Manual Backups" value={manualCount} icon={<Database size={20} />} iconColor="text-indigo-600" iconBg="bg-indigo-50" />
         <StatCard title="Automated Backups" value={autoCount} icon={<Clock size={20} />} iconColor="text-emerald-600" iconBg="bg-emerald-50" trend={100} trendLabel="success rate (30d)" />
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-slate-100 rounded-2xl shadow-sm flex flex-col flex-1 overflow-hidden min-h-0">
+      <div className="bg-white border border-slate-100 rounded-xl shadow-sm flex flex-col flex-1 overflow-hidden min-h-0">
         {/* Toolbar */}
         <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shrink-0 bg-slate-50/50">
           <div className="flex items-center gap-3">
@@ -142,7 +142,7 @@ export function BackupManagement() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: i * 0.04 }}
-                    className={`border-b hover:bg-blue-50/20 transition-colors group cursor-pointer ${selectedBackups.has(backup.id) ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
+                    className={`border-b hover:bg-indigo-50/20 transition-colors group cursor-pointer ${selectedBackups.has(backup.id) ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
                     onClick={() => toggleSelect(backup.id)}
                   >
                     <td className="py-3.5 px-4 text-center align-middle">
@@ -205,3 +205,4 @@ export function BackupManagement() {
     </div>
   );
 }
+

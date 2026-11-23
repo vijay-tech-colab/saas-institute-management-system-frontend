@@ -80,82 +80,55 @@ const MODULES = [
     }
   },
   {
-    id: 'students',
-    name: 'Student Management',
+    id: 'security',
+    name: 'Platform Security & Incidents',
     permissions: {
-      view: 'view_students', create: 'create_student', edit: 'edit_student', delete: 'delete_student',
+      view: 'view_security', create: 'create_security_policy', edit: 'edit_security_policy', delete: 'delete_security_policy',
       special: [
-        { id: 'import_students', label: 'Import Students' },
-        { id: 'export_students', label: 'Export Students' },
-        { id: 'promote_students', label: 'Promote Students' },
-        { id: 'issue_id_cards', label: 'Issue ID Cards' },
-        { id: 'view_attendance', label: 'View Full Attendance' }
+        { id: 'quarantine_ips', label: 'Quarantine IPs' },
+        { id: 'enforce_mfa', label: 'Enforce Global MFA' },
+        { id: 'revoke_api_keys', label: 'Revoke API Keys' },
+        { id: 'trigger_security_audit', label: 'Trigger Security Audit' },
+        { id: 'export_security_logs', label: 'Export Security Logs' }
       ]
     }
   },
   {
-    id: 'academic',
-    name: 'Academic & Curriculum',
+    id: 'infrastructure',
+    name: 'Cloud & Infrastructure',
     permissions: {
-      view: 'view_academic', create: 'create_academic', edit: 'edit_academic', delete: 'delete_academic',
+      view: 'view_infrastructure', create: 'provision_resource', edit: 'scale_cluster', delete: 'deprovision_resource',
       special: [
-        { id: 'publish_timetable', label: 'Publish Timetable' },
-        { id: 'approve_syllabus', label: 'Approve Syllabus' },
-        { id: 'manage_holidays', label: 'Manage Holidays' },
-        { id: 'export_timetable', label: 'Export Timetable' }
+        { id: 'manage_backups', label: 'Trigger Database Backups' },
+        { id: 'purge_cache', label: 'Purge CDN Cache' },
+        { id: 'rotate_secrets', label: 'Rotate Cloud Secrets' },
+        { id: 'download_telemetry', label: 'Download Telemetry' }
       ]
     }
   },
   {
-    id: 'examination',
-    name: 'Examination & Grading',
+    id: 'tenants_governance',
+    name: 'Tenant Domain & Quota Governance',
     permissions: {
-      view: 'view_exams', create: 'create_exam', edit: 'edit_exam', delete: 'delete_exam',
+      view: 'view_tenants', create: 'create_tenant', edit: 'edit_tenant', delete: 'delete_tenant',
       special: [
-        { id: 'publish_results', label: 'Publish Results' },
-        { id: 'print_report_cards', label: 'Print Report Cards' },
-        { id: 'manage_grading_rules', label: 'Manage Grading Rules' },
-        { id: 'import_marks', label: 'Import Marks' }
+        { id: 'verify_domains', label: 'Verify Custom Domains' },
+        { id: 'issue_ssl', label: 'Issue SSL Certificates' },
+        { id: 'suspend_tenants', label: 'Suspend Delinquent Tenants' },
+        { id: 'override_quotas', label: 'Override Resource Quotas' }
       ]
     }
   },
   {
-    id: 'finance',
-    name: 'Fee & Finance Management',
+    id: 'compliance',
+    name: 'Compliance & Audit Logs',
     permissions: {
-      view: 'view_finance', create: 'create_invoice', edit: 'edit_invoice', delete: 'delete_invoice',
+      view: 'view_audit', create: 'generate_audit_report', edit: 'configure_retention', delete: 'purge_logs',
       special: [
-        { id: 'collect_fees', label: 'Collect Fees' },
-        { id: 'issue_refunds', label: 'Issue Refunds' },
-        { id: 'apply_discounts', label: 'Apply Fee Discounts' },
-        { id: 'view_financial_reports', label: 'View Financial Reports' },
-        { id: 'export_transactions', label: 'Export Transactions' }
-      ]
-    }
-  },
-  {
-    id: 'hr',
-    name: 'Human Resources (HR)',
-    permissions: {
-      view: 'view_staff', create: 'add_staff', edit: 'edit_staff', delete: 'remove_staff',
-      special: [
-        { id: 'process_payroll', label: 'Process Payroll' },
-        { id: 'approve_leaves', label: 'Approve Leaves' },
-        { id: 'view_payslips', label: 'View Payslips' },
-        { id: 'export_staff_data', label: 'Export Staff Data' }
-      ]
-    }
-  },
-  {
-    id: 'communication',
-    name: 'Communication & Notices',
-    permissions: {
-      view: 'view_notices', create: 'create_notice', edit: 'edit_notice', delete: 'delete_notice',
-      special: [
-        { id: 'send_sms', label: 'Send SMS Broadcast' },
-        { id: 'send_email', label: 'Send Email Broadcast' },
-        { id: 'push_notifications', label: 'Send Push Notifications' },
-        { id: 'approve_notices', label: 'Approve Pending Notices' }
+        { id: 'export_soc2_logs', label: 'Export SOC2 Compliance Data' },
+        { id: 'view_pii_access_logs', label: 'View PII Access Logs' },
+        { id: 'manage_retention_rules', label: 'Manage Data Retention Rules' },
+        { id: 'audit_super_admin_actions', label: 'Audit Super Admin Actions' }
       ]
     }
   }
@@ -296,7 +269,7 @@ export function RolePermissionManager({ roleId, hideHeader = false }: { roleId: 
         </div>
       )}
 
-      <div className={`bg-white border border-slate-100 rounded-2xl shadow-sm flex flex-col flex-1 overflow-hidden min-h-0 ${!hideHeader ? 'mb-6' : ''}`}>
+      <div className={`bg-white border border-slate-100 rounded-xl shadow-sm flex flex-col flex-1 overflow-hidden min-h-0 ${!hideHeader ? 'mb-6' : ''}`}>
         {/* Toolbar aligned with Access Policies / Roles List */}
         <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row gap-4 justify-between items-center bg-slate-50/30">
           <div className="w-full sm:w-auto">
@@ -423,3 +396,4 @@ export function RolePermissionManager({ roleId, hideHeader = false }: { roleId: 
     </div>
   );
 }
+

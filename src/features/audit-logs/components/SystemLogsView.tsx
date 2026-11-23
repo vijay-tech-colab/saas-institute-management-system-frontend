@@ -40,7 +40,7 @@ export function SystemLogsView() {
         </PageHeader>
       </div>
 
-      <div className="bg-[#0D1117] border border-slate-800 rounded-2xl shadow-sm flex-1 flex flex-col min-h-0 overflow-hidden text-slate-300">
+      <div className="bg-[#0D1117] border border-slate-800 rounded-xl shadow-sm flex-1 flex flex-col min-h-0 overflow-hidden text-slate-300">
         {/* Toolbar */}
         <div className="p-4 border-b border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#161B22]">
           <div className="flex items-center gap-3 w-full sm:w-auto">
@@ -63,7 +63,7 @@ export function SystemLogsView() {
                 key={level}
                 onClick={() => setLevelFilter(level)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold capitalize transition-colors ${
-                  levelFilter === level ? 'bg-blue-600 text-white' : 'bg-[#0D1117] border border-slate-700 text-slate-400 hover:bg-slate-800'
+                  levelFilter === level ? 'bg-indigo-600 text-white' : 'bg-[#0D1117] border border-slate-700 text-slate-400 hover:bg-slate-800'
                 }`}
               >
                 {level}
@@ -118,3 +118,4 @@ export function SystemLogsView() {
     </div>
   );
 }
+

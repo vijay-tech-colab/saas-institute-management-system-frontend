@@ -5,33 +5,33 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Bell, Check, ExternalLink, MessageSquare, Settings, UserPlus } from "lucide-react"
 import { NotificationSheet } from "./NotificationSheet"
 
-// Dummy Notifications
+// Super Admin Notifications
 const NOTIFICATIONS = [
   {
     id: 1,
-    title: "New Registration",
-    message: "Sarah Jenkins has applied for B.Tech Computer Science.",
+    title: "New Tenant Onboarded",
+    message: "Apex Computing Institute registered for the Enterprise Plan.",
     time: "2 mins ago",
     unread: true,
-    type: "user", // userPlus
+    type: "user",
     color: "emerald",
   },
   {
     id: 2,
     title: "System Update",
-    message: "CampusOS has been updated to version 2.4.0. Check out the new features.",
+    message: "CampusOS Core v2.4.0 deployed successfully across all tenant nodes.",
     time: "1 hour ago",
     unread: true,
-    type: "system", // settings
+    type: "system",
     color: "indigo",
   },
   {
     id: 3,
-    title: "New Message",
-    message: "Prof. Alan Turing sent you a message regarding the upcoming exams.",
+    title: "Domain Verified",
+    message: "Custom domain portal.techacademy.in verified with automated SSL certificate.",
     time: "3 hours ago",
     unread: false,
-    type: "message", // MessageSquare
+    type: "message",
     color: "sky",
   },
 ]

@@ -2,16 +2,15 @@
 import React, { useState, useEffect } from "react"
 import { useAtomValue } from "jotai"
 import { userAtom, UserRole } from "@/store/user-store"
-import { User, Shield, Bell, Building2, CreditCard, Sliders } from "lucide-react"
+import { User, Shield, Bell, CreditCard, Sliders } from "lucide-react"
 
 import { ProfileSettings } from "./tabs/ProfileSettings"
 import { SecuritySettings } from "./tabs/SecuritySettings"
 import { NotificationSettings } from "./tabs/NotificationSettings"
-import { InstituteSettings } from "./tabs/InstituteSettings"
 import { BillingSettings } from "./tabs/BillingSettings"
 import { PlatformSettings } from "./tabs/PlatformSettings"
 
-type TabId = 'profile' | 'security' | 'notifications' | 'institute' | 'billing' | 'platform'
+type TabId = 'profile' | 'security' | 'notifications' | 'billing' | 'platform'
 
 interface TabConfig {
   id: TabId
@@ -26,11 +25,10 @@ export function SettingsView() {
   const [activeTab, setActiveTab] = useState<TabId>('profile')
 
   const tabs: TabConfig[] = [
-    { id: 'profile', label: 'Profile', icon: <User className="w-5 h-5" />, roles: ['SUPER_ADMIN', 'ADMIN', 'TEACHER', 'STUDENT', 'PARENT'], component: <ProfileSettings /> },
-    { id: 'security', label: 'Security', icon: <Shield className="w-5 h-5" />, roles: ['SUPER_ADMIN', 'ADMIN', 'TEACHER', 'STUDENT', 'PARENT'], component: <SecuritySettings /> },
-    { id: 'notifications', label: 'Notifications', icon: <Bell className="w-5 h-5" />, roles: ['SUPER_ADMIN', 'ADMIN', 'TEACHER', 'STUDENT', 'PARENT'], component: <NotificationSettings /> },
-    { id: 'institute', label: 'Institute Info', icon: <Building2 className="w-5 h-5" />, roles: ['ADMIN'], component: <InstituteSettings /> },
-    { id: 'billing', label: 'Billing & Plan', icon: <CreditCard className="w-5 h-5" />, roles: ['SUPER_ADMIN', 'ADMIN'], component: <BillingSettings /> },
+    { id: 'profile', label: 'Profile', icon: <User className="w-5 h-5" />, roles: ['SUPER_ADMIN'], component: <ProfileSettings /> },
+    { id: 'security', label: 'Security', icon: <Shield className="w-5 h-5" />, roles: ['SUPER_ADMIN'], component: <SecuritySettings /> },
+    { id: 'notifications', label: 'Notifications', icon: <Bell className="w-5 h-5" />, roles: ['SUPER_ADMIN'], component: <NotificationSettings /> },
+    { id: 'billing', label: 'Billing & Plan', icon: <CreditCard className="w-5 h-5" />, roles: ['SUPER_ADMIN'], component: <BillingSettings /> },
     { id: 'platform', label: 'Platform Settings', icon: <Sliders className="w-5 h-5" />, roles: ['SUPER_ADMIN'], component: <PlatformSettings /> },
   ]
 
@@ -70,9 +68,10 @@ export function SettingsView() {
       </aside>
 
       {/* Content Area */}
-      <main className="flex-1 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden min-h-[600px]">
+      <main className="flex-1 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden min-h-[600px]">
         {currentTabComponent}
       </main>
     </div>
   )
 }
+

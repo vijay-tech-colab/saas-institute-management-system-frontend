@@ -66,7 +66,7 @@ export function CreateEditPolicyModal({ isOpen, onClose, policy, onSave }: Creat
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden pointer-events-auto flex flex-col max-h-[90vh]"
+              className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden pointer-events-auto flex flex-col max-h-[90vh]"
             >
               <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
                 <div className="flex items-center gap-3">
@@ -121,8 +121,8 @@ export function CreateEditPolicyModal({ isOpen, onClose, policy, onSave }: Creat
                     <SelectContent>
                       <SelectItem value="All Roles">All Roles</SelectItem>
                       <SelectItem value="Super Admin">Super Admin</SelectItem>
-                      <SelectItem value="Branch Admin">Branch Admin</SelectItem>
-                      <SelectItem value="Teacher">Teacher</SelectItem>
+                      <SelectItem value="Tenant Admin">Tenant Admin</SelectItem>
+                      <SelectItem value="Platform Operator">Platform Operator</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -156,3 +156,4 @@ export function CreateEditPolicyModal({ isOpen, onClose, policy, onSave }: Creat
     </AnimatePresence>
   );
 }
+

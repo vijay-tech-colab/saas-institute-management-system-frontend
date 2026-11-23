@@ -127,7 +127,7 @@ function CreatePlanForm({ onClose }: { onClose: () => void }) {
           <textarea
             id="description"
             rows={2}
-            className={`w-full px-4 py-2 text-sm border rounded-xl focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200 resize-none ${errors.description ? 'bg-rose-50 border-rose-200 text-rose-900 focus:ring-rose-500/20 focus:border-rose-400' : 'border-slate-200 bg-white text-slate-900 focus:ring-blue-600/20 focus:border-blue-400'}`}
+            className={`w-full px-4 py-2 text-sm border rounded-xl focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200 resize-none ${errors.description ? 'bg-rose-50 border-rose-200 text-rose-900 focus:ring-rose-500/20 focus:border-rose-400' : 'border-slate-200 bg-white text-slate-900 focus:ring-indigo-600/20 focus:border-blue-400'}`}
             placeholder="Describe the plan..."
             {...register("description")}
             disabled={isLoading}
@@ -166,7 +166,7 @@ function CreatePlanForm({ onClose }: { onClose: () => void }) {
         </div>
       </div>
       <div className="flex gap-3 pt-2">
-        <button type="submit" disabled={isLoading} className="flex-1 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 active:scale-[0.98] transition-all disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center">
+        <button type="submit" disabled={isLoading} className="flex-1 py-2.5 bg-indigo-600 text-white text-sm font-semibold rounded-xl hover:bg-indigo-700 active:scale-[0.98] transition-all disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center">
           {isLoading ? <ButtonLoader text="Creating..." /> : "Create Plan"}
         </button>
         <button type="button" onClick={onClose} disabled={isLoading} className="flex-1 py-2.5 bg-slate-100 text-slate-700 text-sm font-semibold rounded-xl hover:bg-slate-200 active:scale-[0.98] transition-all disabled:opacity-70 disabled:cursor-not-allowed">
@@ -193,10 +193,10 @@ function PlanCard({ plan, onEdit, onDuplicate, onDelete, onView }: {
 
   return (
     <div
-      className={`relative bg-white border rounded-2xl p-6 shadow-sm hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:-translate-y-0.5 transition-all duration-300 group ${isPopular ? 'border-blue-200 ring-4 ring-blue-50' : 'border-slate-200'}`}
+      className={`relative bg-white border rounded-xl p-6 shadow-sm hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:-translate-y-0.5 transition-all duration-300 group ${isPopular ? 'border-indigo-200 ring-4 ring-indigo-50' : 'border-slate-200'}`}
     >
       {isPopular && (
-        <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-blue-600 text-white text-[11px] font-bold rounded-full uppercase tracking-wider shadow-sm shadow-blue-200">
+        <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-indigo-600 text-white text-[11px] font-bold rounded-full uppercase tracking-wider shadow-sm shadow-indigo-200">
           ⭐ Most Popular
         </span>
       )}
@@ -247,9 +247,9 @@ function PlanCard({ plan, onEdit, onDuplicate, onDelete, onView }: {
                 +{hiddenFeatures.length} more
               </button>
             </PopoverTrigger>
-            <PopoverContent className="w-64 p-4 rounded-2xl shadow-xl z-50 bg-white border-slate-100">
+            <PopoverContent className="w-64 p-4 rounded-xl shadow-xl z-50 bg-white border-slate-100">
               <div className="flex items-center gap-2 mb-3 pb-3 border-b border-slate-100">
-                <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+                <div className="w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600">
                   <CheckCircle2 className="w-4 h-4" />
                 </div>
                 <div>
@@ -376,7 +376,7 @@ export function PlansManagement() {
       >
         <button
           onClick={() => setShowCreateModal(true)}
-          className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all active:scale-95 shadow-sm shadow-blue-200"
+          className="flex items-center gap-2 px-4 py-2 text-sm bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-all active:scale-95 shadow-sm shadow-indigo-200"
         >
           <Plus className="w-4 h-4" /> Create Plan
         </button>
@@ -384,13 +384,13 @@ export function PlansManagement() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <StatCard title="Total Plans" value={totalPlans} icon={<Package size={20} />} iconColor="text-blue-600" iconBg="bg-blue-50" />
+        <StatCard title="Total Plans" value={totalPlans} icon={<Package size={20} />} iconColor="text-indigo-600" iconBg="bg-indigo-50" />
         <StatCard title="Active Plans" value={activePlans} icon={<Activity size={20} />} iconColor="text-emerald-600" iconBg="bg-emerald-50" />
         <StatCard title="Total Subscribers" value={totalSubscribers} icon={<Users size={20} />} iconColor="text-indigo-600" iconBg="bg-indigo-50" trend={5.4} trendLabel="vs last month" />
         <StatCard title="Avg Monthly Price" value={avgMonthlyPrice} prefix="₹" icon={<IndianRupee size={20} />} iconColor="text-amber-600" iconBg="bg-amber-50" />
       </div>
 
-      <div className="bg-white border border-slate-100 rounded-2xl shadow-sm flex flex-col flex-1 overflow-hidden min-h-0">
+      <div className="bg-white border border-slate-100 rounded-xl shadow-sm flex flex-col flex-1 overflow-hidden min-h-0">
         {/* Toolbar */}
         <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shrink-0 bg-slate-50/50">
           <div className="flex items-center gap-3">
@@ -460,7 +460,7 @@ export function PlansManagement() {
             <div className="p-5 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
               {isTableLoading ? (
                 Array.from({ length: 6 }).map((_, i) => (
-                  <div key={i} className="bg-white border border-slate-100 rounded-2xl h-72 animate-pulse" />
+                  <div key={i} className="bg-white border border-slate-100 rounded-xl h-72 animate-pulse" />
                 ))
               ) : (
                 <>
@@ -519,7 +519,7 @@ export function PlansManagement() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: i * 0.04 }}
-                        className={`border-b hover:bg-blue-50/30 transition-colors cursor-pointer ${selectedPlans.includes(plan.id) ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
+                        className={`border-b hover:bg-indigo-50/30 transition-colors cursor-pointer ${selectedPlans.includes(plan.id) ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
                       >
                         <td className="py-3.5 px-4 text-center align-middle">
                           <div className="flex items-center justify-center">
@@ -601,3 +601,4 @@ export function PlansManagement() {
     </div>
   );
 }
+

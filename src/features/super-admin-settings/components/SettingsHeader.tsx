@@ -14,11 +14,6 @@ export function SettingsHeader({ activeCategoryLabel, hasUnsavedChanges, onSave,
   return (
     <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-5 md:py-6 bg-white border-b border-slate-200/70">
       <div>
-        <div className="flex items-center gap-1.5 mb-1.5">
-          <span className="text-[11px] sm:text-xs font-medium text-slate-400">Settings</span>
-          <span className="text-slate-300 text-[11px] sm:text-xs">/</span>
-          <span className="text-[11px] sm:text-xs font-medium text-slate-600">{activeCategoryLabel}</span>
-        </div>
         <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">{activeCategoryLabel}</h1>
         <p className="text-xs sm:text-sm text-slate-500 mt-1">Configure {activeCategoryLabel.toLowerCase()} and system preferences.</p>
       </div>
@@ -49,7 +44,7 @@ export function SettingsHeader({ activeCategoryLabel, hasUnsavedChanges, onSave,
         <button
           onClick={onSave}
           disabled={!hasUnsavedChanges}
-          className="flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-1.5 sm:py-2 bg-blue-600 text-white text-[13px] sm:text-sm font-bold rounded-xl hover:bg-blue-700 transition-colors shadow-sm shadow-blue-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-1.5 sm:py-2 bg-indigo-600 text-white text-[13px] sm:text-sm font-bold rounded-xl hover:bg-indigo-700 transition-colors shadow-sm shadow-indigo-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Save className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Save
         </button>
@@ -57,4 +52,5 @@ export function SettingsHeader({ activeCategoryLabel, hasUnsavedChanges, onSave,
     </header>
   )
 }
+
 

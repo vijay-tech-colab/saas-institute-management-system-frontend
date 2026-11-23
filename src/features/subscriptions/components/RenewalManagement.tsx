@@ -74,7 +74,7 @@ export function RenewalManagement() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
         <StatCard
           title="Upcoming Renewals" value={upcoming}
-          icon={<RefreshCw size={16} />} iconColor="text-blue-600" iconBg="bg-blue-50"
+          icon={<RefreshCw size={16} />} iconColor="text-indigo-600" iconBg="bg-indigo-50"
           trend={3.2} trendLabel="vs last month"
         />
         <StatCard
@@ -194,7 +194,7 @@ export function RenewalManagement() {
           <div className="bg-white border border-slate-100 rounded-xl shadow-sm overflow-hidden">
             <div className="px-4 pt-4 pb-1">
               <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-blue-500 inline-block" />
+                <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 inline-block" />
                 Renewal Calendar
               </h2>
               <p className="text-[11px] text-slate-400 mt-0.5">Click a date to see renewals</p>
@@ -208,7 +208,7 @@ export function RenewalManagement() {
                 expired: expiredDates,
               }}
               modifiersClassNames={{
-                renewal: 'after:block after:w-1 after:h-1 after:bg-blue-500 after:rounded-full after:mx-auto after:-mt-0.5',
+                renewal: 'after:block after:w-1 after:h-1 after:bg-indigo-500 after:rounded-full after:mx-auto after:-mt-0.5',
                 expired: 'after:block after:w-1 after:h-1 after:bg-red-400 after:rounded-full after:mx-auto after:-mt-0.5',
               }}
               className="border-0"
@@ -216,7 +216,7 @@ export function RenewalManagement() {
             {/* Legend */}
             <div className="flex items-center gap-4 px-4 pb-3 border-t border-slate-50 pt-2">
               <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-blue-500" />
+                <span className="w-2 h-2 rounded-full bg-indigo-500" />
                 <span className="text-[10px] text-slate-500">Upcoming</span>
               </div>
               <div className="flex items-center gap-1.5">
@@ -253,7 +253,7 @@ export function RenewalManagement() {
           {/* Reminder Automation */}
           <div className="bg-white border border-slate-100 rounded-xl shadow-sm p-4">
             <h2 className="text-sm font-bold text-slate-900 mb-0.5 flex items-center gap-2">
-              <Bell className="w-3.5 h-3.5 text-blue-500" /> Reminder Automation
+              <Bell className="w-3.5 h-3.5 text-indigo-500" /> Reminder Automation
             </h2>
             <p className="text-[11px] text-slate-400 mb-3">Send email + SMS before renewal</p>
             <div className="space-y-2">
@@ -270,7 +270,7 @@ export function RenewalManagement() {
                 </div>
               ))}
             </div>
-            <button className="w-full mt-3 py-2 bg-blue-600 text-white text-xs font-semibold rounded-lg hover:bg-blue-700 transition-all">
+            <button className="w-full mt-3 py-2 bg-indigo-600 text-white text-xs font-semibold rounded-lg hover:bg-indigo-700 transition-all">
               Save Settings
             </button>
           </div>
@@ -285,7 +285,7 @@ export function RenewalManagement() {
               {mockRenewals.slice(0, 4).map((r, i) => (
                 <div key={r.id} className="relative flex items-start gap-3">
                   <div className={`absolute -left-3 top-1 w-2 h-2 rounded-full border-2 border-white ${
-                    r.status === 'upcoming' ? 'bg-blue-500' :
+                    r.status === 'upcoming' ? 'bg-indigo-500' :
                     r.status === 'successful' ? 'bg-emerald-500' :
                     r.status === 'expired' ? 'bg-red-400' : 'bg-slate-200'
                   }`} />
@@ -302,3 +302,4 @@ export function RenewalManagement() {
     </div>
   );
 }
+

@@ -40,11 +40,12 @@ export default function TicketsListPage() {
   
   const [pageIndex, setPageIndex] = useState(0)
   const [pageSize, setPageSize] = useState(10)
-  const [isTableLoading, setIsTableLoading] = useState(true)
+  const [isTableLoading, setIsTableLoading] = useState(false)
 
   React.useEffect(() => {
-    setIsTableLoading(true)
-    const timer = setTimeout(() => setIsTableLoading(false), 600)
+    const timer = setTimeout(() => {
+      setIsTableLoading(false)
+    }, 400)
     return () => clearTimeout(timer)
   }, [pageIndex, pageSize, search, filter, viewMode])
 

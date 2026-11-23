@@ -24,7 +24,7 @@ function Tab_Overview({ invoice }: { invoice: Invoice }) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Invoice Summary Card */}
-        <div className="lg:col-span-2 bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+        <div className="lg:col-span-2 bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
           <div className="flex items-center justify-between mb-8">
             <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
               <FileText className="w-4 h-4 text-slate-400" /> Invoice Line Items
@@ -72,7 +72,7 @@ function Tab_Overview({ invoice }: { invoice: Invoice }) {
               )}
               <div className="flex justify-between w-64 text-base pt-2 border-t border-slate-100 mt-2">
                 <span className="font-bold text-slate-900">Total</span>
-                <span className="font-black text-blue-600">₹{invoice.total.toLocaleString('en-IN')}</span>
+                <span className="font-black text-indigo-600">₹{invoice.total.toLocaleString('en-IN')}</span>
               </div>
             </div>
           </div>
@@ -80,7 +80,7 @@ function Tab_Overview({ invoice }: { invoice: Invoice }) {
 
         {/* Customer & Info Card */}
         <div className="space-y-6">
-          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+          <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
             <h3 className="text-sm font-bold text-slate-900 mb-4 flex items-center gap-2">
               <Building2 className="w-4 h-4 text-slate-400" /> Billed To
             </h3>
@@ -91,12 +91,12 @@ function Tab_Overview({ invoice }: { invoice: Invoice }) {
               </div>
               <div>
                 <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-0.5">Email</p>
-                <p className="text-sm font-medium text-blue-600">{invoice.email}</p>
+                <p className="text-sm font-medium text-indigo-600">{invoice.email}</p>
               </div>
             </div>
           </div>
           
-          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+          <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
             <h3 className="text-sm font-bold text-slate-900 mb-4 flex items-center gap-2">
               <Calendar className="w-4 h-4 text-slate-400" /> Dates
             </h3>
@@ -121,7 +121,7 @@ function Tab_Payment({ invoice }: { invoice: Invoice }) {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
           <h3 className="text-sm font-bold text-slate-900 mb-6 flex items-center gap-2">
             <CreditCard className="w-4 h-4 text-slate-400" /> Payment Details
           </h3>
@@ -141,7 +141,7 @@ function Tab_Payment({ invoice }: { invoice: Invoice }) {
           </div>
         </div>
         
-        <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
           <h3 className="text-sm font-bold text-slate-900 mb-6 flex items-center gap-2">
             <Activity className="w-4 h-4 text-slate-400" /> Timeline
           </h3>
@@ -159,7 +159,7 @@ function Tab_Payment({ invoice }: { invoice: Invoice }) {
 
             {invoice.status === 'paid' && (
               <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                <div className="flex items-center justify-center w-5 h-5 rounded-full border border-white bg-slate-300 group-[.is-active]:bg-blue-500 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2" />
+                <div className="flex items-center justify-center w-5 h-5 rounded-full border border-white bg-slate-300 group-[.is-active]:bg-indigo-500 text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2" />
                 <div className="w-[calc(100%-2rem)] md:w-[calc(50%-1.5rem)] p-4 rounded-xl border border-slate-200 bg-white shadow-sm">
                   <div className="flex items-center justify-between space-x-2 mb-1">
                     <div className="font-bold text-slate-900 text-xs">Payment Received</div>
@@ -190,8 +190,8 @@ export function InvoiceDetailsView({ invoiceId }: { invoiceId: string }) {
   return (
     <div className="min-h-[calc(100vh-64px)] bg-slate-50/70 p-4 sm:p-6 xl:p-8">
       <div className="mx-auto flex max-w-[1540px] flex-col gap-5">
-        <header className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-          <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-blue-100/70 blur-3xl" />
+        <header className="relative overflow-hidden rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+          <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-indigo-100/70 blur-3xl" />
           <div className="relative flex flex-col gap-5">
             <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-start">
               <div className="flex min-w-0 items-start gap-3 sm:gap-4">
@@ -204,7 +204,7 @@ export function InvoiceDetailsView({ invoiceId }: { invoiceId: string }) {
                 >
                   <ArrowLeft className="h-4 w-4" />
                 </Button>
-                <div className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-200 sm:flex font-bold">
+                <div className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-lg shadow-indigo-200 sm:flex font-bold">
                   <Receipt className="h-5 w-5" />
                 </div>
                 <div className="min-w-0">
@@ -234,7 +234,7 @@ export function InvoiceDetailsView({ invoiceId }: { invoiceId: string }) {
                 <Button variant="outline" className="border-slate-200 bg-white shadow-sm hover:bg-slate-50">
                   <Download className="mr-2 h-4 w-4" /> Download PDF
                 </Button>
-                <Button className="bg-blue-600 text-white hover:bg-blue-700 shadow-sm">
+                <Button className="bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm">
                   <Mail className="mr-2 h-4 w-4" /> Email Invoice
                 </Button>
               </div>
@@ -242,7 +242,7 @@ export function InvoiceDetailsView({ invoiceId }: { invoiceId: string }) {
 
             <div className="grid gap-3 border-t border-slate-100 pt-4 sm:grid-cols-2 xl:grid-cols-4">
               <div className="flex items-center gap-3 rounded-xl bg-slate-50 px-3.5 py-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white text-blue-600 shadow-sm ring-1 ring-slate-200">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200">
                   <IndianRupee className="h-4 w-4" />
                 </div>
                 <div>
@@ -288,7 +288,7 @@ export function InvoiceDetailsView({ invoiceId }: { invoiceId: string }) {
                     onClick={() => setActiveTab(tab.id)}
                     className={`flex items-center gap-2 border-b-2 py-4 text-sm font-semibold whitespace-nowrap transition-colors ${
                       activeTab === tab.id
-                        ? 'border-blue-600 text-blue-700'
+                        ? 'border-indigo-600 text-indigo-700'
                         : 'border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-800'
                     }`}
                   >
@@ -318,3 +318,4 @@ export function InvoiceDetailsView({ invoiceId }: { invoiceId: string }) {
     </div>
   );
 }
+

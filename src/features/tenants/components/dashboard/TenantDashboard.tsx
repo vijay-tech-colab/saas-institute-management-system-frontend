@@ -27,7 +27,7 @@ function AnalyticsCardsGrid() {
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-      <StatCard title="Total Institutes" value={totalTenants} icon={<Store size={20} />} iconColor="text-blue-600" iconBg="bg-blue-50" trend={15.2} trendLabel="vs last month" />
+      <StatCard title="Total Institutes" value={totalTenants} icon={<Store size={20} />} iconColor="text-indigo-600" iconBg="bg-indigo-50" trend={15.2} trendLabel="vs last month" />
       <StatCard title="Active Institutes" value={activeTenants} icon={<Activity size={20} />} iconColor="text-emerald-600" iconBg="bg-emerald-50" trend={10.5} trendLabel="vs last month" />
       <StatCard title="Suspended" value={suspendedTenants} icon={<Ban size={20} />} iconColor="text-rose-600" iconBg="bg-rose-50" />
       <StatCard title="In Trial" value={trialTenants} icon={<AlertCircle size={20} />} iconColor="text-amber-600" iconBg="bg-amber-50" />
@@ -39,13 +39,13 @@ function InstituteGrowthChart() {
   const max = Math.max(...growthData.map(d => d.institutes));
   
   return (
-    <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm flex flex-col h-full">
+    <div className="bg-white border border-slate-200/80 rounded-xl p-6 shadow-sm flex flex-col h-full">
       <div className="flex items-center justify-between mb-8">
         <div>
           <h3 className="text-base font-bold text-slate-900">Institute Growth</h3>
           <p className="text-xs text-slate-500 mt-1">Total onboarded institutes over time</p>
         </div>
-        <div className="p-2 bg-blue-50 text-blue-600 rounded-xl">
+        <div className="p-2 bg-indigo-50 text-indigo-600 rounded-xl">
           <TrendingUp className="w-5 h-5" />
         </div>
       </div>
@@ -60,7 +60,7 @@ function InstituteGrowthChart() {
                   initial={{ height: 0 }}
                   animate={{ height: `${height}%` }}
                   transition={{ duration: 1, delay: i * 0.1, ease: 'easeOut' }}
-                  className="w-full max-w-[40px] bg-blue-100 rounded-t-xl group-hover:bg-blue-600 transition-colors relative"
+                  className="w-full max-w-[40px] bg-indigo-100 rounded-t-xl group-hover:bg-indigo-600 transition-colors relative"
                 >
                   <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-0 opacity-0 group-hover:opacity-100 group-hover:text-slate-700 transition-all">
                     {d.institutes}
@@ -83,7 +83,7 @@ function UsageMetricsOverview() {
   const totalBranches = mockTenants.reduce((acc, curr) => acc + curr.usage.branches, 0);
 
   return (
-    <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm h-full flex flex-col">
+    <div className="bg-white border border-slate-200/80 rounded-xl p-6 shadow-sm h-full flex flex-col">
       <h3 className="text-base font-bold text-slate-900 mb-6">Platform Usage</h3>
       
       <div className="space-y-6 flex-1">
@@ -96,7 +96,7 @@ function UsageMetricsOverview() {
             <p className="text-sm font-bold text-slate-900">{totalStudents.toLocaleString()}</p>
           </div>
           <div className="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden">
-             <div className="h-full bg-blue-500 rounded-full w-[75%]"></div>
+             <div className="h-full bg-indigo-500 rounded-full w-[75%]"></div>
           </div>
         </div>
 
@@ -134,13 +134,13 @@ function RecentTenantsList() {
   const recentTenants = [...mockTenants].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 5);
 
   return (
-    <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
+    <div className="bg-white border border-slate-200/80 rounded-xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h3 className="text-base font-bold text-slate-900">Recent Tenants</h3>
           <p className="text-xs text-slate-500 mt-1">Latest institutes to join</p>
         </div>
-        <button className="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1">
+        <button className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 flex items-center gap-1">
           View All <ChevronRight className="w-3.5 h-3.5" />
         </button>
       </div>
@@ -152,10 +152,10 @@ function RecentTenantsList() {
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: i * 0.1 }}
-            className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 transition-colors cursor-pointer border border-transparent hover:border-slate-100"
+            className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 transition-colors cursor-pointer border border-transparent hover:border-slate-200/80"
           >
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center shrink-0 text-blue-600 font-bold text-sm">
+              <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center shrink-0 text-indigo-600 font-bold text-sm">
                 {tenant.name.substring(0, 2).toUpperCase()}
               </div>
               <div>
@@ -199,7 +199,7 @@ export function TenantDashboard() {
             <Download className="w-4 h-4 text-slate-400" /> Export
           </button>
           
-          <button className="p-2.5 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100 transition-colors group shadow-sm shadow-blue-100">
+          <button className="p-2.5 bg-indigo-50 text-indigo-600 rounded-xl hover:bg-indigo-100 transition-colors group shadow-sm shadow-indigo-100">
             <RefreshCcw className="w-4 h-4 group-hover:rotate-180 transition-transform duration-500" />
           </button>
         </div>
@@ -218,3 +218,4 @@ export function TenantDashboard() {
     </div>
   );
 }
+

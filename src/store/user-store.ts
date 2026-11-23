@@ -1,8 +1,8 @@
 import { atom } from 'jotai';
 
-export type UserRole = 'SUPER_ADMIN' | 'ADMIN' | 'BRANCH_MANAGER' | 'TEACHER' | 'STUDENT' | 'PARENT';
+export type UserRole = 'SUPER_ADMIN';
 
-interface UserProfile {
+export interface UserProfile {
   name: string;
   email: string;
   role: UserRole;
@@ -10,17 +10,13 @@ interface UserProfile {
   avatarUrl?: string;
 }
 
-// Initial mock state for development
+// Initial state for Super Admin
 export const userAtom = atom<UserProfile>({
-  name: 'John Doe',
-  email: 'admin@institute-os.com',
+  name: 'Alex Rivera',
+  email: 'superadmin@campusos.internal',
   role: 'SUPER_ADMIN',
-  instituteName: 'Main Campus',
+  instituteName: 'CampusOS SaaS HQ',
 });
 
-// Derived atom to easily check specific roles if needed
-export const isSuperAdminAtom = atom((get) => get(userAtom).role === 'SUPER_ADMIN');
-export const isAdminAtom = atom((get) => get(userAtom).role === 'ADMIN');
-export const isTeacherAtom = atom((get) => get(userAtom).role === 'TEACHER');
-export const isStudentAtom = atom((get) => get(userAtom).role === 'STUDENT');
-export const isParentAtom = atom((get) => get(userAtom).role === 'PARENT');
+// Derived atom to easily check super admin state
+export const isSuperAdminAtom = atom(() => true);

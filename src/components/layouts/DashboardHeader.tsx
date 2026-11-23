@@ -17,22 +17,15 @@ import {
 import { useSetAtom, useAtom } from "jotai"
 import { isMobileSidebarOpenAtom, isChatbotOpenAtom } from "@/store/layout-store"
 import { NotificationDropdown } from "./NotificationDropdown"
-import { RoleSwitcherDropdown } from "./RoleSwitcherDropdown"
+import { getBreadcrumbItems } from "@/config/breadcrumbs"
 
 export function DashboardHeader() {
   const pathname = usePathname()
   const setIsMobileOpen = useSetAtom(isMobileSidebarOpenAtom)
   const [isChatbotOpen, setIsChatbotOpen] = useAtom(isChatbotOpenAtom)
 
-  // Generate breadcrumbs from pathname
-  const pathSegments = pathname?.split("/").filter(Boolean) || []
-
-  const formatSegment = (segment: string) => {
-    return segment
-      .split("-")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ")
-  }
+  // Generate clean, route-aware breadcrumbs from pathname
+  const breadcrumbs = getBreadcrumbItems(pathname)
 
   return (
     <header className="h-16 border-b border-slate-200/60 bg-white/80 backdrop-blur-xl flex items-center justify-between px-4 lg:px-6 sticky top-0 z-20 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
@@ -51,33 +44,31 @@ export function DashboardHeader() {
         {/* Breadcrumbs */}
         <nav
           aria-label="Breadcrumb"
-          className="flex items-center gap-1 overflow-hidden whitespace-nowrap min-w-0"
+          className="flex items-center gap-1.5 overflow-hidden whitespace-nowrap min-w-0"
         >
-          {/* Home icon */}
-          <Link
-            href="/dashboard"
-            className="flex items-center gap-1.5 text-slate-400 hover:text-indigo-600 transition-colors duration-200 flex-shrink-0 group"
-          >
-            <Home className="w-[15px] h-[15px] group-hover:scale-105 transition-transform" />
-          </Link>
-
-          {pathSegments.map((segment, index) => {
-            const isLast = index === pathSegments.length - 1
-            const href = `/${pathSegments.slice(0, index + 1).join("/")}`
-
+          {breadcrumbs.map((item, index) => {
             return (
-              <React.Fragment key={href}>
-                <ChevronRight className="w-3.5 h-3.5 text-slate-300 flex-shrink-0" />
-                {isLast ? (
-                  <span className="font-semibold text-slate-800 flex-shrink-0 text-[13px]">
-                    {formatSegment(segment)}
+              <React.Fragment key={item.href}>
+                {index > 0 && (
+                  <ChevronRight className="w-3.5 h-3.5 text-slate-300 flex-shrink-0" />
+                )}
+
+                {item.isCurrent ? (
+                  <span className="flex items-center gap-1.5 font-semibold text-slate-800 flex-shrink-0 text-[13px]">
+                    {item.label === "Dashboard" && (
+                      <Home className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+                    )}
+                    {item.label}
                   </span>
                 ) : (
                   <Link
-                    href={href}
-                    className="text-slate-400 hover:text-slate-700 transition-colors duration-200 font-medium flex-shrink-0 text-[13px]"
+                    href={item.href}
+                    className="flex items-center gap-1.5 text-slate-500 hover:text-primary transition-colors duration-200 font-medium flex-shrink-0 text-[13px] group"
                   >
-                    {formatSegment(segment)}
+                    {item.label === "Dashboard" && (
+                      <Home className="w-3.5 h-3.5 text-slate-400 group-hover:text-primary transition-colors flex-shrink-0" />
+                    )}
+                    <span>{item.label}</span>
                   </Link>
                 )}
               </React.Fragment>
@@ -90,26 +81,23 @@ export function DashboardHeader() {
       <div className="flex items-center gap-1.5 flex-shrink-0">
         
         {/* Search button */}
-        <button className="p-2 rounded-lg hover:bg-slate-50 transition-all duration-200 text-slate-400 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/30 cursor-pointer group hidden sm:block">
+        <button className="p-2 rounded-lg hover:bg-slate-50 transition-all duration-200 text-slate-400 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 cursor-pointer group hidden sm:block">
           <Search className="w-[18px] h-[18px] group-hover:scale-105 transition-transform" />
         </button>
 
         {/* Messages button */}
-        <button className="relative p-2 rounded-lg hover:bg-slate-50 transition-all duration-200 text-slate-400 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/30 cursor-pointer group">
+        <button className="relative p-2 rounded-lg hover:bg-slate-50 transition-all duration-200 text-slate-400 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 cursor-pointer group">
           <MessageSquare className="w-[18px] h-[18px] group-hover:scale-105 transition-transform" />
         </button>
 
         {/* Help button */}
         <button className="hidden md:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-all duration-200 group cursor-pointer">
-          <HelpCircle className="w-4 h-4 group-hover:text-indigo-500 transition-colors" />
+          <HelpCircle className="w-4 h-4 group-hover:text-primary transition-colors" />
           <span className="text-[12px] font-medium">Help</span>
         </button>
 
         {/* Notification Dropdown */}
         <NotificationDropdown />
-
-        {/* Role Switcher */}
-        <RoleSwitcherDropdown />
 
         {/* Separator */}
         <div className="w-[1px] h-6 bg-slate-200/60 mx-1 hidden sm:block" />
@@ -119,16 +107,16 @@ export function DashboardHeader() {
           onClick={() => setIsChatbotOpen(!isChatbotOpen)}
           className={`hidden sm:flex items-center gap-1.5 pl-2 pr-3 py-1.5 ml-1 rounded-full transition-all duration-200 group cursor-pointer border ${
             isChatbotOpen 
-              ? "bg-indigo-600 text-white border-indigo-600 shadow-md" 
-              : "bg-gradient-to-r from-indigo-50 to-purple-50 hover:from-indigo-100 hover:to-purple-100 text-indigo-600 border-indigo-100/50"
+              ? "bg-primary text-primary-foreground border-primary shadow-xs" 
+              : "bg-primary-light hover:bg-primary-border/60 text-primary border-primary-border"
           }`}
         >
           <div className={`rounded-full p-1 flex items-center justify-center transition-colors ${
-            isChatbotOpen ? "bg-white/20 text-white" : "bg-gradient-to-br from-indigo-500 to-purple-600 text-white"
+            isChatbotOpen ? "bg-white/20 text-white" : "bg-primary text-primary-foreground"
           }`}>
             <Sparkles className="w-3.5 h-3.5 group-hover:scale-110 transition-transform duration-300" />
           </div>
-          <span className="text-[12px] font-semibold tracking-wide">Ask AI</span>
+          <span className="text-[12px] font-medium tracking-wide">Ask AI</span>
         </button>
 
       </div>

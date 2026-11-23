@@ -35,7 +35,7 @@ function CouponRow({ coupon, index, selected, onToggle }: { coupon: Coupon; inde
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: index * 0.04 }}
-      className={`border-b hover:bg-blue-50/20 transition-colors group cursor-pointer ${selected ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
+      className={`border-b hover:bg-indigo-50/20 transition-colors group cursor-pointer ${selected ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
       onClick={onToggle}
     >
       <td className="py-3.5 px-4 text-center align-middle">
@@ -53,7 +53,7 @@ function CouponRow({ coupon, index, selected, onToggle }: { coupon: Coupon; inde
         </div>
       </td>
       <td className="py-3.5 px-4">
-        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${coupon.discountType === 'percentage' ? 'bg-blue-50 text-blue-700' : 'bg-purple-50 text-purple-700'}`}>
+        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${coupon.discountType === 'percentage' ? 'bg-indigo-50 text-indigo-700' : 'bg-purple-50 text-purple-700'}`}>
           {coupon.discountType === 'percentage' ? `${coupon.discountValue}%` : `₹${coupon.discountValue}`}
           <span className="opacity-60">{coupon.discountType === 'percentage' ? 'OFF' : 'flat'}</span>
         </span>
@@ -61,7 +61,7 @@ function CouponRow({ coupon, index, selected, onToggle }: { coupon: Coupon; inde
       <td className="py-3.5 px-4">
         <div className="flex items-center gap-2">
           <div className="flex-1 bg-slate-100 rounded-full h-1.5 w-20">
-            <div className="h-full rounded-full bg-blue-500" style={{ width: `${Math.min(100, usagePct)}%` }} />
+            <div className="h-full rounded-full bg-indigo-500" style={{ width: `${Math.min(100, usagePct)}%` }} />
           </div>
           <span className="text-xs text-slate-500 whitespace-nowrap">{coupon.usageCount}/{coupon.maximumUsage}</span>
         </div>
@@ -171,7 +171,7 @@ function CreateCouponForm({ onClose }: { onClose: () => void }) {
                 type="button"
                 disabled={isLoading}
                 onClick={() => setValue("discountType", t, { shouldValidate: true })}
-                className={`flex-1 py-2.5 text-sm font-semibold rounded-xl border transition-all disabled:opacity-70 disabled:cursor-not-allowed ${discountType === t ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-slate-600 border-slate-200 hover:border-blue-300'}`}
+                className={`flex-1 py-2.5 text-sm font-semibold rounded-xl border transition-all disabled:opacity-70 disabled:cursor-not-allowed ${discountType === t ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-200 hover:border-blue-300'}`}
               >
                 {t === 'percentage' ? '% Percentage' : '₹ Flat Amount'}
               </button>
@@ -242,7 +242,7 @@ function CreateCouponForm({ onClose }: { onClose: () => void }) {
         </div>
       </div>
       <div className="flex gap-3 pt-2">
-        <button type="submit" disabled={isLoading} className="flex-1 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 active:scale-[0.98] transition-all disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center">
+        <button type="submit" disabled={isLoading} className="flex-1 py-2.5 bg-indigo-600 text-white text-sm font-semibold rounded-xl hover:bg-indigo-700 active:scale-[0.98] transition-all disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center">
           {isLoading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : "Create Coupon"}
         </button>
         <button type="button" onClick={onClose} disabled={isLoading} className="flex-1 py-2.5 bg-slate-100 text-slate-700 text-sm font-semibold rounded-xl hover:bg-slate-200 active:scale-[0.98] transition-all disabled:opacity-70 disabled:cursor-not-allowed">
@@ -302,7 +302,7 @@ export function CouponManagement() {
         description="Create and manage discount coupons, track usage and revenue impact."
         breadcrumbs={[{ label: 'Subscriptions' }, { label: 'Coupons' }]}
       >
-        <button onClick={() => setShowCreate(true)} className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all active:scale-95 shadow-sm shadow-blue-200">
+        <button onClick={() => setShowCreate(true)} className="flex items-center gap-2 px-4 py-2 text-sm bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-all active:scale-95 shadow-sm shadow-indigo-200">
           <Plus className="w-4 h-4" /> Create Coupon
         </button>
       </PageHeader>
@@ -310,13 +310,13 @@ export function CouponManagement() {
       {/* Analytics Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <StatCard title="Revenue Generated" value={totalRevenue} prefix="₹" icon={<TrendingUp size={20} />} iconColor="text-emerald-600" iconBg="bg-emerald-50" trend={22.4} trendLabel="vs last month" />
-        <StatCard title="Total Usage" value={totalUsage} icon={<BarChart2 size={20} />} iconColor="text-blue-600" iconBg="bg-blue-50" trend={15.1} trendLabel="vs last month" />
+        <StatCard title="Total Usage" value={totalUsage} icon={<BarChart2 size={20} />} iconColor="text-indigo-600" iconBg="bg-indigo-50" trend={15.1} trendLabel="vs last month" />
         <StatCard title="Active Coupons" value={activeCoupons} icon={<Tag size={20} />} iconColor="text-purple-600" iconBg="bg-purple-50" />
         <StatCard title="Expired Coupons" value={expiredCoupons} icon={<DollarSign size={20} />} iconColor="text-slate-400" iconBg="bg-slate-100" />
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-slate-100 rounded-2xl shadow-sm flex flex-col flex-1 overflow-hidden min-h-0">
+      <div className="bg-white border border-slate-100 rounded-xl shadow-sm flex flex-col flex-1 overflow-hidden min-h-0">
         <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shrink-0 bg-slate-50/50">
           <div className="flex items-center gap-3">
             <SearchInput value={search} onChange={setSearch} placeholder="Search coupon code..." className="w-full sm:w-72" />
@@ -388,3 +388,4 @@ export function CouponManagement() {
     </div>
   );
 }
+

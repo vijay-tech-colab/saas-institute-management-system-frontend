@@ -11,12 +11,12 @@ export function InsightsAndHealth() {
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
       
       {/* Tenant Health */}
-      <div className="bg-white border border-slate-100 rounded-2xl shadow-sm flex flex-col overflow-hidden">
+      <div className="bg-white border border-slate-100 rounded-xl shadow-sm flex flex-col overflow-hidden">
         <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
           <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
             <ShieldAlert className="w-4 h-4 text-emerald-500" /> Tenant Health
           </h2>
-          <Link href="/dashboard/subscriptions/health" className="text-xs font-semibold text-blue-600 hover:underline">View All</Link>
+          <Link href="/dashboard/subscriptions/health" className="text-xs font-semibold text-indigo-600 hover:underline">View All</Link>
         </div>
         <div className="p-5 flex-1 flex flex-col justify-between">
           <div className="space-y-4">
@@ -55,15 +55,15 @@ export function InsightsAndHealth() {
       <div className="flex flex-col gap-6">
         
         {/* Gateway Metrics */}
-        <div className="bg-white border border-slate-100 rounded-2xl shadow-sm">
+        <div className="bg-white border border-slate-100 rounded-xl shadow-sm">
           <div className="px-5 py-4 border-b border-slate-100">
             <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
-              <Server className="w-4 h-4 text-blue-500" /> Payment Gateways
+              <Server className="w-4 h-4 text-indigo-500" /> Payment Gateways
             </h2>
           </div>
           <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
             {mockGatewayMetrics.map(gw => (
-              <div key={gw.id} className="p-3 border border-slate-100 rounded-xl hover:border-blue-200 transition-colors">
+              <div key={gw.id} className="p-3 border border-slate-100 rounded-xl hover:border-indigo-200 transition-colors">
                 <div className="flex justify-between items-center mb-2">
                   <span className="font-semibold text-slate-700 text-sm">{gw.gateway}</span>
                   <span className="text-xs font-bold text-emerald-600">{gw.successRate}% Success</span>
@@ -79,7 +79,7 @@ export function InsightsAndHealth() {
 
         {/* Quick Insights Grid */}
         <div className="grid grid-cols-2 gap-4">
-          <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-4 flex items-center gap-3">
+          <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-4 flex items-center gap-3">
             <div className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center text-indigo-600">
               <Smartphone className="w-5 h-5" />
             </div>
@@ -88,7 +88,7 @@ export function InsightsAndHealth() {
               <p className="text-lg font-bold text-indigo-900">78%</p>
             </div>
           </div>
-          <div className="bg-fuchsia-50 border border-fuchsia-100 rounded-2xl p-4 flex items-center gap-3">
+          <div className="bg-fuchsia-50 border border-fuchsia-100 rounded-xl p-4 flex items-center gap-3">
             <div className="w-10 h-10 bg-fuchsia-100 rounded-xl flex items-center justify-center text-fuchsia-600">
               <Zap className="w-5 h-5" />
             </div>
@@ -104,3 +104,4 @@ export function InsightsAndHealth() {
     </div>
   );
 }
+

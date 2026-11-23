@@ -87,21 +87,21 @@ export function SupportTickets() {
         description="Manage and resolve tickets submitted by institute owners and administrators."
         breadcrumbs={[{ label: 'Tenants' }, { label: 'Support' }]}
       >
-        <button className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all active:scale-95 shadow-sm shadow-blue-200">
+        <button className="flex items-center gap-2 px-4 py-2 text-sm bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-all active:scale-95 shadow-sm shadow-indigo-200">
           <Plus className="w-4 h-4" /> Create Ticket
         </button>
       </PageHeader>
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <StatCard title="Total Tickets" value={allTickets.length} icon={<MessageSquare size={20} />} iconColor="text-blue-600" iconBg="bg-blue-50" />
+        <StatCard title="Total Tickets" value={allTickets.length} icon={<MessageSquare size={20} />} iconColor="text-indigo-600" iconBg="bg-indigo-50" />
         <StatCard title="Open" value={openCount} icon={<Clock size={20} />} iconColor="text-rose-600" iconBg="bg-rose-50" />
         <StatCard title="In Progress" value={inProgressCount} icon={<Clock size={20} />} iconColor="text-amber-600" iconBg="bg-amber-50" />
         <StatCard title="Resolved" value={resolvedCount} icon={<CheckCircle2 size={20} />} iconColor="text-emerald-600" iconBg="bg-emerald-50" />
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-slate-100 rounded-2xl shadow-sm flex flex-col flex-1 overflow-hidden min-h-0">
+      <div className="bg-white border border-slate-100 rounded-xl shadow-sm flex flex-col flex-1 overflow-hidden min-h-0">
         {/* Toolbar */}
         <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shrink-0 bg-slate-50/50">
           <div className="flex items-center gap-3">
@@ -189,7 +189,7 @@ export function SupportTickets() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: i * 0.04 }}
-                    className={`border-b hover:bg-blue-50/20 transition-colors group cursor-pointer ${selectedTickets.has(ticket.id) ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
+                    className={`border-b hover:bg-indigo-50/20 transition-colors group cursor-pointer ${selectedTickets.has(ticket.id) ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
                     onClick={() => toggleSelect(ticket.id)}
                   >
                     <td className="py-3.5 px-4 text-center align-middle">
@@ -261,3 +261,4 @@ export function SupportTickets() {
     </div>
   );
 }
+

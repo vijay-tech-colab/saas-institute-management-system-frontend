@@ -66,7 +66,7 @@ export function PermissionBuilder() {
               className="h-full flex flex-col"
             >
               {/* Removed max-w-4xl to make it full screen width */}
-              <div className="bg-white border border-slate-100 rounded-2xl shadow-sm p-6 lg:p-8 w-full">
+              <div className="bg-white border border-slate-100 rounded-xl shadow-sm p-6 lg:p-8 w-full">
                 {activeTab === 'basic' && (
                   <div className="space-y-6">
                     <div>
@@ -172,7 +172,7 @@ export function PermissionBuilder() {
                       </div>
                     </div>
 
-                    <div className="p-5 border border-amber-200 bg-amber-50 rounded-2xl mt-4">
+                    <div className="p-5 border border-amber-200 bg-amber-50 rounded-xl mt-4">
                       <div className="flex items-start gap-3">
                         <Activity className="w-5 h-5 text-amber-600 mt-0.5" />
                         <div>
@@ -232,3 +232,4 @@ return context.defaultRole.hasPermission;`}
     </div>
   );
 }
+

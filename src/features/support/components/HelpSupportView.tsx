@@ -23,32 +23,32 @@ const FAQs = [
   {
     id: "faq-1",
     category: "Getting Started",
-    question: "How do I add a new branch to my institute?",
-    answer: "You can add a new branch by navigating to 'Branch Management' -> 'Create Branch'. Fill in the required branch details, including the name, contact info, and address. Once saved, you can easily switch between branches using the branch switcher in the top left corner of the sidebar."
+    question: "How do I onboard a new institute tenant?",
+    answer: "You can onboard a new tenant by navigating to 'Tenant Management' -> 'Create Institute'. Fill in the institute name, contact administrator, and subdomain. Once created, the tenant's workspace is automatically provisioned and isolated."
   },
   {
     id: "faq-2",
     category: "Account & Settings",
-    question: "Can I customize the roles and permissions for my staff?",
-    answer: "Yes! Navigate to 'Identity & Access Management' -> 'Roles'. You can create custom roles (e.g., 'Senior Teacher', 'Accountant') and assign specific permissions from the Permissions Builder. Assign these roles to your users via the User Management tab."
+    question: "Can I customize the roles and permissions for platform operators?",
+    answer: "Yes! Navigate to 'Identity & Access Management' -> 'Roles'. You can configure custom roles (e.g., 'Support Specialist', 'Billing Analyst') and assign granular permissions from the Permissions Builder."
   },
   {
     id: "faq-3",
     category: "Billing & Subscriptions",
-    question: "How do I upgrade my subscription plan?",
-    answer: "Go to the 'Subscriptions' module and select 'Plans & Pricing'. Choose the plan that best fits your institute's size and needs, and click 'Upgrade'. You can manage your payment methods in the Settings section."
+    question: "How do I manage subscription plans and pricing tiers?",
+    answer: "Go to the 'Subscriptions' module and select 'Plans & Pricing'. Here you can configure plan quotas, set annual and monthly pricing, and monitor active customer subscriptions and recurring revenue."
   },
   {
     id: "faq-4",
     category: "API & Integrations",
-    question: "Where can I find the API documentation?",
-    answer: "The API documentation is available for enterprise clients in the 'Developer Hub' section (under Platform Settings). You can generate API keys and view comprehensive endpoint guides there."
+    question: "Where can I find the API documentation and webhook configuration?",
+    answer: "Platform API documentation and webhook endpoints are available in the 'Platform Settings' section. You can generate root API keys, inspect payload contracts, and configure webhook listeners."
   },
   {
     id: "faq-5",
-    category: "Billing & Subscriptions",
-    question: "How do I generate student fee receipts?",
-    answer: "When a fee is collected under 'Operations & Finance' -> 'Fees' -> 'Collect Fees', a receipt is automatically generated. You can download or print the receipt immediately, or view past receipts from the 'Pending Fees' tab."
+    category: "Domain & SSL",
+    question: "How do I provision custom domains and SSL certificates for tenants?",
+    answer: "Under 'Tenant Management' -> 'Domain Management', add the client's custom domain, verify CNAME DNS propagation, and generate an automated Let's Encrypt SSL certificate."
   }
 ];
 
@@ -64,7 +64,7 @@ const categories = [
 
 function FaqItem({ faq, isOpen, onToggle }: { faq: typeof FAQs[0], isOpen: boolean, onToggle: () => void }) {
   return (
-    <div className={`border rounded-2xl bg-white shadow-sm overflow-hidden transition-all duration-200 hover:shadow-md ${isOpen ? 'border-primary-200' : 'border-slate-100 hover:border-primary-100'}`}>
+    <div className={`border rounded-xl bg-white shadow-sm overflow-hidden transition-all duration-200 hover:shadow-md ${isOpen ? 'border-primary-200' : 'border-slate-100 hover:border-primary-100'}`}>
       <button 
         onClick={onToggle}
         className="w-full flex items-center justify-between p-5 text-left bg-white outline-none focus-visible:bg-slate-50 cursor-pointer"
@@ -144,7 +144,7 @@ export function HelpSupportView() {
               placeholder="Search for articles, guides, or FAQs..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-14 pl-12 pr-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl text-white placeholder:text-white/50 outline-none focus:bg-white/20 focus:border-white/40 focus:ring-4 focus:ring-white/10 transition-all text-[15px] shadow-xl shadow-primary-900/20"
+              className="w-full h-14 pl-12 pr-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl text-white placeholder:text-white/50 outline-none focus:bg-white/20 focus:border-white/40 focus:ring-4 focus:ring-white/10 transition-all text-[15px] shadow-xl shadow-primary-900/20"
             />
           </motion.div>
         </div>
@@ -165,7 +165,7 @@ export function HelpSupportView() {
               <div 
                 key={i} 
                 onClick={() => setSelectedCategory(isSelected ? null : cat.label)}
-                className={`p-5 rounded-2xl border shadow-sm transition-all duration-300 cursor-pointer group flex flex-col items-center text-center ${
+                className={`p-5 rounded-xl border shadow-sm transition-all duration-300 cursor-pointer group flex flex-col items-center text-center ${
                   isSelected 
                     ? "bg-primary-600 border-primary-600 shadow-primary-200" 
                     : "bg-white border-slate-100 hover:shadow-md hover:border-primary-100"
@@ -229,7 +229,7 @@ export function HelpSupportView() {
                   <motion.div 
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="p-8 text-center bg-white border border-slate-100 rounded-2xl"
+                    className="p-8 text-center bg-white border border-slate-100 rounded-xl"
                   >
                     <Search className="w-8 h-8 text-slate-300 mx-auto mb-3" />
                     <p className="text-slate-600 font-medium">No results found.</p>
@@ -253,7 +253,7 @@ export function HelpSupportView() {
               <div className="space-y-3">
                 <button 
                   onClick={() => setIsChatbotOpen(true)}
-                  className="w-full flex items-center gap-4 p-4 rounded-2xl bg-primary-50/50 hover:bg-primary-50 border border-transparent hover:border-primary-100 transition-all group text-left cursor-pointer"
+                  className="w-full flex items-center gap-4 p-4 rounded-xl bg-primary-50/50 hover:bg-primary-50 border border-transparent hover:border-primary-100 transition-all group text-left cursor-pointer"
                 >
                   <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shrink-0 shadow-sm group-hover:scale-110 transition-transform">
                     <MessageSquare className="w-5 h-5 text-primary-600" />
@@ -267,7 +267,7 @@ export function HelpSupportView() {
 
                 <a 
                   href="mailto:support@institute-os.com?subject=Support Request"
-                  className="w-full flex items-center gap-4 p-4 rounded-2xl bg-emerald-50/50 hover:bg-emerald-50 border border-transparent hover:border-emerald-100 transition-all group text-left cursor-pointer outline-none"
+                  className="w-full flex items-center gap-4 p-4 rounded-xl bg-emerald-50/50 hover:bg-emerald-50 border border-transparent hover:border-emerald-100 transition-all group text-left cursor-pointer outline-none"
                 >
                   <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shrink-0 shadow-sm group-hover:scale-110 transition-transform">
                     <Mail className="w-5 h-5 text-emerald-600" />
@@ -281,7 +281,7 @@ export function HelpSupportView() {
 
                 <a 
                   href="tel:+18001234567"
-                  className="w-full flex items-center gap-4 p-4 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-transparent hover:border-slate-200 transition-all group text-left cursor-pointer outline-none"
+                  className="w-full flex items-center gap-4 p-4 rounded-xl bg-slate-50 hover:bg-slate-100 border border-transparent hover:border-slate-200 transition-all group text-left cursor-pointer outline-none"
                 >
                   <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shrink-0 shadow-sm group-hover:scale-110 transition-transform">
                     <Phone className="w-5 h-5 text-slate-600" />
@@ -327,3 +327,4 @@ export function HelpSupportView() {
     </div>
   );
 }
+

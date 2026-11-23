@@ -21,7 +21,7 @@ export function ActivityDetailsModal({ log, isOpen, onClose }: ActivityDetailsMo
             <span className={`px-2.5 py-1 text-xs font-bold rounded-lg ${
               log.severity === 'high' ? 'bg-rose-100 text-rose-700' :
               log.severity === 'medium' ? 'bg-amber-100 text-amber-700' :
-              'bg-blue-100 text-blue-700'
+              'bg-indigo-100 text-indigo-700'
             }`}>
               <Activity className="w-3.5 h-3.5 inline-block mr-1" />
               {log.action}
@@ -78,7 +78,7 @@ export function ActivityDetailsModal({ log, isOpen, onClose }: ActivityDetailsMo
               <User className="w-4 h-4" /> Actor Info
             </h4>
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-sm shrink-0">
+              <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-sm shrink-0">
                 {log.user.name.charAt(0)}
               </div>
               <div>
@@ -103,7 +103,7 @@ export function ActivityDetailsModal({ log, isOpen, onClose }: ActivityDetailsMo
                 <p className="text-[10px] text-slate-500 font-semibold uppercase mb-1">IP Address</p>
                 <p className="text-xs font-mono text-slate-800 flex items-center justify-between">
                   {log.ipAddress}
-                  <button className="text-slate-400 hover:text-blue-600"><Copy className="w-3 h-3" /></button>
+                  <button className="text-slate-400 hover:text-indigo-600"><Copy className="w-3 h-3" /></button>
                 </p>
               </div>
               <div>
@@ -117,3 +117,4 @@ export function ActivityDetailsModal({ log, isOpen, onClose }: ActivityDetailsMo
     </Modal>
   );
 }
+

@@ -40,7 +40,7 @@ export default function ForgotPasswordPage() {
               Regain access to your <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-sky-400">workspace.</span>
             </h1>
             <p className="text-slate-400/90 leading-relaxed text-sm font-medium">
-              Don't worry, it happens to the best of us. Enter your email and we'll help you get back to managing your digital institute in no time.
+              Don&apos;t worry, it happens to the best of us. Enter your email and we&apos;ll help you get back to managing your digital institute in no time.
             </p>
           </div>
           

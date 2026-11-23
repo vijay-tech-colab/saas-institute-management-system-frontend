@@ -31,7 +31,7 @@ export function RevenueAnalyticsSection() {
   };
 
   return (
-    <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
+    <div className="bg-white border border-slate-100 rounded-xl p-5 shadow-sm">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
         <div>
           <h2 className="text-lg font-bold text-slate-900">Revenue Analytics</h2>
@@ -83,3 +83,4 @@ export function RevenueAnalyticsSection() {
     </div>
   );
 }
+

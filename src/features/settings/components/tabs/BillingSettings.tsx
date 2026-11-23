@@ -61,7 +61,7 @@ function AdminBillingView() {
       {/* Current Plan */}
       <section>
         <h3 className="text-lg font-semibold text-slate-900 mb-4">Current Plan</h3>
-        <div className="p-6 border border-indigo-200 bg-gradient-to-br from-indigo-50 to-white rounded-2xl relative overflow-hidden">
+        <div className="p-6 border border-indigo-200 bg-gradient-to-br from-indigo-50 to-white rounded-xl relative overflow-hidden">
           <div className="absolute top-0 right-0 p-6">
             <span className="px-3 py-1 bg-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-wider rounded-full">Active</span>
           </div>
@@ -217,5 +217,6 @@ function SuperAdminBillingView() {
     </div>
   )
 }
+
 
 

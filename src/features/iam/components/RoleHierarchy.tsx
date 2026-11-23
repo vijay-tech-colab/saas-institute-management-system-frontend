@@ -17,33 +17,33 @@ const ADVANCED_HIERARCHY_DATA = [
     children: [
       {
         id: 'h2',
-        role: 'Institute Owner',
-        code: 'institute_owner',
+        role: 'Tenant Administrator',
+        code: 'tenant_admin',
         level: 2,
-        usersCount: 12,
+        usersCount: 48,
         policiesCount: 18,
         children: [
           {
             id: 'h3',
-            role: 'Branch Manager',
-            code: 'branch_manager',
+            role: 'Platform Operator',
+            code: 'platform_operator',
             level: 3,
-            usersCount: 45,
+            usersCount: 15,
             policiesCount: 12,
             children: [
               {
                 id: 'h4',
-                role: 'Teacher',
-                code: 'teacher',
+                role: 'Support Specialist',
+                code: 'support_specialist',
                 level: 4,
-                usersCount: 320,
-                policiesCount: 5,
+                usersCount: 24,
+                policiesCount: 8,
                 children: []
               },
               {
                 id: 'h5',
-                role: 'Accountant',
-                code: 'accountant',
+                role: 'Billing Analyst',
+                code: 'billing_analyst',
                 level: 4,
                 usersCount: 8,
                 policiesCount: 7,
@@ -79,7 +79,7 @@ const AdvancedRoleNode = ({ node, isLast }: { node: any; isLast?: boolean }) => 
       <motion.div 
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className={`bg-white border ${isExpanded ? 'border-indigo-200 shadow-md shadow-indigo-100/50' : 'border-slate-200 shadow-sm'} rounded-2xl p-4 mb-4 w-full max-w-xl relative z-10 flex flex-col hover:border-indigo-300 transition-all cursor-default group`}
+        className={`bg-white border ${isExpanded ? 'border-indigo-200 shadow-md shadow-indigo-100/50' : 'border-slate-200 shadow-sm'} rounded-xl p-4 mb-4 w-full max-w-xl relative z-10 flex flex-col hover:border-indigo-300 transition-all cursor-default group`}
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -187,9 +187,9 @@ export function RoleHierarchy() {
         </button>
       </PageHeader>
 
-      <div className="bg-white border border-slate-100 rounded-2xl shadow-sm flex flex-col flex-1 overflow-auto min-h-0 mb-6 p-6 md:p-8">
+      <div className="bg-white border border-slate-100 rounded-xl shadow-sm flex flex-col flex-1 overflow-auto min-h-0 mb-6 p-6 md:p-8">
         <div className="max-w-5xl w-full mx-auto">
-          <div className="mb-8 p-5 bg-gradient-to-r from-indigo-50 to-white border border-indigo-100 rounded-2xl flex items-start gap-4">
+          <div className="mb-8 p-5 bg-gradient-to-r from-indigo-50 to-white border border-indigo-100 rounded-xl flex items-start gap-4">
             <div className="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center shrink-0">
               <Shield className="w-5 h-5 text-indigo-600" />
             </div>
@@ -219,3 +219,4 @@ export function RoleHierarchy() {
     </div>
   );
 }
+

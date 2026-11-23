@@ -58,7 +58,7 @@ export function PricingManagement() {
           <button
             key={p.id}
             onClick={() => setSelectedPlan(p.id)}
-            className={`px-4 py-2 rounded-xl text-sm font-semibold border transition-all ${selectedPlan === p.id ? 'bg-blue-600 text-white border-blue-600 shadow-sm shadow-blue-200' : 'bg-white text-slate-600 border-slate-200 hover:border-blue-300'}`}
+            className={`px-4 py-2 rounded-xl text-sm font-semibold border transition-all ${selectedPlan === p.id ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm shadow-indigo-200' : 'bg-white text-slate-600 border-slate-200 hover:border-blue-300'}`}
           >
             {p.name}
             {p.status === 'popular' && <Star className="w-3 h-3 inline ml-1 text-current" />}
@@ -67,12 +67,12 @@ export function PricingManagement() {
       </div>
 
       {/* Billing Cycle Tabs */}
-      <div className="bg-white border border-slate-100 rounded-2xl p-1.5 inline-flex gap-1 mb-6 shadow-sm">
+      <div className="bg-white border border-slate-100 rounded-xl p-1.5 inline-flex gap-1 mb-6 shadow-sm">
         {CYCLE_ORDER.map(cycle => (
           <button
             key={cycle}
             onClick={() => setSelectedCycle(cycle)}
-            className={`relative px-4 py-2 rounded-xl text-sm font-semibold transition-all ${selectedCycle === cycle ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+            className={`relative px-4 py-2 rounded-xl text-sm font-semibold transition-all ${selectedCycle === cycle ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
           >
             {CYCLE_LABELS[cycle]}
             {cycle === 'yearly' && <span className="absolute -top-2 -right-2 px-1.5 py-0.5 bg-emerald-500 text-white text-[9px] font-bold rounded-full leading-none">BEST</span>}
@@ -88,7 +88,7 @@ export function PricingManagement() {
             key={`${selectedPlan}-${selectedCycle}`}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white border border-blue-100 rounded-2xl p-6 shadow-sm ring-2 ring-blue-50"
+            className="bg-white border border-indigo-100 rounded-xl p-6 shadow-sm ring-2 ring-indigo-50"
           >
             {tier.offerBadge && (
               <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-600 text-white text-[11px] font-bold rounded-full mb-4">
@@ -127,7 +127,7 @@ export function PricingManagement() {
               </div>
               <div className="border-t border-slate-200 pt-2 flex justify-between">
                 <span className="font-bold text-slate-900">Final Price</span>
-                <span className="font-black text-blue-600 text-lg">₹{tier.finalPrice.toLocaleString('en-IN')}</span>
+                <span className="font-black text-indigo-600 text-lg">₹{tier.finalPrice.toLocaleString('en-IN')}</span>
               </div>
             </div>
             <div className="flex items-center justify-between mt-4 px-4 py-3 bg-slate-50 rounded-xl">
@@ -138,22 +138,22 @@ export function PricingManagement() {
               <Toggle checked={tier.autoRenewal} onChange={() => {}} />
             </div>
             <div className="flex gap-3 mt-4">
-              <button className="flex-1 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-all">Save Pricing</button>
+              <button className="flex-1 py-2.5 bg-indigo-600 text-white text-sm font-semibold rounded-xl hover:bg-indigo-700 transition-all">Save Pricing</button>
               <button className="flex-1 py-2.5 bg-slate-100 text-slate-700 text-sm font-semibold rounded-xl hover:bg-slate-200 transition-all">Reset</button>
             </div>
           </motion.div>
         ) : (
-          <div className="bg-white border border-dashed border-slate-200 rounded-2xl p-8 flex flex-col items-center justify-center text-slate-400">
+          <div className="bg-white border border-dashed border-slate-200 rounded-xl p-8 flex flex-col items-center justify-center text-slate-400">
             <p className="font-semibold text-slate-500">No pricing configured</p>
             <p className="text-sm mt-1">for {plan?.name} — {CYCLE_LABELS[selectedCycle]}</p>
-            <button className="mt-4 px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-all">
+            <button className="mt-4 px-4 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-xl hover:bg-indigo-700 transition-all">
               Configure Pricing
             </button>
           </div>
         )}
 
         {/* Plan Features Panel */}
-        <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
+        <div className="bg-white border border-slate-100 rounded-xl p-6 shadow-sm">
           <p className="font-bold text-slate-900 mb-4">Included Features — {plan?.name}</p>
           <div className="grid grid-cols-2 gap-2">
             {planFeatures.map((f, i) => (
@@ -167,7 +167,7 @@ export function PricingManagement() {
       </div>
 
       {/* All Cycles Summary */}
-      <div className="bg-white border border-slate-100 rounded-2xl shadow-sm overflow-hidden">
+      <div className="bg-white border border-slate-100 rounded-xl shadow-sm overflow-hidden">
         <div className="px-5 py-4 border-b border-slate-100">
           <h2 className="font-bold text-slate-900">All Pricing Tiers — {plan?.name}</h2>
         </div>
@@ -194,7 +194,7 @@ export function PricingManagement() {
                 return (
                   <tr 
                     key={cycle} 
-                    className={`border-b hover:bg-blue-50/20 transition-colors cursor-pointer ${selectedCycle === cycle ? 'bg-blue-50/40 border-slate-100' : 'border-slate-50'} ${selectedRows.has(cycle) ? 'bg-indigo-50/50 border-indigo-100' : ''}`}
+                    className={`border-b hover:bg-indigo-50/20 transition-colors cursor-pointer ${selectedCycle === cycle ? 'bg-indigo-50/40 border-slate-100' : 'border-slate-50'} ${selectedRows.has(cycle) ? 'bg-indigo-50/50 border-indigo-100' : ''}`}
                     onClick={() => toggleSelect(cycle)}
                   >
                     <td className="py-3.5 px-4 text-center align-middle">
@@ -225,3 +225,4 @@ export function PricingManagement() {
     </div>
   );
 }
+

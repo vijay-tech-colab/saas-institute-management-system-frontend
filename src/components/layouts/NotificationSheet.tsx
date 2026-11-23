@@ -4,12 +4,12 @@ import React, { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Bell, Check, MessageSquare, Settings, UserPlus, X, Search, CheckCircle2, ShieldAlert, CreditCard } from "lucide-react"
 
-// Expanded dummy data for the sheet
+// Expanded Super Admin platform notifications
 const ALL_NOTIFICATIONS = [
   {
     id: 1,
-    title: "New Registration",
-    message: "Sarah Jenkins has applied for B.Tech Computer Science.",
+    title: "New Tenant Onboarded",
+    message: "Apex Computing Institute registered for the Enterprise Plan.",
     time: "2 mins ago",
     unread: true,
     type: "user",
@@ -18,7 +18,7 @@ const ALL_NOTIFICATIONS = [
   {
     id: 2,
     title: "System Update",
-    message: "CampusOS has been updated to version 2.4.0. Check out the new features.",
+    message: "CampusOS Core v2.4.0 deployed successfully across all tenant nodes.",
     time: "1 hour ago",
     unread: true,
     type: "system",
@@ -26,8 +26,8 @@ const ALL_NOTIFICATIONS = [
   },
   {
     id: 3,
-    title: "New Message",
-    message: "Prof. Alan Turing sent you a message regarding the upcoming exams.",
+    title: "Domain Verified",
+    message: "Custom domain portal.techacademy.in verified with automated SSL certificate.",
     time: "3 hours ago",
     unread: false,
     type: "message",
@@ -35,8 +35,8 @@ const ALL_NOTIFICATIONS = [
   },
   {
     id: 4,
-    title: "Payment Received",
-    message: "A payment of $1,200 was received for Semester 1 from John Doe.",
+    title: "Subscription Renewal",
+    message: "Enterprise plan renewal processed for Horizon Institute ($2,400/yr).",
     time: "Yesterday",
     unread: false,
     type: "finance",
@@ -45,7 +45,7 @@ const ALL_NOTIFICATIONS = [
   {
     id: 5,
     title: "Security Alert",
-    message: "New login detected from unusual location: San Francisco, CA.",
+    message: "Unusual root login detected and quarantined from IP 198.51.100.24.",
     time: "Yesterday",
     unread: true,
     type: "system",

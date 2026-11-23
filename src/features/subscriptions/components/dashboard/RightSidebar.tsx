@@ -12,7 +12,7 @@ import Link from 'next/link';
 export function RightSidebar() {
   const getActivityIcon = (type: string) => {
     switch (type) {
-      case 'subscription_renewed': return <RefreshCcw className="w-3.5 h-3.5 text-blue-500" />;
+      case 'subscription_renewed': return <RefreshCcw className="w-3.5 h-3.5 text-indigo-500" />;
       case 'plan_changed': return <ArrowUpRight className="w-3.5 h-3.5 text-purple-500" />;
       case 'payment_received': return <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />;
       case 'trial_started': return <Play className="w-3.5 h-3.5 text-indigo-500" />;
@@ -24,7 +24,7 @@ export function RightSidebar() {
 
   const getActivityColor = (type: string) => {
     switch (type) {
-      case 'subscription_renewed': return 'bg-blue-50 border-blue-100';
+      case 'subscription_renewed': return 'bg-indigo-50 border-indigo-100';
       case 'plan_changed': return 'bg-purple-50 border-purple-100';
       case 'payment_received': return 'bg-emerald-50 border-emerald-100';
       case 'trial_started': return 'bg-indigo-50 border-indigo-100';
@@ -47,7 +47,7 @@ export function RightSidebar() {
     <div className="w-full xl:w-80 flex-shrink-0 space-y-6 sticky top-6 self-start h-[calc(100vh-3rem)] overflow-y-auto scrollbar-hide">
       
       {/* Quick Actions (Glassmorphic) */}
-      <div className="bg-white/60 backdrop-blur-md border border-white rounded-2xl p-5 shadow-sm">
+      <div className="bg-white/60 backdrop-blur-md border border-white rounded-xl p-5 shadow-sm">
         <h3 className="text-sm font-bold text-slate-900 mb-4">Quick Actions</h3>
         <div className="grid grid-cols-3 gap-2">
           {quickActions.map((action, i) => (
@@ -66,12 +66,12 @@ export function RightSidebar() {
       </div>
 
       {/* Recent Activities Timeline */}
-      <div className="bg-white border border-slate-100 rounded-2xl shadow-sm flex flex-col h-[500px]">
+      <div className="bg-white border border-slate-100 rounded-xl shadow-sm flex flex-col h-[500px]">
         <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
           <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-            <Activity className="w-4 h-4 text-blue-500" /> Activity Feed
+            <Activity className="w-4 h-4 text-indigo-500" /> Activity Feed
           </h3>
-          <button className="text-[11px] font-semibold text-blue-600 hover:underline">All</button>
+          <button className="text-[11px] font-semibold text-indigo-600 hover:underline">All</button>
         </div>
         
         <div className="flex-1 overflow-y-auto p-5">
@@ -96,7 +96,7 @@ export function RightSidebar() {
       </div>
 
       {/* Mini Promotion or Upgrade Prompt */}
-      <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-5 text-white shadow-md relative overflow-hidden">
+      <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl p-5 text-white shadow-md relative overflow-hidden">
         <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-white opacity-10 rounded-full blur-2xl"></div>
         <div className="relative z-10">
           <h3 className="text-sm font-bold mb-1">Super Admin Pro</h3>
@@ -110,3 +110,4 @@ export function RightSidebar() {
     </div>
   );
 }
+

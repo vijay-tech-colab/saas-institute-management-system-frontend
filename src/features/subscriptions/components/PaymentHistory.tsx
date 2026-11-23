@@ -25,7 +25,7 @@ const FILTER_OPTIONS = [
 ];
 
 const GATEWAY_BADGE: Record<string, string> = {
-  'Razorpay':      'bg-blue-50 text-blue-700',
+  'Razorpay':      'bg-indigo-50 text-indigo-700',
   'Stripe':        'bg-purple-50 text-purple-700',
   'UPI':           'bg-orange-50 text-orange-700',
   'Bank Transfer': 'bg-emerald-50 text-emerald-700',
@@ -107,7 +107,7 @@ export function PaymentHistory() {
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-slate-100 rounded-2xl shadow-sm flex flex-col flex-1 overflow-hidden min-h-0">
+      <div className="bg-white border border-slate-100 rounded-xl shadow-sm flex flex-col flex-1 overflow-hidden min-h-0">
         <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shrink-0 bg-slate-50/50">
           <div className="flex items-center gap-3">
             <SearchInput value={search} onChange={setSearch} placeholder="Search by TxnID or institute..." className="w-full sm:w-80" />
@@ -188,7 +188,7 @@ export function PaymentHistory() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: i * 0.04 }}
-                    className={`border-b hover:bg-blue-50/20 transition-colors group cursor-pointer ${selectedPayments.has(pay.id) ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
+                    className={`border-b hover:bg-indigo-50/20 transition-colors group cursor-pointer ${selectedPayments.has(pay.id) ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
                     onClick={() => toggleSelect(pay.id)}
                   >
                     <td className="py-3.5 px-4 text-center align-middle">
@@ -259,3 +259,4 @@ export function PaymentHistory() {
     </div>
   );
 }
+

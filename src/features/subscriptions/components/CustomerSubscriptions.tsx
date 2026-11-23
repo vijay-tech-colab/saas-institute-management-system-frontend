@@ -81,13 +81,13 @@ export function CustomerSubscriptions() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 shrink-0">
-        <StatCard title="Active Customers" value={active} icon={<Users size={20} />} iconColor="text-blue-600" iconBg="bg-blue-50" trend={5.4} trendLabel="vs last month" />
+        <StatCard title="Active Customers" value={active} icon={<Users size={20} />} iconColor="text-indigo-600" iconBg="bg-indigo-50" trend={5.4} trendLabel="vs last month" />
         <StatCard title="Trial Accounts" value={trial} icon={<TrendingUp size={20} />} iconColor="text-purple-600" iconBg="bg-purple-50" />
         <StatCard title="Expired/Suspended" value={expired + mockCustomers.filter(c => c.status === 'suspended').length} icon={<PauseCircle size={20} />} iconColor="text-red-500" iconBg="bg-red-50" />
         <StatCard title="Total MRR" value={totalMRR} prefix="₹" icon={<TrendingUp size={20} />} iconColor="text-emerald-600" iconBg="bg-emerald-50" trend={8.2} trendLabel="vs last month" />
       </div>
 
-      <div className="bg-white border border-slate-100 rounded-2xl shadow-sm flex flex-col flex-1 overflow-hidden min-h-0">
+      <div className="bg-white border border-slate-100 rounded-xl shadow-sm flex flex-col flex-1 overflow-hidden min-h-0">
         {/* Toolbar */}
         <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shrink-0 bg-slate-50/50">
           <div className="flex items-center gap-3">
@@ -174,7 +174,7 @@ export function CustomerSubscriptions() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: i * 0.04 }}
-                    className={`border-b hover:bg-blue-50/30 transition-colors cursor-pointer ${selectedCustomers.has(customer.id) ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
+                    className={`border-b hover:bg-indigo-50/30 transition-colors cursor-pointer ${selectedCustomers.has(customer.id) ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
                     onClick={() => toggleSelect(customer.id)}
                   >
                     <td className="py-3 px-4 text-center align-middle">
@@ -188,7 +188,7 @@ export function CustomerSubscriptions() {
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xs flex-shrink-0">
+                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xs flex-shrink-0">
                           {customer.instituteName.charAt(0)}
                         </div>
                         <div>
@@ -203,7 +203,7 @@ export function CustomerSubscriptions() {
                     <td className="py-3 px-4 min-w-[100px]">
                       <div className="flex items-center gap-2">
                         <div className="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                          <div className="h-full bg-blue-500 rounded-full" style={{ width: `${Math.min(100, (customer.storageUsed / customer.storageLimit) * 100)}%` }} />
+                          <div className="h-full bg-indigo-500 rounded-full" style={{ width: `${Math.min(100, (customer.storageUsed / customer.storageLimit) * 100)}%` }} />
                         </div>
                         <span className="text-[10px] font-semibold text-slate-500">{customer.storageUsed}/{customer.storageLimit}</span>
                       </div>
@@ -280,3 +280,4 @@ export function CustomerSubscriptions() {
     </div>
   );
 }
+

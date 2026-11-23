@@ -23,7 +23,7 @@ export function SearchInput({ value, onChange, placeholder = 'Search...', classN
         value={value}
         onChange={e => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full pl-9 pr-9 py-2 text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 placeholder:text-slate-400 transition-all"
+        className="w-full pl-9 pr-9 py-2 text-sm bg-white border border-slate-200/90 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 placeholder:text-slate-400 transition-all shadow-xs"
       />
       <AnimatePresence>
         {value && (
@@ -53,16 +53,16 @@ interface FilterChipsProps {
 
 export function FilterChips({ options, selected, onChange, className }: FilterChipsProps) {
   return (
-    <div className={cn('flex items-center gap-2 flex-wrap', className)}>
+    <div className={cn('flex items-center gap-1.5 flex-wrap', className)}>
       {options.map(opt => (
         <button
           key={opt.value}
           onClick={() => onChange(opt.value)}
           className={cn(
-            'px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 border',
+            'px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 border',
             selected === opt.value
-              ? 'bg-blue-600 text-white border-blue-600 shadow-sm shadow-blue-200'
-              : 'bg-white text-slate-600 border-slate-200 hover:border-blue-300 hover:text-blue-600'
+              ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs'
+              : 'bg-white text-slate-600 border-slate-200/90 hover:border-slate-300 hover:text-slate-900 shadow-xs'
           )}
         >
           {opt.label}
@@ -104,7 +104,7 @@ export function Modal({ isOpen, onClose, title, children, size = 'md' }: ModalPr
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className={cn('relative bg-white rounded-2xl shadow-2xl border border-slate-100 w-full overflow-hidden', sizeClass)}
+            className={cn('relative bg-white rounded-xl shadow-2xl border border-slate-100 w-full overflow-hidden', sizeClass)}
           >
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
               <h2 className="text-base font-bold text-slate-900">{title}</h2>
@@ -130,9 +130,9 @@ interface PageHeaderProps {
 
 export function PageHeader({ title, description, children, breadcrumbs }: PageHeaderProps) {
   return (
-    <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-      <div>
-        {breadcrumbs && (
+    <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+      <div className="space-y-1 min-w-0">
+        {breadcrumbs && breadcrumbs.length > 0 && (
           <div className="flex items-center gap-1.5 mb-1">
             {breadcrumbs.map((b, i) => (
               <React.Fragment key={i}>
@@ -142,22 +142,22 @@ export function PageHeader({ title, description, children, breadcrumbs }: PageHe
             ))}
           </div>
         )}
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900">{title}</h1>
-        {description && <p className="text-sm text-slate-500 mt-0.5">{description}</p>}
+        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 truncate">{title}</h1>
+        {description && <p className="text-xs sm:text-sm text-slate-500 leading-relaxed max-w-2xl">{description}</p>}
       </div>
-      {children && <div className="flex items-center gap-3 flex-shrink-0">{children}</div>}
+      {children && <div className="flex items-center gap-2.5 flex-wrap flex-shrink-0">{children}</div>}
     </header>
   );
 }
 
 // ─── Progress Bar ────────────────────────────────────────────
 interface ProgressBarProps { value: number; max: number; color?: string; showLabel?: boolean; size?: 'sm' | 'md' }
-export function ProgressBar({ value, max, color = 'bg-blue-500', showLabel = true, size = 'sm' }: ProgressBarProps) {
+export function ProgressBar({ value, max, color = 'bg-indigo-600', showLabel = true, size = 'sm' }: ProgressBarProps) {
   const pct = Math.min(100, (value / max) * 100);
-  const barColor = pct > 90 ? 'bg-red-500' : pct > 70 ? 'bg-amber-500' : color;
+  const barColor = pct > 90 ? 'bg-rose-500' : pct > 70 ? 'bg-amber-500' : color;
   return (
     <div className="w-full">
-      <div className={cn('w-full bg-slate-100 rounded-full overflow-hidden', size === 'sm' ? 'h-1.5' : 'h-2.5')}>
+      <div className={cn('w-full bg-slate-100 rounded-full overflow-hidden', size === 'sm' ? 'h-1.5' : 'h-2')}>
         <motion.div
           className={cn('h-full rounded-full', barColor)}
           initial={{ width: 0 }}
@@ -165,7 +165,7 @@ export function ProgressBar({ value, max, color = 'bg-blue-500', showLabel = tru
           transition={{ duration: 0.8, ease: 'easeOut' }}
         />
       </div>
-      {showLabel && <p className="text-[10px] text-slate-400 mt-0.5">{value.toLocaleString('en-IN')} / {max.toLocaleString('en-IN')}</p>}
+      {showLabel && <p className="text-[10px] text-slate-400 mt-1">{value.toLocaleString('en-IN')} / {max.toLocaleString('en-IN')}</p>}
     </div>
   );
 }
@@ -180,12 +180,12 @@ export function Toggle({ checked, onChange, label }: ToggleProps) {
         role="switch"
         aria-checked={checked}
         onClick={() => onChange(!checked)}
-        className={cn('relative w-9 h-5 rounded-full transition-colors duration-200 flex-shrink-0', checked ? 'bg-blue-600' : 'bg-slate-200')}
+        className={cn('relative w-8 h-4.5 rounded-full transition-colors duration-200 flex-shrink-0', checked ? 'bg-indigo-600' : 'bg-slate-200')}
       >
         <motion.span
           layout
           transition={{ type: 'spring', stiffness: 700, damping: 30 }}
-          className={cn('absolute top-0.5 w-4 h-4 rounded-full bg-white shadow-sm', checked ? 'right-0.5 left-auto' : 'left-0.5 right-auto')}
+          className={cn('absolute top-0.5 w-3.5 h-3.5 rounded-full bg-white shadow-xs', checked ? 'right-0.5 left-auto' : 'left-0.5 right-auto')}
         />
       </button>
       {label && <span className="text-sm text-slate-600">{label}</span>}
@@ -279,12 +279,12 @@ export function CustomSelect({ options, value, onChange, className, placeholder 
               className={cn(
                 'flex items-center justify-between w-full text-left px-2.5 py-2 text-xs rounded-lg transition-colors cursor-pointer',
                 value === option.value
-                  ? 'bg-blue-50 text-blue-700 font-bold'
+                  ? 'bg-indigo-50 text-indigo-700 font-bold'
                   : 'text-slate-600 hover:bg-slate-50 font-medium hover:text-slate-900'
               )}
             >
               {option.label}
-              {value === option.value && <Check className="w-3.5 h-3.5 text-blue-600 shrink-0" />}
+              {value === option.value && <Check className="w-3.5 h-3.5 text-indigo-600 shrink-0" />}
             </button>
           ))}
         </div>
@@ -300,7 +300,7 @@ export function CustomSelect({ options, value, onChange, className, placeholder 
         type="button"
         onClick={() => setIsOpen(o => !o)}
         className={cn(
-          'flex items-center justify-between w-full min-w-[140px] gap-2 text-xs font-semibold bg-white border border-slate-200 text-slate-700 rounded-lg px-3 py-1.5 outline-none hover:bg-slate-50 hover:border-slate-300 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition-all shadow-sm',
+          'flex items-center justify-between w-full min-w-[140px] gap-2 text-xs font-semibold bg-white border border-slate-200 text-slate-700 rounded-lg px-3 py-1.5 outline-none hover:bg-slate-50 hover:border-slate-300 focus:ring-2 focus:ring-indigo-500/20 focus:border-blue-400 transition-all shadow-sm',
           buttonClassName
         )}
       >
@@ -313,3 +313,4 @@ export function CustomSelect({ options, value, onChange, className, placeholder 
     </div>
   );
 }
+

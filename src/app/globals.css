@@ -1,15 +1,125 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8fafc;
+  --foreground: #0f172a;
+
+  /* ─── Nordic Teal & Clean Slate Theme (Eye-friendly, Premium SaaS) ─── */
+  --primary: #0d9488;          /* Teal 600 - Main Brand Accent */
+  --primary-hover: #0f766e;    /* Teal 700 - Hover State */
+  --primary-active: #115e59;   /* Teal 800 - Active State */
+  --primary-foreground: #ffffff;
+  --primary-light: #f0fdfa;    /* Teal 50 - Soft Background Badges */
+  --primary-border: #ccfbf1;   /* Teal 100 - Delicate Borders */
+  --primary-ring: rgba(13, 148, 136, 0.25);
+
+  --secondary: #f1f5f9;        /* Slate 100 - Secondary Surfaces */
+  --secondary-foreground: #1e293b; /* Slate 800 */
+  --secondary-hover: #e2e8f0;
+
+  --accent: #14b8a6;           /* Teal 500 */
+  --accent-light: #e6fffa;
+
+  --muted: #64748b;            /* Slate 500 */
+  --muted-foreground: #94a3b8; /* Slate 400 */
+  --border: #e2e8f0;           /* Slate 200 */
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+
+  /* ─── Universal Semantic Status Colors ─── */
+  /* Success (Green) - Action completed, healthy, safe */
+  --status-success: #16a34a;
+  --status-success-bg: #f0fdf4;
+  --status-success-border: #bbf7d0;
+  --status-success-text: #15803d;
+
+  /* Warning (Yellow / Amber) - Attention needed, pending, non-blocking risk */
+  --status-warning: #f59e0b;
+  --status-warning-bg: #fffbeb;
+  --status-warning-border: #fde68a;
+  --status-warning-text: #b45309;
+
+  /* Error / Danger (Red) - Critical failure, system interruption, destructive/suspended */
+  --status-error: #dc2626;
+  --status-error-bg: #fef2f2;
+  --status-error-border: #fecaca;
+  --status-error-text: #b91c1c;
+
+  /* Info (Blue) - Neutral announcement, tutorial, no action required */
+  --status-info: #0284c7;
+  --status-info-bg: #f0f9ff;
+  --status-info-border: #bae6fd;
+  --status-info-text: #0369a1;
+
+  /* Neutral / Inactive (Gray / Slate) - Draft states, unstarted items, inactive/expired */
+  --status-neutral: #64748b;
+  --status-neutral-bg: #f8fafc;
+  --status-neutral-border: #e2e8f0;
+  --status-neutral-text: #475569;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-active: var(--primary-active);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-light: var(--primary-light);
+  --color-primary-border: var(--primary-border);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-light: var(--accent-light);
+  --color-primary-ring: var(--primary-ring);
+
+  /* Semantic Status Tokens */
+  --color-status-success: var(--status-success);
+  --color-status-success-bg: var(--status-success-bg);
+  --color-status-success-border: var(--status-success-border);
+  --color-status-success-text: var(--status-success-text);
+
+  --color-status-warning: var(--status-warning);
+  --color-status-warning-bg: var(--status-warning-bg);
+  --color-status-warning-border: var(--status-warning-border);
+  --color-status-warning-text: var(--status-warning-text);
+
+  --color-status-error: var(--status-error);
+  --color-status-error-bg: var(--status-error-bg);
+  --color-status-error-border: var(--status-error-border);
+  --color-status-error-text: var(--status-error-text);
+
+  --color-status-info: var(--status-info);
+  --color-status-info-bg: var(--status-info-bg);
+  --color-status-info-border: var(--status-info-border);
+  --color-status-info-text: var(--status-info-text);
+
+  --color-status-neutral: var(--status-neutral);
+  --color-status-neutral-bg: var(--status-neutral-bg);
+  --color-status-neutral-border: var(--status-neutral-border);
+  --color-status-neutral-text: var(--status-neutral-text);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* ─── Remap Indigo Palette to Dynamic Primary Theme ─── */
+  --color-indigo-50: var(--primary-light);
+  --color-indigo-100: var(--primary-border);
+  --color-indigo-200: var(--primary-border);
+  --color-indigo-300: var(--accent-light);
+  --color-indigo-400: var(--accent);
+  --color-indigo-500: var(--accent);
+  --color-indigo-600: var(--primary);
+  --color-indigo-700: var(--primary-hover);
+  --color-indigo-800: var(--primary-active);
+  --color-indigo-900: var(--primary-active);
+  --color-indigo-950: var(--primary-active);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -186,4 +296,63 @@ html {
   100% {
     transform: translateX(100%);
   }
+}
+
+/* ─── Silky Smooth GPU-Accelerated Keyframes ─── */
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+}
+
+@keyframes float-reverse {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(10px) rotate(-1.5deg);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.65;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 4.5s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-float-reverse {
+  animation: float-reverse 5.2s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 4s ease-in-out infinite;
+  will-change: opacity, transform;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 22s linear infinite;
+  will-change: transform;
 }

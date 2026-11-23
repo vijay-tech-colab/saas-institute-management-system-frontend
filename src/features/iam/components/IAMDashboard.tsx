@@ -19,7 +19,7 @@ export function IAMDashboard() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard title="Total Roles" value={mockIAMStats.totalRoles} icon={<Shield size={20} />} iconColor="text-indigo-600" iconBg="bg-indigo-50" trend={12} trendLabel="vs last month" />
-        <StatCard title="Active Users" value={mockIAMStats.activeUsers} icon={<Users size={20} />} iconColor="text-blue-600" iconBg="bg-blue-50" trend={5} trendLabel="vs last month" />
+        <StatCard title="Active Users" value={mockIAMStats.activeUsers} icon={<Users size={20} />} iconColor="text-indigo-600" iconBg="bg-indigo-50" trend={5} trendLabel="vs last month" />
         <StatCard title="Policy Violations" value={mockIAMStats.policyViolations} icon={<ShieldAlert size={20} />} iconColor="text-rose-600" iconBg="bg-rose-50" trend={-15} trendLabel="vs last month" />
         <StatCard title="Active Sessions" value={mockIAMStats.activeSessions} icon={<Activity size={20} />} iconColor="text-emerald-600" iconBg="bg-emerald-50" trend={8} trendLabel="vs last month" />
       </div>
@@ -27,7 +27,7 @@ export function IAMDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Charts */}
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+          <div className="bg-white p-6 rounded-xl border border-slate-100 shadow-sm">
             <h3 className="text-base font-bold text-slate-900 mb-6">Authentication Trends</h3>
             <div className="h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
@@ -50,7 +50,7 @@ export function IAMDashboard() {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+          <div className="bg-white p-6 rounded-xl border border-slate-100 shadow-sm">
             <h3 className="text-base font-bold text-slate-900 mb-6">Security Events & Violations</h3>
             <div className="h-[250px]">
               <ResponsiveContainer width="100%" height="100%">
@@ -73,7 +73,7 @@ export function IAMDashboard() {
 
         {/* Side Panels */}
         <div className="space-y-6">
-          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex flex-col">
+          <div className="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden flex flex-col">
             <div className="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
               <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4 text-rose-500" /> Security Alerts
@@ -93,7 +93,7 @@ export function IAMDashboard() {
             </button>
           </div>
 
-          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+          <div className="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
             <div className="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
               <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
                 <Fingerprint className="w-4 h-4 text-slate-400" /> Recent Activities
@@ -105,7 +105,7 @@ export function IAMDashboard() {
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
                     act.type === 'security' ? 'bg-rose-100 text-rose-600' :
                     act.type === 'create' ? 'bg-emerald-100 text-emerald-600' :
-                    act.type === 'delete' ? 'bg-red-100 text-red-600' : 'bg-blue-100 text-blue-600'
+                    act.type === 'delete' ? 'bg-red-100 text-red-600' : 'bg-indigo-100 text-indigo-600'
                   }`}>
                     <Activity className="w-4 h-4" />
                   </div>
@@ -125,3 +125,4 @@ export function IAMDashboard() {
     </div>
   );
 }
+

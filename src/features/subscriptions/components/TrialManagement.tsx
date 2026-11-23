@@ -51,7 +51,7 @@ export function TrialManagement() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <StatCard title="Active Trials" value={active} icon={<Clock size={20} />} iconColor="text-blue-600" iconBg="bg-blue-50" trend={12} trendLabel="vs last month" />
+        <StatCard title="Active Trials" value={active} icon={<Clock size={20} />} iconColor="text-indigo-600" iconBg="bg-indigo-50" trend={12} trendLabel="vs last month" />
         <StatCard title="Ending Soon" value={endingSoon} icon={<Clock size={20} />} iconColor="text-orange-600" iconBg="bg-orange-50" />
         <StatCard title="Trial Expired" value={expired} icon={<XCircle size={20} />} iconColor="text-slate-400" iconBg="bg-slate-100" />
         <StatCard title="Converted" value={converted} icon={<CheckCircle2 size={20} />} iconColor="text-emerald-600" iconBg="bg-emerald-50" trend={68.4} trendLabel="conversion rate" />
@@ -59,7 +59,7 @@ export function TrialManagement() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Trial Users Table — 2 cols */}
-        <div className="lg:col-span-2 bg-white border border-slate-100 rounded-2xl shadow-sm overflow-hidden">
+        <div className="lg:col-span-2 bg-white border border-slate-100 rounded-xl shadow-sm overflow-hidden">
           <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50 shrink-0">
             <div className="flex items-center gap-3">
               <SearchInput value={search} onChange={setSearch} placeholder="Search institute or email..." className="w-full sm:w-72" />
@@ -103,7 +103,7 @@ export function TrialManagement() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: i * 0.05 }}
-                    className={`border-b hover:bg-blue-50/20 transition-colors cursor-pointer ${selectedTrials.has(t.id) ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
+                    className={`border-b hover:bg-indigo-50/20 transition-colors cursor-pointer ${selectedTrials.has(t.id) ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
                     onClick={() => toggleSelect(t.id)}
                   >
                     <td className="py-3.5 px-4 text-center align-middle">
@@ -121,7 +121,7 @@ export function TrialManagement() {
                     </td>
                     <td className="py-3.5 px-4 text-xs text-slate-500">{t.email}</td>
                     <td className="py-3.5 px-4">
-                      <span className="px-2 py-0.5 bg-blue-50 text-blue-700 text-[11px] font-semibold rounded-full">{t.planName}</span>
+                      <span className="px-2 py-0.5 bg-indigo-50 text-indigo-700 text-[11px] font-semibold rounded-full">{t.planName}</span>
                     </td>
                     <td className="py-3.5 px-4 text-xs text-slate-500">{t.startDate}</td>
                     <td className="py-3.5 px-4 text-xs text-slate-500">{t.endDate}</td>
@@ -129,7 +129,7 @@ export function TrialManagement() {
                       {t.daysRemaining > 0 ? (
                         <div className="flex items-center gap-2">
                           <div className="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                            <div className={`h-full rounded-full ${t.daysRemaining <= 2 ? 'bg-red-500' : t.daysRemaining <= 5 ? 'bg-orange-500' : 'bg-blue-500'}`} style={{ width: `${(t.daysRemaining / 14) * 100}%` }} />
+                            <div className={`h-full rounded-full ${t.daysRemaining <= 2 ? 'bg-red-500' : t.daysRemaining <= 5 ? 'bg-orange-500' : 'bg-indigo-500'}`} style={{ width: `${(t.daysRemaining / 14) * 100}%` }} />
                           </div>
                           <span className="text-xs font-semibold text-slate-700">{t.daysRemaining}d</span>
                         </div>
@@ -152,9 +152,9 @@ export function TrialManagement() {
         </div>
 
         {/* Trial Settings */}
-        <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm h-fit">
+        <div className="bg-white border border-slate-100 rounded-xl p-5 shadow-sm h-fit">
           <h2 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
-            <Settings className="w-4 h-4 text-blue-500" /> Trial Settings
+            <Settings className="w-4 h-4 text-indigo-500" /> Trial Settings
           </h2>
           <div className="space-y-4">
             <div>
@@ -163,7 +163,7 @@ export function TrialManagement() {
                 type="number"
                 value={settings.duration}
                 onChange={e => setSettings(prev => ({ ...prev, duration: Number(e.target.value) }))}
-                className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                className="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
               />
             </div>
             {[
@@ -194,14 +194,14 @@ export function TrialManagement() {
                         ? prev.reminderDays.filter(x => x !== d)
                         : [...prev.reminderDays, d]
                     }))}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${settings.reminderDays.includes(d) ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-slate-600 border-slate-200 hover:border-blue-300'}`}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${settings.reminderDays.includes(d) ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-200 hover:border-blue-300'}`}
                   >
                     {d}d
                   </button>
                 ))}
               </div>
             </div>
-            <button className="w-full py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-all">
+            <button className="w-full py-2.5 bg-indigo-600 text-white text-sm font-semibold rounded-xl hover:bg-indigo-700 transition-all">
               Save Settings
             </button>
           </div>
@@ -210,3 +210,4 @@ export function TrialManagement() {
     </div>
   );
 }
+

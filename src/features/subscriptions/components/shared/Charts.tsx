@@ -221,16 +221,23 @@ export function DonutChart({ data, size = 160, thickness = 28 }: DonutChartProps
   const cx = size / 2;
   const cy = size / 2;
   const circumference = 2 * Math.PI * radius;
-  let cumulative = 0;
+
+  const segments = data.map((seg, i) => {
+    const fraction = total > 0 ? seg.value / total : 0;
+    const dashArray = fraction * circumference;
+    const prevTotal = data.slice(0, i).reduce((s, d) => s + d.value, 0);
+    const dashOffset = circumference - (prevTotal * circumference) / (total || 1);
+    return {
+      ...seg,
+      dashArray,
+      dashOffset,
+    };
+  });
 
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
       <circle cx={cx} cy={cy} r={radius} fill="none" stroke="#f1f5f9" strokeWidth={thickness} />
-      {data.map((seg, i) => {
-        const fraction = seg.value / total;
-        const dashArray = fraction * circumference;
-        const dashOffset = circumference - cumulative * circumference / total;
-        cumulative += seg.value;
+      {segments.map((seg, i) => {
         return (
           <circle
             key={i}
@@ -238,8 +245,8 @@ export function DonutChart({ data, size = 160, thickness = 28 }: DonutChartProps
             fill="none"
             stroke={seg.color}
             strokeWidth={thickness}
-            strokeDasharray={`${dashArray} ${circumference - dashArray}`}
-            strokeDashoffset={dashOffset}
+            strokeDasharray={`${seg.dashArray} ${circumference - seg.dashArray}`}
+            strokeDashoffset={seg.dashOffset}
             strokeLinecap="round"
             transform={`rotate(-90 ${cx} ${cy})`}
             style={{ transition: `stroke-dasharray 0.8s ease ${i * 0.15}s` }}
@@ -249,3 +256,4 @@ export function DonutChart({ data, size = 160, thickness = 28 }: DonutChartProps
     </svg>
   );
 }
+

@@ -82,13 +82,13 @@ export function DomainManagement() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-        <StatCard title="Active Subdomains" value={activeSubdomains} icon={<Globe size={20} />} iconColor="text-blue-600" iconBg="bg-blue-50" />
+        <StatCard title="Active Subdomains" value={activeSubdomains} icon={<Globe size={20} />} iconColor="text-indigo-600" iconBg="bg-indigo-50" />
         <StatCard title="Custom Domains" value={customDomains} icon={<CheckCircle2 size={20} />} iconColor="text-emerald-600" iconBg="bg-emerald-50" />
         <StatCard title="SSL Pending" value={sslPending} icon={<ShieldAlert size={20} />} iconColor="text-amber-600" iconBg="bg-amber-50" />
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-slate-100 rounded-2xl shadow-sm flex flex-col flex-1 overflow-hidden min-h-0">
+      <div className="bg-white border border-slate-100 rounded-xl shadow-sm flex flex-col flex-1 overflow-hidden min-h-0">
         {/* Toolbar */}
         <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shrink-0 bg-slate-50/50">
           <div className="flex items-center gap-3">
@@ -139,7 +139,7 @@ export function DomainManagement() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: i * 0.04 }}
-                    className={`border-b hover:bg-blue-50/20 transition-colors group cursor-pointer ${selectedDomains.has(domain.id) ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
+                    className={`border-b hover:bg-indigo-50/20 transition-colors group cursor-pointer ${selectedDomains.has(domain.id) ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
                     onClick={() => toggleSelect(domain.id)}
                   >
                     <td className="py-3.5 px-4 text-center align-middle">
@@ -156,17 +156,17 @@ export function DomainManagement() {
                       <p className="text-[11px] text-slate-400">{domain.code}</p>
                     </td>
                     <td className="py-3.5 px-4 text-sm text-slate-600">
-                      <a href={`https://${domain.subdomain}`} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 hover:text-blue-600 transition-colors">
+                      <a href={`https://${domain.subdomain}`} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 hover:text-indigo-600 transition-colors">
                         {domain.subdomain} <ExternalLink className="w-3 h-3 opacity-60" />
                       </a>
                     </td>
                     <td className="py-3.5 px-4">
                       {domain.customDomain ? (
-                        <a href={`https://${domain.customDomain}`} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-sm font-medium text-slate-800 hover:text-blue-600 transition-colors">
+                        <a href={`https://${domain.customDomain}`} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-sm font-medium text-slate-800 hover:text-indigo-600 transition-colors">
                           {domain.customDomain} <ExternalLink className="w-3 h-3 opacity-60" />
                         </a>
                       ) : (
-                        <button className="flex items-center gap-1 text-xs font-semibold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg hover:bg-blue-100 transition-colors">
+                        <button className="flex items-center gap-1 text-xs font-semibold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-lg hover:bg-indigo-100 transition-colors">
                           <Plus className="w-3 h-3" /> Add Domain
                         </button>
                       )}
@@ -227,3 +227,4 @@ export function DomainManagement() {
     </div>
   );
 }
+

@@ -54,7 +54,7 @@ export function useChat() {
       setIsTyping(false);
       const botResponse: Message = {
         id: (Date.now() + 1).toString(),
-        text: "I understand you need assistance with that.\n\nAs a highly advanced AI tailored for CampusOS, I can help you manage:\n- Student Enrollments\n- Staff Directories\n- Academic Courses\n\nWhat specific detail would you like to explore first?",
+        text: "I understand you need assistance with that.\n\nAs the CampusOS Platform AI, I can help you monitor and manage:\n- Multi-tenant Institutes & Domains\n- Platform Subscriptions & MRR Billing\n- System Health, Security & IAM Governance\n\nWhat specific platform metric or action would you like to explore?",
         sender: "bot",
         timestamp: new Date(),
       };

@@ -71,13 +71,13 @@ export function ExportLogs() {
       >
         <button 
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-xl hover:bg-blue-700 transition-colors shadow-sm shadow-blue-200"
+          className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 transition-colors shadow-sm shadow-indigo-200"
         >
           <Plus className="w-4 h-4" /> New Export
         </button>
       </PageHeader>
 
-      <div className="bg-white border border-slate-100 rounded-2xl shadow-sm flex flex-col flex-1 overflow-hidden min-h-0">
+      <div className="bg-white border border-slate-100 rounded-xl shadow-sm flex flex-col flex-1 overflow-hidden min-h-0">
         {/* Toolbar */}
         <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50 shrink-0">
           <div className="flex items-center gap-3">
@@ -134,7 +134,7 @@ export function ExportLogs() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: i * 0.04 }}
-                  className={`border-b hover:bg-blue-50/30 transition-colors cursor-pointer group ${selectedExports.has(job.id) ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
+                  className={`border-b hover:bg-indigo-50/30 transition-colors cursor-pointer group ${selectedExports.has(job.id) ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
                   onClick={() => toggleSelect(job.id)}
                 >
                   <td className="py-3.5 px-4 text-center align-middle">
@@ -227,3 +227,4 @@ export function ExportLogs() {
     </div>
   );
 }
+

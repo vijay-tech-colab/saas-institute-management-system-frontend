@@ -28,7 +28,7 @@ function Tab_Overview({ plan }: { plan: Plan }) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Plan Information Card */}
-        <div className="lg:col-span-2 bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+        <div className="lg:col-span-2 bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
           <h3 className="text-sm font-bold text-slate-900 mb-6 flex items-center gap-2">
             <Package className="w-4 h-4 text-slate-400" /> Plan Profile
           </h3>
@@ -59,7 +59,7 @@ function Tab_Overview({ plan }: { plan: Plan }) {
         </div>
 
         {/* Quick Stats Summary */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
           <h3 className="text-sm font-bold text-slate-900 mb-6 flex items-center gap-2">
             <BarChart3 className="w-4 h-4 text-slate-400" /> Quick Stats
           </h3>
@@ -86,9 +86,9 @@ function Tab_Overview({ plan }: { plan: Plan }) {
       
       {/* Key Features Highlights */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:border-blue-200 transition-colors group">
+        <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:border-indigo-200 transition-colors group">
           <div className="flex items-center justify-between mb-4">
-            <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
+            <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-colors">
               <Users className="w-5 h-5" />
             </div>
           </div>
@@ -98,7 +98,7 @@ function Tab_Overview({ plan }: { plan: Plan }) {
           <p className="text-xs font-semibold text-slate-500 mt-1 uppercase tracking-wider">Student Limit</p>
         </div>
         
-        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:border-emerald-200 transition-colors group">
+        <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:border-emerald-200 transition-colors group">
           <div className="flex items-center justify-between mb-4">
             <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-colors">
               <GitBranch className="w-5 h-5" />
@@ -110,7 +110,7 @@ function Tab_Overview({ plan }: { plan: Plan }) {
           <p className="text-xs font-semibold text-slate-500 mt-1 uppercase tracking-wider">Branch Limit</p>
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:border-amber-200 transition-colors group">
+        <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:border-amber-200 transition-colors group">
           <div className="flex items-center justify-between mb-4">
             <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center group-hover:bg-amber-600 group-hover:text-white transition-colors">
               <Database className="w-5 h-5" />
@@ -120,7 +120,7 @@ function Tab_Overview({ plan }: { plan: Plan }) {
           <p className="text-xs font-semibold text-slate-500 mt-1 uppercase tracking-wider">Storage Limit</p>
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:border-purple-200 transition-colors group">
+        <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:border-purple-200 transition-colors group">
           <div className="flex items-center justify-between mb-4">
             <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center group-hover:bg-purple-600 group-hover:text-white transition-colors">
               <ShieldCheck className="w-5 h-5" />
@@ -143,7 +143,7 @@ function Tab_Features({ plan }: { plan: Plan }) {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
           <h3 className="text-sm font-bold text-slate-900 mb-6 flex items-center gap-2">
             <Zap className="w-4 h-4 text-slate-400" /> Feature Availability
           </h3>
@@ -165,7 +165,7 @@ function Tab_Features({ plan }: { plan: Plan }) {
           </ul>
         </div>
         
-        <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm h-fit">
+        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm h-fit">
           <h3 className="text-sm font-bold text-slate-900 mb-6 flex items-center gap-2">
             <Settings className="w-4 h-4 text-slate-400" /> Quantitative Limits
           </h3>
@@ -189,20 +189,20 @@ function Tab_Pricing({ plan }: { plan: Plan }) {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white border border-blue-200 rounded-2xl p-8 shadow-sm relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
+        <div className="bg-white border border-indigo-200 rounded-xl p-8 shadow-sm relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
           <h3 className="text-lg font-bold text-slate-900 mb-2">Monthly Billing</h3>
           <p className="text-sm text-slate-500 mb-6">Billed every month</p>
           <div className="flex items-end gap-2 mb-6">
-            <p className="text-4xl font-black text-blue-600">₹{plan.monthlyPrice.toLocaleString()}</p>
+            <p className="text-4xl font-black text-indigo-600">₹{plan.monthlyPrice.toLocaleString()}</p>
             <p className="text-sm font-medium text-slate-400 mb-1">/ month</p>
           </div>
-          <div className="bg-blue-50 text-blue-700 text-sm font-semibold p-4 rounded-xl border border-blue-100">
+          <div className="bg-indigo-50 text-indigo-700 text-sm font-semibold p-4 rounded-xl border border-indigo-100">
             Current Active Subscribers: {Math.round(plan.subscribersCount * 0.4).toLocaleString()} (40%)
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-indigo-900 to-blue-900 rounded-2xl p-8 text-white shadow-lg relative overflow-hidden">
+        <div className="bg-gradient-to-br from-indigo-900 to-indigo-900 rounded-xl p-8 text-white shadow-lg relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 blur-3xl rounded-full -translate-y-1/2 translate-x-1/3"></div>
           <div className="relative z-10 flex flex-col h-full">
             <div className="flex items-center justify-between mb-2">
@@ -229,12 +229,12 @@ function Tab_Pricing({ plan }: { plan: Plan }) {
 function Tab_Subscribers({ plan }: { plan: Plan }) {
   return (
     <div className="space-y-6">
-      <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+      <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
           <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
             <Users className="w-4 h-4 text-slate-400" /> Recent Subscribers
           </h3>
-          <button className="text-sm font-semibold text-blue-600 hover:text-blue-700">View All {plan.subscribersCount}</button>
+          <button className="text-sm font-semibold text-indigo-600 hover:text-indigo-700">View All {plan.subscribersCount}</button>
         </div>
         <table className="w-full text-left">
           <thead className="bg-slate-50">
@@ -256,7 +256,7 @@ function Tab_Subscribers({ plan }: { plan: Plan }) {
                   <StatusBadge status="active" />
                 </td>
                 <td className="py-4 px-6 text-right">
-                  <button className="text-slate-400 hover:text-blue-600"><Eye className="w-4 h-4" /></button>
+                  <button className="text-slate-400 hover:text-indigo-600"><Eye className="w-4 h-4" /></button>
                 </td>
               </tr>
             ))}
@@ -281,8 +281,8 @@ export function PlanDetailsView({ planId }: { planId: string }) {
   return (
     <div className="min-h-[calc(100vh-64px)] bg-slate-50/70 p-4 sm:p-6 xl:p-8">
       <div className="mx-auto flex max-w-[1540px] flex-col gap-5">
-        <header className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-          <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-blue-100/70 blur-3xl" />
+        <header className="relative overflow-hidden rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+          <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-indigo-100/70 blur-3xl" />
           <div className="relative flex flex-col gap-5">
             <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-start">
               <div className="flex min-w-0 items-start gap-3 sm:gap-4">
@@ -295,7 +295,7 @@ export function PlanDetailsView({ planId }: { planId: string }) {
                 >
                   <ArrowLeft className="h-4 w-4" />
                 </Button>
-                <div className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-200 sm:flex">
+                <div className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-lg shadow-indigo-200 sm:flex">
                   <Package className="h-5 w-5" />
                 </div>
                 <div className="min-w-0">
@@ -326,7 +326,7 @@ export function PlanDetailsView({ planId }: { planId: string }) {
 
             <div className="grid gap-3 border-t border-slate-100 pt-4 sm:grid-cols-2 xl:grid-cols-4">
               <div className="flex items-center gap-3 rounded-xl bg-slate-50 px-3.5 py-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white text-blue-600 shadow-sm ring-1 ring-slate-200">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200">
                   <IndianRupee className="h-4 w-4" />
                 </div>
                 <div>
@@ -372,7 +372,7 @@ export function PlanDetailsView({ planId }: { planId: string }) {
                     onClick={() => setActiveTab(tab.id)}
                     className={`flex items-center gap-2 border-b-2 py-4 text-sm font-semibold whitespace-nowrap transition-colors ${
                       activeTab === tab.id
-                        ? 'border-blue-600 text-blue-700'
+                        ? 'border-indigo-600 text-indigo-700'
                         : 'border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-800'
                     }`}
                   >
@@ -404,3 +404,4 @@ export function PlanDetailsView({ planId }: { planId: string }) {
     </div>
   );
 }
+

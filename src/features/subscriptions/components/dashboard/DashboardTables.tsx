@@ -14,10 +14,10 @@ export function DashboardTables() {
   return (
     <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
       {/* Recent Subscriptions */}
-      <div className="bg-white border border-slate-100 rounded-2xl shadow-sm flex flex-col overflow-hidden">
+      <div className="bg-white border border-slate-100 rounded-xl shadow-sm flex flex-col overflow-hidden">
         <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
           <h2 className="text-base font-bold text-slate-900">Recent Subscriptions</h2>
-          <Link href="/dashboard/subscriptions/customers" className="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1 group">
+          <Link href="/dashboard/subscriptions/customers" className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 group">
             View All <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
           </Link>
         </div>
@@ -51,7 +51,7 @@ export function DashboardTables() {
                     ₹{sub.monthlyRevenue.toLocaleString()}
                   </td>
                   <td className="px-5 py-3 whitespace-nowrap text-right">
-                    <button className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                    <button className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
                       <Eye className="w-4 h-4" />
                     </button>
                   </td>
@@ -63,10 +63,10 @@ export function DashboardTables() {
       </div>
 
       {/* Recent Payments */}
-      <div className="bg-white border border-slate-100 rounded-2xl shadow-sm flex flex-col overflow-hidden">
+      <div className="bg-white border border-slate-100 rounded-xl shadow-sm flex flex-col overflow-hidden">
         <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
           <h2 className="text-base font-bold text-slate-900">Recent Payments</h2>
-          <Link href="/dashboard/subscriptions/payments" className="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1 group">
+          <Link href="/dashboard/subscriptions/payments" className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 group">
             View All <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
           </Link>
         </div>
@@ -113,3 +113,4 @@ export function DashboardTables() {
     </div>
   );
 }
+

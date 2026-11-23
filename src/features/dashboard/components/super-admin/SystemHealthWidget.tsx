@@ -1,53 +1,80 @@
+"use client"
+
 import React from 'react';
 import { Server, Database, Box, Cpu, HardDrive, Wifi, Activity, CheckCircle2, AlertTriangle } from 'lucide-react';
+import Link from 'next/link';
 
 export function SystemHealthWidget() {
   const metrics = [
-    { name: 'CPU Usage', value: '42%', status: 'healthy', icon: Cpu },
-    { name: 'RAM Usage', value: '78%', status: 'warning', icon: Server },
-    { name: 'Disk I/O', value: '25%', status: 'healthy', icon: HardDrive },
-    { name: 'Database', value: '99.9%', status: 'healthy', icon: Database },
-    { name: 'Redis Cache', value: '98.5%', status: 'healthy', icon: Box },
-    { name: 'API Latency', value: '124ms', status: 'healthy', icon: Wifi },
+    { name: 'CPU Utilization', value: '38%', status: 'healthy', icon: Cpu, detail: '16 Cores' },
+    { name: 'Memory (RAM)', value: '64%', status: 'healthy', icon: Server, detail: '41/64 GB' },
+    { name: 'Primary Storage', value: '32%', status: 'healthy', icon: HardDrive, detail: 'NVMe SSD' },
+    { name: 'PostgreSQL Cluster', value: '99.9%', status: 'healthy', icon: Database, detail: 'Active Replica' },
+    { name: 'Redis Cache Layer', value: '98.5%', status: 'healthy', icon: Box, detail: 'Hit rate 98%' },
+    { name: 'Average API Latency', value: '112ms', status: 'healthy', icon: Wifi, detail: 'Global p95' },
   ];
 
   return (
-    <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h3 className="font-bold text-slate-900 flex items-center gap-2">
-            <Activity className="w-4 h-4 text-emerald-500" />
-            System Health
-          </h3>
-          <p className="text-xs text-slate-500 mt-0.5">Live infrastructure monitoring</p>
+    <div className="bg-white border border-slate-200/80 p-5 rounded-xl shadow-xs flex flex-col justify-between h-full">
+      <div>
+        <div className="flex items-center justify-between pb-3.5 mb-3.5 border-b border-slate-100">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100">
+              <Activity className="w-4 h-4" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-sm text-slate-900 leading-tight">Infrastructure Health</h3>
+              <p className="text-xs text-slate-500">Real-time cluster & service status</p>
+            </div>
+          </div>
+          <span className="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 text-xs font-medium rounded-full border border-emerald-200/70 flex items-center gap-1.5">
+            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            Operational
+          </span>
         </div>
-        <div className="px-2.5 py-1 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-md border border-emerald-100 flex items-center gap-1.5">
-          <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
-          All Systems Operational
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          {metrics.map((metric) => {
+            const Icon = metric.icon;
+            const isWarning = metric.status === 'warning';
+            return (
+              <div
+                key={metric.name}
+                className="p-3 rounded-lg border border-slate-100 bg-slate-50/50 hover:bg-slate-50 hover:border-slate-200 transition-colors flex flex-col justify-between"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <Icon className="w-4 h-4 text-slate-400" />
+                  {isWarning ? (
+                    <AlertTriangle className="w-3.5 h-3.5 text-amber-500" />
+                  ) : (
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                  )}
+                </div>
+                <div>
+                  <p className="text-[11px] font-medium text-slate-500 truncate">
+                    {metric.name}
+                  </p>
+                  <p className="text-base font-semibold text-slate-900 mt-0.5">
+                    {metric.value}
+                  </p>
+                  <p className="text-[11px] text-slate-400 mt-0.5">
+                    {metric.detail}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-        {metrics.map((metric) => {
-          const Icon = metric.icon;
-          const isWarning = metric.status === 'warning';
-          return (
-            <div key={metric.name} className="p-4 rounded-xl border border-slate-100 bg-slate-50 flex flex-col gap-3 group hover:border-slate-300 transition-colors">
-              <div className="flex items-center justify-between">
-                <Icon className="w-4 h-4 text-slate-400 group-hover:text-slate-600" />
-                {isWarning ? (
-                  <AlertTriangle className="w-4 h-4 text-amber-500" />
-                ) : (
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                )}
-              </div>
-              <div>
-                <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">{metric.name}</p>
-                <p className={`text-xl font-bold mt-0.5 ${isWarning ? 'text-amber-600' : 'text-slate-900'}`}>{metric.value}</p>
-              </div>
-            </div>
-          );
-        })}
+      <div className="pt-3.5 mt-3.5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+        <span>6 of 6 microservices healthy</span>
+        <Link
+          href="/dashboard/logs/system"
+          className="font-semibold text-indigo-600 hover:text-indigo-700 transition-colors"
+        >
+          View System Logs &rarr;
+        </Link>
       </div>
     </div>
   );

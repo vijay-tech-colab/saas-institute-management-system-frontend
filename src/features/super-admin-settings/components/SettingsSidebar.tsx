@@ -81,3 +81,4 @@ export function SettingsSidebar({ categories, activeCategoryId, onSelectCategory
   )
 }
 
+

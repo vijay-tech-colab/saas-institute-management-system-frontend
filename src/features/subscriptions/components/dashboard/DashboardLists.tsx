@@ -14,12 +14,12 @@ export function DashboardLists() {
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
       
       {/* Expiring Soon */}
-      <div className="bg-white border border-slate-100 rounded-2xl shadow-sm flex flex-col">
+      <div className="bg-white border border-slate-100 rounded-xl shadow-sm flex flex-col">
         <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
           <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
             <Bell className="w-4 h-4 text-amber-500" /> Expiring Soon
           </h3>
-          <Link href="/dashboard/subscriptions/renewals" className="text-[11px] font-semibold text-blue-600 hover:underline">View All</Link>
+          <Link href="/dashboard/subscriptions/renewals" className="text-[11px] font-semibold text-indigo-600 hover:underline">View All</Link>
         </div>
         <div className="p-2 space-y-1">
           {expiringSoon.map(r => (
@@ -33,7 +33,7 @@ export function DashboardLists() {
                   {r.daysUntilRenewal} Days
                 </span>
                 <div className="mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button className="text-[10px] font-semibold text-blue-600 hover:text-blue-700">Remind</button>
+                  <button className="text-[10px] font-semibold text-indigo-600 hover:text-indigo-700">Remind</button>
                 </div>
               </div>
             </div>
@@ -42,12 +42,12 @@ export function DashboardLists() {
       </div>
 
       {/* Trial Users */}
-      <div className="bg-white border border-slate-100 rounded-2xl shadow-sm flex flex-col">
+      <div className="bg-white border border-slate-100 rounded-xl shadow-sm flex flex-col">
         <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
           <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
             <UserCheck className="w-4 h-4 text-purple-500" /> Active Trials
           </h3>
-          <Link href="/dashboard/subscriptions/trials" className="text-[11px] font-semibold text-blue-600 hover:underline">View All</Link>
+          <Link href="/dashboard/subscriptions/trials" className="text-[11px] font-semibold text-indigo-600 hover:underline">View All</Link>
         </div>
         <div className="p-2 space-y-1">
           {trialUsers.map(t => (
@@ -72,12 +72,12 @@ export function DashboardLists() {
       </div>
 
       {/* Failed Payments */}
-      <div className="bg-white border border-slate-100 rounded-2xl shadow-sm flex flex-col">
+      <div className="bg-white border border-slate-100 rounded-xl shadow-sm flex flex-col">
         <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
           <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
             <AlertTriangle className="w-4 h-4 text-rose-500" /> Failed Payments
           </h3>
-          <Link href="/dashboard/subscriptions/payments" className="text-[11px] font-semibold text-blue-600 hover:underline">View All</Link>
+          <Link href="/dashboard/subscriptions/payments" className="text-[11px] font-semibold text-indigo-600 hover:underline">View All</Link>
         </div>
         <div className="p-2 space-y-1">
           {failedPayments.map(p => (
@@ -89,7 +89,7 @@ export function DashboardLists() {
               <div className="text-right flex-shrink-0">
                 <span className="block text-sm font-bold text-slate-900">₹{p.amount.toLocaleString()}</span>
                 <div className="mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button className="text-[10px] font-semibold text-blue-600 hover:text-blue-700">Retry</button>
+                  <button className="text-[10px] font-semibold text-indigo-600 hover:text-indigo-700">Retry</button>
                 </div>
               </div>
             </div>
@@ -100,3 +100,4 @@ export function DashboardLists() {
     </div>
   );
 }
+

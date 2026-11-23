@@ -84,8 +84,8 @@ export function TenantList() {
   const SortIcon = ({ field }: { field: keyof Tenant }) => {
     if (sortField !== field) return <ChevronDown className="w-3 h-3 text-slate-300 ml-1" />;
     return sortDirection === 'asc'
-      ? <ChevronUp className="w-3 h-3 text-blue-600 ml-1" />
-      : <ChevronDown className="w-3 h-3 text-blue-600 ml-1" />;
+      ? <ChevronUp className="w-3 h-3 text-primary ml-1" />
+      : <ChevronDown className="w-3 h-3 text-primary ml-1" />;
   };
 
   const activeTenants = mockTenants.filter(t => t.status === 'active').length;
@@ -101,35 +101,40 @@ export function TenantList() {
   };
 
   return (
-    <div className="flex-1 w-full flex flex-col min-h-0">
+    <div className="flex-1 w-full flex flex-col min-h-0 space-y-6">
       <PageHeader
         title="Institutes List"
-        description="Manage all your registered institutes, subscriptions, and settings."
-        breadcrumbs={[{ label: 'Tenants' }, { label: 'List' }]}
+        description="View, filter, and manage all onboarded institutes, subscriptions, and system statuses."
       >
-        <button className="flex items-center gap-2 px-4 py-2 text-sm bg-white border border-slate-200 text-slate-700 font-semibold rounded-xl hover:bg-slate-50 transition-all active:scale-95 shadow-sm">
-          <Download className="w-4 h-4" /> Export
+        <button
+          onClick={handleExport}
+          className="flex items-center gap-2 px-3.5 py-2 text-xs sm:text-sm bg-white border border-slate-200 text-slate-700 font-semibold rounded-lg hover:bg-slate-50 transition-all shadow-xs"
+        >
+          <Download className="w-4 h-4 text-slate-400" /> Export
         </button>
-        <button className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all active:scale-95 shadow-sm shadow-blue-200">
+        <button
+          onClick={() => router.push('/dashboard/tenants/create')}
+          className="flex items-center gap-2 px-4 py-2 text-xs sm:text-sm bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary-hover transition-all shadow-xs"
+        >
           <Plus className="w-4 h-4" /> Add Institute
         </button>
       </PageHeader>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <StatCard title="Total Institutes" value={mockTenants.length} icon={<Store size={20} />} iconColor="text-blue-600" iconBg="bg-blue-50" trend={15.2} trendLabel="vs last month" />
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <StatCard title="Total Institutes" value={mockTenants.length} icon={<Store size={20} />} iconColor="text-indigo-600" iconBg="bg-indigo-50" trend={15.2} trendLabel="vs last month" />
         <StatCard title="Active" value={activeTenants} icon={<Activity size={20} />} iconColor="text-emerald-600" iconBg="bg-emerald-50" trend={10.5} trendLabel="vs last month" />
         <StatCard title="Suspended" value={suspendedTenants} icon={<Ban size={20} />} iconColor="text-rose-600" iconBg="bg-rose-50" />
         <StatCard title="In Trial" value={trialTenants} icon={<AlertCircle size={20} />} iconColor="text-amber-600" iconBg="bg-amber-50" />
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-slate-100 rounded-2xl shadow-sm flex flex-col flex-1 overflow-hidden min-h-0">
+      <div className="bg-white border border-slate-200/80 rounded-xl shadow-xs flex flex-col flex-1 overflow-hidden min-h-0">
         {/* Toolbar */}
         <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shrink-0 bg-slate-50/50">
           <div className="flex items-center gap-3">
-            <SearchInput value={search} onChange={setSearch} placeholder="Search institutes..." className="w-full sm:w-72" />
-            <button className="p-2 border border-slate-200 rounded-xl bg-white text-slate-500 hover:bg-slate-50 transition-colors shadow-sm">
+            <SearchInput value={search} onChange={setSearch} placeholder="Search institutes by name, code, email..." className="w-full sm:w-80" />
+            <button className="p-2 border border-slate-200 rounded-lg bg-white text-slate-500 hover:bg-slate-50 transition-colors shadow-xs">
               <Filter className="w-4 h-4" />
             </button>
           </div>
@@ -224,9 +229,9 @@ export function TenantList() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: i * 0.04 }}
-                    className="border-b border-slate-50 hover:bg-blue-50/20 transition-colors group"
+                    className="border-b border-slate-100/80 hover:bg-slate-50/70 transition-colors group"
                   >
-                    <td className="py-3.5 px-4 text-center align-middle">
+                    <td className="py-3 px-4 text-center align-middle">
                       <div className="flex items-center justify-center">
                         <Checkbox
                           checked={selectedTenants.has(tenant.id)}
@@ -234,13 +239,13 @@ export function TenantList() {
                         />
                       </div>
                     </td>
-                    <td className="py-3.5 px-4">
+                    <td className="py-3 px-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xs shrink-0 border border-blue-100">
+                        <div className="w-8 h-8 rounded-lg bg-primary-light text-primary flex items-center justify-center font-bold text-xs shrink-0 border border-primary-border">
                           {tenant.code}
                         </div>
                         <div>
-                          <p className="text-sm font-semibold text-slate-900">{tenant.name}</p>
+                          <p className="text-sm font-semibold text-slate-900 group-hover:text-primary transition-colors">{tenant.name}</p>
                           <p className="text-[11px] text-slate-400">{tenant.email}</p>
                         </div>
                       </div>

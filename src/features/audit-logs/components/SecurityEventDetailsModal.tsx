@@ -58,8 +58,8 @@ export function SecurityEventDetailsModal({ event, isOpen, onClose }: SecurityEv
                   {event.description}
                 </p>
               </div>
-              <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
-                <p className="text-xs font-bold text-blue-600 mb-1 uppercase tracking-wider">Automated Mitigation Taken</p>
+              <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-4">
+                <p className="text-xs font-bold text-indigo-600 mb-1 uppercase tracking-wider">Automated Mitigation Taken</p>
                 <p className="text-sm font-medium text-blue-900 leading-relaxed">
                   {event.mitigationActionTaken}
                 </p>
@@ -145,7 +145,7 @@ export function SecurityEventDetailsModal({ event, isOpen, onClose }: SecurityEv
           Close
         </button>
         {!event.resolved && (
-          <button className="px-4 py-2 text-sm font-semibold text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors shadow-sm shadow-blue-200">
+          <button className="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 transition-colors shadow-sm shadow-indigo-200">
             Investigate
           </button>
         )}
@@ -153,3 +153,4 @@ export function SecurityEventDetailsModal({ event, isOpen, onClose }: SecurityEv
     </Modal>
   );
 }
+

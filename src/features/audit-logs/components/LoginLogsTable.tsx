@@ -79,7 +79,7 @@ export function LoginLogsTable() {
         </button>
       </PageHeader>
 
-      <div className="bg-white border border-slate-200 rounded-2xl shadow-sm flex-1 flex flex-col min-h-0 overflow-hidden">
+      <div className="bg-white border border-slate-200 rounded-xl shadow-sm flex-1 flex flex-col min-h-0 overflow-hidden">
         {/* Toolbar */}
         <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50">
           <div className="flex items-center gap-3">
@@ -167,7 +167,7 @@ export function LoginLogsTable() {
                     key={log.id}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className={`border-b hover:bg-blue-50/30 transition-colors cursor-pointer ${selectedLogs.has(log.id) ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
+                    className={`border-b hover:bg-indigo-50/30 transition-colors cursor-pointer ${selectedLogs.has(log.id) ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
                     onClick={() => toggleSelect(log.id)}
                   >
                     <td className="py-3.5 px-4 text-center align-middle">
@@ -263,3 +263,4 @@ export function LoginLogsTable() {
     </div>
   );
 }
+

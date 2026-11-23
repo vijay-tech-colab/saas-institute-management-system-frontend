@@ -59,12 +59,12 @@ export function ActivityLogsView() {
         description="Detailed chronological trail of all user actions and system changes."
         breadcrumbs={[{ label: 'Audit Logs' }, { label: 'Activity Logs' }]}
       >
-        <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-xl hover:bg-blue-700 transition-colors shadow-sm shadow-blue-200">
+        <button className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 transition-colors shadow-sm shadow-indigo-200">
           <Download className="w-4 h-4" /> Export Report
         </button>
       </PageHeader>
 
-      <div className="bg-white border border-slate-200 rounded-2xl shadow-sm flex-1 flex flex-col min-h-0 overflow-hidden">
+      <div className="bg-white border border-slate-200 rounded-xl shadow-sm flex-1 flex flex-col min-h-0 overflow-hidden">
         {/* Toolbar */}
         <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50">
           <div className="flex items-center gap-3">
@@ -121,7 +121,7 @@ export function ActivityLogsView() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: i * 0.04 }}
-                        className={`border-b hover:bg-blue-50/30 transition-colors cursor-pointer ${selectedLogs.has(log.id) ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
+                        className={`border-b hover:bg-indigo-50/30 transition-colors cursor-pointer ${selectedLogs.has(log.id) ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
                         onClick={() => toggleSelect(log.id)}
                       >
                         <td className="py-3.5 px-4 text-center align-middle">
@@ -146,7 +146,7 @@ export function ActivityLogsView() {
                         </td>
                         <td className="py-3.5 px-4 text-sm font-medium text-slate-700">{log.action}</td>
                         <td className="py-3.5 px-4">
-                          <span className="text-xs font-semibold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-100">
+                          <span className="text-xs font-semibold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-lg border border-indigo-100">
                             {log.module}
                           </span>
                         </td>
@@ -195,3 +195,4 @@ export function ActivityLogsView() {
     </div>
   );
 }
+

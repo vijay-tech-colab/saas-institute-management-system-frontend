@@ -23,7 +23,7 @@ const TEMPLATE_STYLES: Record<string, {
 }> = {
   essential_clean: { name: 'Essential Clean', tier: 'Basic', accent: 'bg-slate-900', accentText: 'text-slate-900', accentSoft: 'bg-slate-100', tableHead: 'bg-slate-900' },
   basic_compact: { name: 'Compact Ledger', tier: 'Basic', accent: 'bg-sky-600', accentText: 'text-sky-700', accentSoft: 'bg-sky-50', tableHead: 'bg-sky-600' },
-  basic_academic: { name: 'Classic Academic', tier: 'Basic', accent: 'bg-blue-600', accentText: 'text-blue-700', accentSoft: 'bg-blue-50', tableHead: 'bg-blue-600' },
+  basic_academic: { name: 'Classic Academic', tier: 'Basic', accent: 'bg-indigo-600', accentText: 'text-indigo-700', accentSoft: 'bg-indigo-50', tableHead: 'bg-indigo-600' },
   basic_attendance: { name: 'Attendance Register', tier: 'Basic', accent: 'bg-cyan-600', accentText: 'text-cyan-700', accentSoft: 'bg-cyan-50', tableHead: 'bg-cyan-600' },
   basic_receipt: { name: 'Simple Fee Statement', tier: 'Basic', accent: 'bg-teal-600', accentText: 'text-teal-700', accentSoft: 'bg-teal-50', tableHead: 'bg-teal-600' },
   pro_insights: { name: 'Modern Insights', tier: 'Pro', accent: 'bg-indigo-600', accentText: 'text-indigo-600', accentSoft: 'bg-indigo-50', tableHead: 'bg-indigo-600' },
@@ -34,7 +34,7 @@ const TEMPLATE_STYLES: Record<string, {
   advanced_analytics: { name: 'Analytics Suite', tier: 'Advanced', accent: 'bg-violet-600', accentText: 'text-violet-600', accentSoft: 'bg-violet-50', tableHead: 'bg-violet-600' },
   advanced_executive: { name: 'Executive Brief', tier: 'Advanced', accent: 'bg-amber-500', accentText: 'text-amber-600', accentSoft: 'bg-amber-50', tableHead: 'bg-amber-500' },
   advanced_growth: { name: 'Growth Intelligence', tier: 'Advanced', accent: 'bg-pink-600', accentText: 'text-pink-600', accentSoft: 'bg-pink-50', tableHead: 'bg-pink-600' },
-  advanced_branches: { name: 'Multi-Branch Command', tier: 'Advanced', accent: 'bg-blue-700', accentText: 'text-blue-700', accentSoft: 'bg-blue-50', tableHead: 'bg-blue-700' },
+  advanced_branches: { name: 'Multi-Branch Command', tier: 'Advanced', accent: 'bg-indigo-700', accentText: 'text-indigo-700', accentSoft: 'bg-indigo-50', tableHead: 'bg-indigo-700' },
   advanced_annual: { name: 'Annual Impact', tier: 'Advanced', accent: 'bg-red-600', accentText: 'text-red-600', accentSoft: 'bg-red-50', tableHead: 'bg-red-600' },
 };
 
@@ -209,7 +209,7 @@ export function ReportCenter({
                         <td className={`px-3 py-1.5 border-slate-200 font-bold text-white/90 ${template.tableHead} transition-colors`}>Status</td>
                       </tr>
                       {/* Data Rows */}
-                      <tr className="border-b border-slate-200 hover:bg-blue-50/50">
+                      <tr className="border-b border-slate-200 hover:bg-indigo-50/50">
                         <td className="w-8 border-r border-slate-300 bg-slate-100 text-center text-[10px] text-slate-500 font-semibold select-none">2</td>
                         <td className="px-3 py-1.5 border-r border-slate-200 text-slate-600">TEN-001</td>
                         <td className="px-3 py-1.5 border-r border-slate-200 text-slate-600">Global Institute of Tech</td>
@@ -217,7 +217,7 @@ export function ReportCenter({
                         <td className="px-3 py-1.5 border-r border-slate-200 text-slate-600 text-right">$45,200</td>
                         <td className="px-3 py-1.5 border-slate-200 text-slate-600">Active</td>
                       </tr>
-                      <tr className="border-b border-slate-200 hover:bg-blue-50/50">
+                      <tr className="border-b border-slate-200 hover:bg-indigo-50/50">
                         <td className="w-8 border-r border-slate-300 bg-slate-100 text-center text-[10px] text-slate-500 font-semibold select-none">3</td>
                         <td className="px-3 py-1.5 border-r border-slate-200 text-slate-600">TEN-002</td>
                         <td className="px-3 py-1.5 border-r border-slate-200 text-slate-600">Apex Medical Academy</td>
@@ -225,7 +225,7 @@ export function ReportCenter({
                         <td className="px-3 py-1.5 border-r border-slate-200 text-slate-600 text-right">$82,100</td>
                         <td className="px-3 py-1.5 border-slate-200 text-slate-600">Active</td>
                       </tr>
-                      <tr className="border-b border-slate-200 hover:bg-blue-50/50">
+                      <tr className="border-b border-slate-200 hover:bg-indigo-50/50">
                         <td className="w-8 border-r border-slate-300 bg-slate-100 text-center text-[10px] text-slate-500 font-semibold select-none">4</td>
                         <td className="px-3 py-1.5 border-r border-slate-200 text-slate-600">TEN-003</td>
                         <td className="px-3 py-1.5 border-r border-slate-200 text-slate-600">Pioneer Business School</td>
@@ -390,3 +390,4 @@ export function ReportCenter({
     </div>
   );
 }
+

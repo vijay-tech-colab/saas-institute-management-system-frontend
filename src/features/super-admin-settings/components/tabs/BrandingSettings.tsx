@@ -45,7 +45,7 @@ export function BrandingSettings() {
               { name: 'Emerald', color: 'bg-emerald-500', active: false },
               { name: 'Rose', color: 'bg-rose-500', active: false },
               { name: 'Amber', color: 'bg-amber-500', active: false },
-              { name: 'Ocean', color: 'bg-blue-500', active: false },
+              { name: 'Ocean', color: 'bg-indigo-500', active: false },
               { name: 'Violet', color: 'bg-violet-600', active: false },
               { name: 'Slate', color: 'bg-slate-800', active: false },
             ].map((theme) => (
@@ -85,3 +85,4 @@ export function BrandingSettings() {
     </div>
   )
 }
+

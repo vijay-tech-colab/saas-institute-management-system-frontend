@@ -10,7 +10,7 @@ import type { AIInsight } from '../types';
 
 const TYPE_CONFIG: Record<AIInsight['type'], { icon: React.ReactNode; label: string; color: string; bg: string }> = {
   churn_risk:         { icon: <AlertTriangle size={18} />,  label: 'Churn Risk',       color: 'text-red-600',     bg: 'bg-red-50' },
-  upgrade_opportunity:{ icon: <ArrowUpRight size={18} />,   label: 'Upgrade Opp.',     color: 'text-blue-600',    bg: 'bg-blue-50' },
+  upgrade_opportunity:{ icon: <ArrowUpRight size={18} />,   label: 'Upgrade Opp.',     color: 'text-indigo-600',    bg: 'bg-indigo-50' },
   revenue_prediction: { icon: <TrendingUp size={18} />,     label: 'Revenue Forecast', color: 'text-emerald-600', bg: 'bg-emerald-50' },
   health_score:       { icon: <HeartPulse size={18} />,     label: 'Health Score',     color: 'text-purple-600',  bg: 'bg-purple-50' },
   renewal_forecast:   { icon: <Activity size={18} />,       label: 'Renewal Forecast', color: 'text-indigo-600',  bg: 'bg-indigo-50' },
@@ -50,7 +50,7 @@ function InsightCard({ insight, index }: { insight: AIInsight; index: number }) 
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.08 }}
-      className={`bg-white border rounded-2xl p-5 shadow-sm hover:shadow-md transition-all duration-300 ${insight.priority === 'high' ? 'border-red-100 hover:border-red-200' : insight.priority === 'medium' ? 'border-orange-100 hover:border-orange-200' : 'border-slate-100'}`}
+      className={`bg-white border rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-300 ${insight.priority === 'high' ? 'border-red-100 hover:border-red-200' : insight.priority === 'medium' ? 'border-orange-100 hover:border-orange-200' : 'border-slate-100'}`}
     >
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-3">
@@ -86,7 +86,7 @@ function InsightCard({ insight, index }: { insight: AIInsight; index: number }) 
       </div>
 
       <div className="flex gap-2 mt-3 pt-3 border-t border-slate-100">
-        <button className="flex-1 py-2 text-xs font-semibold text-blue-600 bg-blue-50 rounded-xl hover:bg-blue-100 transition-all">Take Action</button>
+        <button className="flex-1 py-2 text-xs font-semibold text-indigo-600 bg-indigo-50 rounded-xl hover:bg-indigo-100 transition-all">Take Action</button>
         <button className="flex-1 py-2 text-xs font-semibold text-slate-500 bg-slate-50 rounded-xl hover:bg-slate-100 transition-all">Dismiss</button>
       </div>
     </motion.div>
@@ -105,13 +105,13 @@ export function AIInsights() {
         description="AI-powered predictions and recommendations to optimize revenue and reduce churn."
         breadcrumbs={[{ label: 'Subscriptions' }, { label: 'AI Insights' }]}
       >
-        <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-violet-600 to-blue-600 text-white rounded-xl text-xs font-semibold">
+        <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-xl text-xs font-semibold">
           <Zap className="w-3.5 h-3.5" /> AI Powered
         </div>
       </PageHeader>
 
       {/* Summary Banner */}
-      <div className="bg-gradient-to-r from-slate-900 to-slate-800 rounded-2xl p-5 mb-6 text-white">
+      <div className="bg-gradient-to-r from-slate-900 to-slate-800 rounded-xl p-5 mb-6 text-white">
         <div className="flex items-center gap-3 mb-3">
           <Brain className="w-5 h-5 text-blue-400" />
           <span className="text-sm font-semibold text-blue-400">AI Analysis Complete</span>
@@ -159,3 +159,4 @@ export function AIInsights() {
     </div>
   );
 }
+

@@ -19,16 +19,16 @@ export function AuditSettings() {
         description="Configure how logs are collected, stored, and retained across your platform."
         breadcrumbs={[{ label: 'Audit Logs' }, { label: 'Settings' }]}
       >
-        <button className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white text-sm font-bold rounded-xl hover:bg-blue-700 transition-colors shadow-sm shadow-blue-200">
+        <button className="flex items-center gap-2 px-6 py-2 bg-indigo-600 text-white text-sm font-bold rounded-xl hover:bg-indigo-700 transition-colors shadow-sm shadow-indigo-200">
           <Save className="w-4 h-4" /> Save Changes
         </button>
       </PageHeader>
 
       <div className="space-y-6">
         {/* Storage & Retention */}
-        <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
+        <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-6">
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-2.5 bg-blue-50 text-blue-600 rounded-xl">
+            <div className="p-2.5 bg-indigo-50 text-indigo-600 rounded-xl">
               <HardDrive className="w-5 h-5" />
             </div>
             <div>
@@ -59,7 +59,7 @@ export function AuditSettings() {
             <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 flex flex-col justify-center">
               <h4 className="text-sm font-bold text-slate-900 mb-2">Current Storage Usage</h4>
               <div className="w-full bg-slate-200 rounded-full h-2 mb-2">
-                <div className="bg-blue-600 h-2 rounded-full w-[45%]"></div>
+                <div className="bg-indigo-600 h-2 rounded-full w-[45%]"></div>
               </div>
               <p className="text-xs font-semibold text-slate-500">450 GB / 1 TB Used</p>
             </div>
@@ -67,7 +67,7 @@ export function AuditSettings() {
         </div>
 
         {/* Security & Tracking */}
-        <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
+        <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-6">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl">
               <Shield className="w-5 h-5" />
@@ -108,7 +108,7 @@ export function AuditSettings() {
         </div>
 
         {/* Advanced Logging */}
-        <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
+        <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-6">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2.5 bg-amber-50 text-amber-600 rounded-xl">
               <Activity className="w-5 h-5" />
@@ -142,3 +142,4 @@ export function AuditSettings() {
     </div>
   );
 }
+

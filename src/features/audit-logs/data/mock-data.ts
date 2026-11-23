@@ -27,7 +27,7 @@ export const generateLoginLogs = (count: number): LoginLog[] => {
       user: {
         name: pick(userNames),
         email: `user${i}@example.com`,
-        role: pick(['Institute Owner', 'Admin', 'Teacher']),
+        role: pick(['Super Admin', 'Tenant Admin', 'Support Specialist', 'Billing Analyst']),
         instituteId: `INST-${randomInt(1, 10)}`,
         instituteName: pick(institutes),
       },

@@ -28,7 +28,7 @@ export function PlanPerformanceSection() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
       {/* Subscription Distribution */}
-      <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
+      <div className="bg-white border border-slate-100 rounded-xl p-5 shadow-sm">
         <h2 className="text-base font-bold text-slate-900 mb-6 flex items-center gap-2">
           <Activity className="w-4 h-4 text-purple-500" /> Subscription Distribution
         </h2>
@@ -62,10 +62,10 @@ export function PlanPerformanceSection() {
       </div>
 
       {/* Plan Performance (Revenue & Stats) */}
-      <div className="lg:col-span-2 bg-white border border-slate-100 rounded-2xl p-5 shadow-sm flex flex-col">
+      <div className="lg:col-span-2 bg-white border border-slate-100 rounded-xl p-5 shadow-sm flex flex-col">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
-            <BarChart2 className="w-4 h-4 text-blue-500" /> Plan Performance
+            <BarChart2 className="w-4 h-4 text-indigo-500" /> Plan Performance
           </h2>
           <CustomSelect 
             options={[
@@ -89,7 +89,7 @@ export function PlanPerformanceSection() {
           </div>
           <div className="flex flex-col">
             <span className="text-[11px] text-slate-500 font-medium uppercase tracking-wide">Most Upgrades</span>
-            <span className="text-sm font-bold text-blue-600 mt-1">Professional</span>
+            <span className="text-sm font-bold text-indigo-600 mt-1">Professional</span>
           </div>
           <div className="flex flex-col">
             <span className="text-[11px] text-slate-500 font-medium uppercase tracking-wide">Highest Churn</span>
@@ -104,3 +104,4 @@ export function PlanPerformanceSection() {
     </div>
   );
 }
+

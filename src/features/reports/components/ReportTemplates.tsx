@@ -79,8 +79,8 @@ const REPORT_TEMPLATES: ReportTemplate[] = [
     description: "A familiar marksheet-inspired layout for academic results.",
     tier: "basic",
     icon: GraduationCap,
-    accent: "bg-blue-600",
-    accentSoft: "bg-blue-50 text-blue-700",
+    accent: "bg-indigo-600",
+    accentSoft: "bg-indigo-50 text-indigo-700",
     useCase: "Academic",
     features: ["Subject rows", "Grade summary", "Signatures"],
     preview: "clean",
@@ -213,8 +213,8 @@ const REPORT_TEMPLATES: ReportTemplate[] = [
     description: "See branch health, rankings and exceptions at a glance.",
     tier: "advanced",
     icon: Landmark,
-    accent: "bg-blue-700",
-    accentSoft: "bg-blue-50 text-blue-700",
+    accent: "bg-indigo-700",
+    accentSoft: "bg-indigo-50 text-indigo-700",
     useCase: "Branches",
     features: ["Branch ranking", "Benchmarks", "Alerts"],
     preview: "executive",
@@ -378,7 +378,7 @@ export function ReportTemplates({ onSelectTemplate }: { onSelectTemplate?: (id: 
   };
 
   return (
-    <section className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <section className="flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
       <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shrink-0 bg-slate-50/50">
         <div className="flex items-center gap-3">
           <SearchInput value={searchQuery} onChange={setSearchQuery} placeholder="Search templates..." className="w-full sm:w-80" />
@@ -490,7 +490,7 @@ export function ReportTemplates({ onSelectTemplate }: { onSelectTemplate?: (id: 
           </div>
         ) : (
           <div className="flex h-64 flex-col items-center justify-center text-center">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-slate-400 shadow-sm"><Search className="h-6 w-6" /></div>
+            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-white text-slate-400 shadow-sm"><Search className="h-6 w-6" /></div>
             <h3 className="mt-4 font-bold text-slate-900">No matching templates</h3>
             <p className="mt-1 text-sm text-slate-500">Try another name or select a different plan.</p>
           </div>
@@ -499,3 +499,4 @@ export function ReportTemplates({ onSelectTemplate }: { onSelectTemplate?: (id: 
     </section>
   );
 }
+

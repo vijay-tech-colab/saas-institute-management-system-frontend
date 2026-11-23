@@ -24,7 +24,7 @@ export function PolicyDetailsHub({ policyId }: PolicyDetailsHubProps) {
   return (
     <div className="flex-1 w-full flex flex-col min-h-0 bg-slate-50/70 p-4 sm:p-6 xl:p-8">
       <div className="mx-auto flex w-full flex-col gap-5 h-full">
-        <header className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6 shrink-0">
+        <header className="relative overflow-hidden rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6 shrink-0">
           <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-rose-100/70 blur-3xl" />
           <div className="relative flex flex-col gap-5">
             <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-start">
@@ -97,7 +97,7 @@ export function PolicyDetailsHub({ policyId }: PolicyDetailsHubProps) {
                 transition={{ duration: 0.2 }}
                 className="h-full flex flex-col"
               >
-                <div className="bg-white border border-slate-100 rounded-2xl shadow-sm p-6 lg:p-8 w-full">
+                <div className="bg-white border border-slate-100 rounded-xl shadow-sm p-6 lg:p-8 w-full">
                   {activeTab === 'overview' && (
                     <div className="space-y-6">
                       <div>
@@ -127,7 +127,7 @@ export function PolicyDetailsHub({ policyId }: PolicyDetailsHubProps) {
                         </div>
                       </div>
 
-                      <div className="p-5 border border-amber-200 bg-amber-50 rounded-2xl mt-4">
+                      <div className="p-5 border border-amber-200 bg-amber-50 rounded-xl mt-4">
                         <div className="flex items-start gap-3">
                           <Activity className="w-5 h-5 text-amber-600 mt-0.5" />
                           <div>
@@ -148,7 +148,7 @@ export function PolicyDetailsHub({ policyId }: PolicyDetailsHubProps) {
                         </div>
                       </div>
 
-                      <div className="bg-white border border-slate-100 rounded-2xl shadow-sm flex flex-col flex-1 min-h-[400px]">
+                      <div className="bg-white border border-slate-100 rounded-xl shadow-sm flex flex-col flex-1 min-h-[400px]">
                         <table className="w-full text-left border-collapse">
                           <thead className="sticky top-0 bg-white shadow-[0_1px_0_rgba(0,0,0,0.05)] z-10">
                             <tr>
@@ -199,3 +199,4 @@ export function PolicyDetailsHub({ policyId }: PolicyDetailsHubProps) {
     </div>
   );
 }
+

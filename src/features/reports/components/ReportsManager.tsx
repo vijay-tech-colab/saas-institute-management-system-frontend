@@ -29,7 +29,7 @@ export function ReportsManager() {
             {[
               { id: 'pdf', label: 'PDF', icon: FileText, color: 'text-rose-500' },
               { id: 'excel', label: 'Excel', icon: TableProperties, color: 'text-emerald-500' },
-              { id: 'csv', label: 'CSV', icon: FileText, color: 'text-blue-500' },
+              { id: 'csv', label: 'CSV', icon: FileText, color: 'text-indigo-500' },
             ].map(format => (
               <button
                 key={format.id}
@@ -66,7 +66,7 @@ export function ReportsManager() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ type: "spring", bounce: 0, duration: 0.3 }}
-              className="w-full max-w-6xl h-[96vh] sm:h-[90vh] bg-white rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col ring-1 ring-slate-900/10 print:shadow-none print:ring-0 print:h-auto print:rounded-none"
+              className="w-full max-w-6xl h-[96vh] sm:h-[90vh] bg-white rounded-xl sm:rounded-xl shadow-2xl overflow-hidden flex flex-col ring-1 ring-slate-900/10 print:shadow-none print:ring-0 print:h-auto print:rounded-none"
             >
               <ReportCenter 
                 templateId={selectedTemplate} 
@@ -81,3 +81,4 @@ export function ReportsManager() {
     </div>
   );
 }
+

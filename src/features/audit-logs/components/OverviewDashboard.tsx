@@ -9,23 +9,23 @@ import { mockLoginLogs, mockApiLogs, mockSecurityEvents } from '../data/mock-dat
 
 function SecurityScoreCard() {
   return (
-    <div className="bg-gradient-to-br from-blue-900 to-slate-900 border border-blue-800 rounded-2xl p-6 shadow-xl relative overflow-hidden text-white flex flex-col justify-between h-full">
-      <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/20 blur-3xl rounded-full -translate-y-1/2 translate-x-1/2"></div>
+    <div className="bg-gradient-to-br from-blue-900 to-slate-900 border border-blue-800 rounded-xl p-6 shadow-xl relative overflow-hidden text-white flex flex-col justify-between h-full">
+      <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/20 blur-3xl rounded-full -translate-y-1/2 translate-x-1/2"></div>
       <div className="relative z-10 flex items-start justify-between">
         <div>
-          <p className="text-blue-200 text-sm font-semibold mb-1 uppercase tracking-wider">AI Security Score</p>
+          <p className="text-indigo-200 text-sm font-semibold mb-1 uppercase tracking-wider">AI Security Score</p>
           <h2 className="text-4xl font-black text-white">92<span className="text-xl text-blue-300 font-medium">/100</span></h2>
         </div>
-        <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center border border-blue-400/30">
+        <div className="w-12 h-12 rounded-xl bg-indigo-500/20 flex items-center justify-center border border-blue-400/30">
           <Shield className="w-6 h-6 text-blue-300" />
         </div>
       </div>
       <div className="relative z-10 mt-8">
-        <p className="text-sm text-blue-100 leading-relaxed mb-4">
+        <p className="text-sm text-indigo-100 leading-relaxed mb-4">
           Your platform security is <span className="font-bold text-emerald-400">Excellent</span>. Our AI models detected no major anomalies in the last 24 hours.
         </p>
         <div className="w-full bg-blue-950/50 rounded-full h-2">
-          <div className="bg-gradient-to-r from-blue-500 to-emerald-400 h-2 rounded-full w-[92%]"></div>
+          <div className="bg-gradient-to-r from-indigo-500 to-emerald-400 h-2 rounded-full w-[92%]"></div>
         </div>
       </div>
     </div>
@@ -41,7 +41,7 @@ function RiskDistributionChart() {
   ];
 
   return (
-    <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm h-full flex flex-col">
+    <div className="bg-white border border-slate-100 rounded-xl p-6 shadow-sm h-full flex flex-col">
       <h3 className="text-sm font-bold text-slate-800 mb-6">Risk Distribution</h3>
       <div className="flex-1 flex items-center gap-6">
         <div className="w-32 h-32 rounded-full border-[12px] border-slate-50 relative flex items-center justify-center shrink-0">
@@ -74,10 +74,10 @@ function RecentAlerts() {
   const alerts = mockSecurityEvents.slice(0, 4);
 
   return (
-    <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm h-full flex flex-col">
+    <div className="bg-white border border-slate-100 rounded-xl p-6 shadow-sm h-full flex flex-col">
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-sm font-bold text-slate-800">Latest Security Alerts</h3>
-        <button className="text-xs font-semibold text-blue-600 hover:text-blue-700">View All</button>
+        <button className="text-xs font-semibold text-indigo-600 hover:text-indigo-700">View All</button>
       </div>
       <div className="flex-1 flex flex-col gap-3">
         {alerts.map((alert, i) => (
@@ -129,7 +129,7 @@ export function OverviewDashboard() {
             <Download className="w-4 h-4 text-slate-400" /> Export
           </button>
           
-          <button className="p-2.5 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100 transition-colors group shadow-sm shadow-blue-100">
+          <button className="p-2.5 bg-indigo-50 text-indigo-600 rounded-xl hover:bg-indigo-100 transition-colors group shadow-sm shadow-indigo-100">
             <RefreshCcw className="w-4 h-4 group-hover:rotate-180 transition-transform duration-500" />
           </button>
         </div>
@@ -137,7 +137,7 @@ export function OverviewDashboard() {
 
       {/* Primary Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <StatCard title="Total Log Entries" value={142058} icon={<Database size={20} />} iconColor="text-blue-600" iconBg="bg-blue-50" trend={12.5} trendLabel="vs last week" />
+        <StatCard title="Total Log Entries" value={142058} icon={<Database size={20} />} iconColor="text-indigo-600" iconBg="bg-indigo-50" trend={12.5} trendLabel="vs last week" />
         <StatCard title="Today's Logins" value={totalLogins} icon={<Users size={20} />} iconColor="text-indigo-600" iconBg="bg-indigo-50" trend={8.2} trendLabel="vs yesterday" />
         <StatCard title="Failed Login Attempts" value={failedLogins} icon={<Lock size={20} />} iconColor="text-rose-600" iconBg="bg-rose-50" trend={-14.3} trendLabel="vs yesterday" />
         <StatCard title="API Requests Today" value={apiRequests} icon={<Activity size={20} />} iconColor="text-emerald-600" iconBg="bg-emerald-50" trend={5.4} trendLabel="vs yesterday" />
@@ -164,3 +164,4 @@ export function OverviewDashboard() {
     </div>
   );
 }
+
