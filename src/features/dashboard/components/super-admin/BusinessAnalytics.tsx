@@ -72,10 +72,10 @@ export function BusinessAnalytics() {
           </div>
 
           <Link
-            href="/dashboard/analytics/revenue"
+            href="/dashboard/subscriptions"
             className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 transition-colors ml-2 hidden sm:inline-block"
           >
-            Detailed Analytics &rarr;
+            View Subscriptions &rarr;
           </Link>
         </div>
       </div>

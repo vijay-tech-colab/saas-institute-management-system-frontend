@@ -9,9 +9,8 @@ import {
   ArrowLeft,
   Building2,
   CreditCard,
-  ShieldCheck,
-  FileBarChart,
-  HelpCircle,
+  Users,
+  ClipboardList,
   Compass,
   Sparkles,
   ShieldAlert,
@@ -57,16 +56,16 @@ export default function NotFound() {
       icon: <CreditCard className="w-4 h-4 text-teal-600" />,
     },
     {
-      title: "Identity & Access (IAM)",
-      desc: "Roles, permissions & access policies",
-      href: "/dashboard/iam",
-      icon: <ShieldCheck className="w-4 h-4 text-emerald-600" />,
+      title: "User Management",
+      desc: "Platform users, owners & directory",
+      href: "/dashboard/users",
+      icon: <Users className="w-4 h-4 text-emerald-600" />,
     },
     {
-      title: "Reports & Analytics",
-      desc: "Platform revenue & institute metrics",
-      href: "/dashboard/analytics",
-      icon: <FileBarChart className="w-4 h-4 text-amber-600" />,
+      title: "Audit Logs",
+      desc: "Security events, API & activity logs",
+      href: "/dashboard/logs",
+      icon: <ClipboardList className="w-4 h-4 text-amber-600" />,
     },
   ]
 
@@ -100,11 +99,11 @@ export default function NotFound() {
         </Link>
 
         <Link
-          href="/dashboard/help-support"
+          href="/dashboard/logs"
           className="flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-indigo-600 transition-colors bg-white/80 backdrop-blur-sm border border-slate-200/70 px-3 py-1.5 rounded-lg shadow-sm hover:shadow"
         >
-          <HelpCircle className="w-3.5 h-3.5" />
-          <span>Support Desk</span>
+          <ClipboardList className="w-3.5 h-3.5" />
+          <span>Audit Logs</span>
         </Link>
       </header>
 
@@ -230,10 +229,17 @@ export default function NotFound() {
         <div>CampusOS Enterprise Platform &copy; {new Date().getFullYear()}</div>
         <div className="flex items-center gap-4">
           <Link
-            href="/dashboard/platform-settings"
+            href="/dashboard/tenants"
             className="hover:text-slate-800 transition-colors"
           >
-            System Settings
+            Tenants
+          </Link>
+          <span>&bull;</span>
+          <Link
+            href="/dashboard/subscriptions"
+            className="hover:text-slate-800 transition-colors"
+          >
+            Subscriptions
           </Link>
           <span>&bull;</span>
           <Link
@@ -241,13 +247,6 @@ export default function NotFound() {
             className="hover:text-slate-800 transition-colors"
           >
             Audit Logs
-          </Link>
-          <span>&bull;</span>
-          <Link
-            href="/dashboard/help-support"
-            className="hover:text-slate-800 transition-colors"
-          >
-            Help & Documentation
           </Link>
         </div>
       </footer>

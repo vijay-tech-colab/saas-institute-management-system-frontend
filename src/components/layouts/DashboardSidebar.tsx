@@ -3,17 +3,16 @@
 import React, { useState, useRef, useEffect, useCallback } from "react"
 import ReactDOM from "react-dom"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useAtom, useAtomValue } from "jotai"
 import { userAtom } from "@/store/user-store"
-import { isMobileSidebarOpenAtom } from "@/store/layout-store"
-import { superAdminNav } from "@/config/navigation"
+import { isMobileSidebarOpenAtom, lastNonSettingsRouteAtom } from "@/store/layout-store"
+import { superAdminNav, superAdminSettingsNav } from "@/config/navigation"
 import { useConfirm } from "@/hooks/use-confirm"
 import { useToast } from "@/hooks/use-toast"
 import { motion, AnimatePresence } from "framer-motion"
 import {
-  Settings,
-  HelpCircle,
+  ArrowLeft,
   PanelLeftClose,
   ChevronRight,
   UserCircle,
@@ -82,18 +81,33 @@ function Tooltip({ label, children, show }: { label: string; children: React.Rea
 export function DashboardSidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [isMobileOpen, setIsMobileOpen] = useAtom(isMobileSidebarOpenAtom)
+  const [lastNonSettingsRoute, setLastNonSettingsRoute] = useAtom(lastNonSettingsRouteAtom)
   const pathname = usePathname()
+  const router = useRouter()
   
   const confirm = useConfirm()
   const toast = useToast()
 
   const user = useAtomValue(userAtom)
-  const navGroups = superAdminNav
+  const isSettingsMode = pathname === "/dashboard/settings" || pathname.startsWith("/dashboard/settings/")
+
+  useEffect(() => {
+    if (pathname && !pathname.startsWith("/dashboard/settings")) {
+      setLastNonSettingsRoute(pathname)
+    }
+  }, [pathname, setLastNonSettingsRoute])
+
+  const navGroups = isSettingsMode ? superAdminSettingsNav : superAdminNav
 
   const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>({})
 
   const toggleMenu = (key: string) => {
     setExpandedMenus((prev) => ({ ...prev, [key]: !prev[key] }))
+  }
+
+  const handleBackToDashboard = () => {
+    setIsMobileOpen(false)
+    router.push(lastNonSettingsRoute || "/dashboard")
   }
 
   const handleLogout = async () => {
@@ -121,114 +135,180 @@ export function DashboardSidebar() {
       transition={{ duration: COLLAPSE_DURATION, ease: [0.25, 0.1, 0.25, 1] }}
       className="flex flex-col h-full bg-white/80 backdrop-blur-xl border-r border-slate-200/70 shadow-[1px_0_24px_rgba(0,0,0,0.03)] overflow-x-clip overflow-y-hidden select-none"
     >
-      {/* ───── Header: Super Admin Platform Console ───── */}
-      <div className={`relative h-16 border-b border-slate-100 flex-shrink-0 flex items-center ${isCollapsed ? 'px-2.5 justify-center' : 'px-4'}`}>
-        <Tooltip label="CampusOS Super Admin Console" show={isCollapsed}>
-          <Link 
-            href="/dashboard"
-            className={`w-full flex items-center ${isCollapsed ? 'justify-center p-1' : 'gap-3 px-1 py-1'} rounded-xl hover:bg-slate-50/80 transition-all duration-200 group`}
+      {/* ───── Header: Context-Aware (Main Console or Settings Back Navigation) ───── */}
+      <AnimatePresence mode="wait" initial={false}>
+        {isSettingsMode ? (
+          <motion.div
+            key="settings-header"
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -10 }}
+            transition={{ duration: 0.18, ease: "easeOut" }}
+            className={`relative h-16 border-b border-slate-100 flex-shrink-0 flex items-center ${isCollapsed ? 'px-2.5 justify-center' : 'px-3'}`}
           >
-            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center font-extrabold text-white flex-shrink-0 shadow-md shadow-primary/25 ring-[1.5px] ring-primary/20">
-              <Shield className="w-5 h-5 text-white" />
-            </div>
-            <AnimatePresence mode="wait">
-              {!isCollapsed && (
-                <motion.div
-                  initial={{ opacity: 0, width: 0 }}
-                  animate={{ opacity: 1, width: "auto" }}
-                  exit={{ opacity: 0, width: 0 }}
-                  transition={{ duration: 0.2, delay: 0.05 }}
-                  className="flex flex-col items-start overflow-hidden"
-                >
-                  <span className="font-extrabold text-slate-900 text-[15px] truncate leading-tight tracking-tight">
-                    CampusOS
-                  </span>
-                  <span className="text-[11px] text-primary font-semibold truncate capitalize leading-tight mt-0.5 flex items-center gap-1">
-                    Super Admin Console
-                  </span>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </Link>
-        </Tooltip>
-      </div>
+            <Tooltip label="Back to Dashboard" show={isCollapsed}>
+              <button
+                type="button"
+                onClick={handleBackToDashboard}
+                className={`w-full flex items-center ${isCollapsed ? 'justify-center p-2.5' : 'gap-2.5 px-2.5 py-2'} rounded-xl text-slate-800 hover:text-slate-900 hover:bg-slate-100 transition-all duration-150 group cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary/30`}
+              >
+                <div className="w-8 h-8 rounded-lg bg-primary-light border border-primary-border flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-colors flex-shrink-0">
+                  <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+                </div>
+                <AnimatePresence mode="wait">
+                  {!isCollapsed && (
+                    <motion.div
+                      initial={{ opacity: 0, width: 0 }}
+                      animate={{ opacity: 1, width: "auto" }}
+                      exit={{ opacity: 0, width: 0 }}
+                      transition={{ duration: 0.15 }}
+                      className="flex flex-col items-start overflow-hidden text-left"
+                    >
+                      <span className="text-[13px] font-semibold text-slate-900 truncate leading-tight">
+                        Back to Dashboard
+                      </span>
+                      <span className="text-[11px] text-primary font-medium truncate leading-tight mt-0.5">
+                        Platform Settings
+                      </span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </button>
+            </Tooltip>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="main-header"
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 10 }}
+            transition={{ duration: 0.18, ease: "easeOut" }}
+            className={`relative h-16 border-b border-slate-100 flex-shrink-0 flex items-center ${isCollapsed ? 'px-2.5 justify-center' : 'px-4'}`}
+          >
+            <Tooltip label="CampusOS Super Admin Console" show={isCollapsed}>
+              <Link 
+                href="/dashboard"
+                className={`w-full flex items-center ${isCollapsed ? 'justify-center p-1' : 'gap-3 px-1 py-1'} rounded-xl hover:bg-slate-50/80 transition-all duration-200 group`}
+              >
+                <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center font-extrabold text-white flex-shrink-0 shadow-md shadow-primary/25 ring-[1.5px] ring-primary/20">
+                  <Shield className="w-5 h-5 text-white" />
+                </div>
+                <AnimatePresence mode="wait">
+                  {!isCollapsed && (
+                    <motion.div
+                      initial={{ opacity: 0, width: 0 }}
+                      animate={{ opacity: 1, width: "auto" }}
+                      exit={{ opacity: 0, width: 0 }}
+                      transition={{ duration: 0.2, delay: 0.05 }}
+                      className="flex flex-col items-start overflow-hidden"
+                    >
+                      <span className="font-extrabold text-slate-900 text-[15px] truncate leading-tight tracking-tight">
+                        CampusOS
+                      </span>
+                      <span className="text-[11px] text-primary font-semibold truncate capitalize leading-tight mt-0.5 flex items-center gap-1">
+                        Super Admin Console
+                      </span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </Link>
+            </Tooltip>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* ───── Search Bar ───── */}
 
       {/* ───── Navigation Groups ───── */}
       <nav
-        className={`flex-1 overflow-y-auto py-3 thin-scrollbar transition-colors duration-300 ${isCollapsed ? 'px-2.5 space-y-1' : 'px-3 space-y-6'}`}
-        aria-label="Main navigation"
+        className={`flex-1 overflow-y-auto py-3 thin-scrollbar transition-colors duration-300 ${isCollapsed ? 'px-2.5 space-y-1' : 'px-3 space-y-5'}`}
+        aria-label={isSettingsMode ? "Settings navigation" : "Main navigation"}
       >
-        {navGroups.map((group, gIdx) => (
-          <div key={gIdx}>
-            <AnimatePresence>
-              {!isCollapsed && (
-                <motion.h3
-                  initial={{ opacity: 0, y: -4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -4 }}
-                  transition={{ duration: 0.15 }}
-                  className="px-3 mb-2 text-[10px] font-bold text-slate-600 uppercase tracking-[0.1em]"
-                >
-                  {group.title}
-                </motion.h3>
-              )}
-            </AnimatePresence>
-
-            <div className="space-y-0.5">
-              {group.items.map((item, iIdx) => {
-                const isActive =
-                  pathname === item.href ||
-                  (item.subItems && item.subItems.some((sub) => pathname === sub.href))
-                const menuKey = `${group.title}-${item.label}`
-
-                if (item.subItems) {
-                  return (
-                    <CollapsibleNavItem
-                      key={iIdx}
-                      icon={item.icon}
-                      label={item.label}
-                      href={item.href}
-                      subItems={item.subItems}
-                      isExpanded={expandedMenus[menuKey] || !!isActive}
-                      onToggle={() => toggleMenu(menuKey)}
-                      isCollapsed={isCollapsed}
-                      active={isActive}
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={isSettingsMode ? "settings-nav" : "main-nav"}
+            initial={{ opacity: 0, x: isSettingsMode ? 12 : -12 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: isSettingsMode ? -12 : 12 }}
+            transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+            className={isCollapsed ? "space-y-1" : isSettingsMode ? "space-y-4" : "space-y-5"}
+          >
+            {navGroups.map((group, gIdx) => (
+              <div key={gIdx}>
+                <AnimatePresence>
+                  {!isCollapsed && (
+                    <motion.h3
+                      initial={{ opacity: 0, y: -4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -4 }}
+                      transition={{ duration: 0.15 }}
+                      className="px-3 mb-1.5 text-[10px] font-bold text-slate-600 uppercase tracking-[0.1em]"
                     >
-                      {item.subItems.map((subItem, sIdx) => (
-                        <SubNavItem
-                          key={sIdx}
-                          label={subItem.label}
-                          href={subItem.href}
-                          active={pathname === subItem.href}
-                        />
-                      ))}
-                    </CollapsibleNavItem>
-                  )
-                }
+                      {group.title}
+                    </motion.h3>
+                  )}
+                </AnimatePresence>
 
-                return (
-                  <NavItem
-                    key={iIdx}
-                    icon={item.icon}
-                    label={item.label}
-                    href={item.href}
-                    badge={item.badge}
-                    active={pathname === item.href}
-                    isCollapsed={isCollapsed}
-                  />
-                )
-              })}
-            </div>
-          </div>
-        ))}
+                <div className="space-y-0.5">
+                  {group.items.map((item, iIdx) => {
+                    const cleanPath = pathname?.replace(/\/+$/, "") || "/dashboard"
+                    const isDefaultSettingsMatch =
+                      isSettingsMode &&
+                      cleanPath === "/dashboard/settings" &&
+                      item.href === "/dashboard/settings/general"
+                    const isActive =
+                      cleanPath === item.href ||
+                      isDefaultSettingsMatch ||
+                      (!isSettingsMode && item.href === "/dashboard/settings" && cleanPath.startsWith("/dashboard/settings")) ||
+                      (item.subItems && item.subItems.some((sub) => cleanPath === sub.href))
+                    const menuKey = `${group.title}-${item.label}`
+
+                    if (item.subItems) {
+                      return (
+                        <CollapsibleNavItem
+                          key={iIdx}
+                          icon={item.icon}
+                          label={item.label}
+                          href={item.href}
+                          subItems={item.subItems}
+                          isExpanded={expandedMenus[menuKey] || !!isActive}
+                          onToggle={() => toggleMenu(menuKey)}
+                          isCollapsed={isCollapsed}
+                          active={isActive}
+                        >
+                          {item.subItems.map((subItem, sIdx) => (
+                            <SubNavItem
+                              key={sIdx}
+                              label={subItem.label}
+                              href={subItem.href}
+                              active={pathname === subItem.href}
+                            />
+                          ))}
+                        </CollapsibleNavItem>
+                      )
+                    }
+
+                    return (
+                      <NavItem
+                        key={iIdx}
+                        icon={item.icon}
+                        label={item.label}
+                        href={item.href}
+                        badge={item.badge}
+                        active={isActive}
+                        isCollapsed={isCollapsed}
+                      />
+                    )
+                  })}
+                </div>
+              </div>
+            ))}
+          </motion.div>
+        </AnimatePresence>
       </nav>
 
       {/* ───── Bottom Section ───── */}
       <div className={`border-t border-slate-100 flex-shrink-0 pt-1.5 space-y-0.5 ${isCollapsed ? 'px-2.5' : 'px-3'}`}>
-        <NavItem href="/dashboard/platform-settings" icon={<Settings />} label="Platform Settings" active={pathname === "/dashboard/platform-settings"} isCollapsed={isCollapsed} />
-        <NavItem href="/dashboard/help-support" icon={<HelpCircle />} label="Help & Support" active={pathname === "/dashboard/help-support"} isCollapsed={isCollapsed} />
         <div className="hidden lg:block">
           <Tooltip label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"} show={isCollapsed}>
             <button onClick={() => setIsCollapsed(!isCollapsed)} className={`w-full flex items-center p-2.5 rounded-xl text-slate-400 hover:bg-slate-50 hover:text-slate-600 transition-all duration-200 cursor-pointer ${isCollapsed ? "justify-center" : "gap-3"}`}>

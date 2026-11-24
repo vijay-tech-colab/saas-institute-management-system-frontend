@@ -1,15 +1,18 @@
 import React from 'react';
-import { 
-  LayoutDashboard, 
-  Building2, 
-  Users, 
-  FileBarChart, 
-  Settings, 
-  CreditCard, 
-  ClipboardList, 
-  MessageSquare, 
+import {
+  LayoutDashboard,
+  Building2,
+  Users,
+  CreditCard,
+  ClipboardList,
+  Settings,
+  Sliders,
+  Layers,
+  Wallet,
+  UserCog,
+  Mail,
+  KeyRound,
   ShieldCheck,
-  Sliders
 } from "lucide-react";
 import { UserRole } from '@/store/user-store';
 
@@ -38,9 +41,9 @@ export const superAdminNav: NavGroupConfig[] = [
   {
     title: 'Administration',
     items: [
-      { 
-        label: 'Tenant Management', 
-        href: '/dashboard/tenants', 
+      {
+        label: 'Tenant Management',
+        href: '/dashboard/tenants',
         icon: <Building2 />,
         subItems: [
           { label: 'Overview', href: '/dashboard/tenants' },
@@ -49,12 +52,11 @@ export const superAdminNav: NavGroupConfig[] = [
           { label: 'Suspended', href: '/dashboard/tenants/suspended' },
           { label: 'Domain Management', href: '/dashboard/tenants/domains' },
           { label: 'Backup & Restore', href: '/dashboard/tenants/backups' },
-          { label: 'Support Desk', href: '/dashboard/tenants/support' },
         ]
       },
-      { 
-        label: 'Subscriptions', 
-        href: '/dashboard/subscriptions', 
+      {
+        label: 'Subscriptions',
+        href: '/dashboard/subscriptions',
         icon: <CreditCard />,
         subItems: [
           { label: 'Overview', href: '/dashboard/subscriptions' },
@@ -65,69 +67,19 @@ export const superAdminNav: NavGroupConfig[] = [
           { label: 'Coupons & Offers', href: '/dashboard/subscriptions/coupons' },
         ]
       },
-      { 
-        label: 'User Management', 
-        href: '/dashboard/users', 
+      {
+        label: 'User Management',
+        href: '/dashboard/users',
         icon: <Users />
-      },
-      { 
-        label: 'Identity & Access Management', 
-        href: '/dashboard/iam', 
-        icon: <ShieldCheck />,
-        subItems: [
-          { label: 'IAM Dashboard', href: '/dashboard/iam' },
-          { label: 'Roles', href: '/dashboard/iam/roles' },
-          { label: 'Permissions Builder', href: '/dashboard/iam/permissions' },
-          { label: 'Access Policies', href: '/dashboard/iam/policies' },
-          { label: 'Role Hierarchy', href: '/dashboard/iam/hierarchy' },
-        ]
-      },
-    ]
-  },
-  {
-    title: 'Analytics & Support',
-    items: [
-      { 
-        label: 'Reports & Analytics', 
-        href: '/dashboard/reports', 
-        icon: <FileBarChart />,
-        subItems: [
-          { label: 'Overview', href: '/dashboard/analytics' },
-          { label: 'Revenue & Growth', href: '/dashboard/analytics/revenue' },
-          { label: 'Institute Statistics', href: '/dashboard/analytics/institutes' },
-          { label: 'Report Management', href: '/dashboard/reports' },
-        ]
-      },
-      { 
-        label: 'Support Tickets', 
-        href: '/dashboard/support', 
-        icon: <MessageSquare />,
-        badge: '12',
-        subItems: [
-          { label: 'Overview', href: '/dashboard/support' },
-          { label: 'All Tickets', href: '/dashboard/support/tickets' },
-          { label: 'Live Chat', href: '/dashboard/support/chat' },
-          { label: 'FAQ Setup', href: '/dashboard/support/faq' },
-        ]
       },
     ]
   },
   {
     title: 'System & Infrastructure',
     items: [
-      { 
-        label: 'Platform Settings', 
-        href: '/dashboard/platform-settings', 
-        icon: <Sliders />
-      },
-      { 
-        label: 'System Settings', 
-        href: '/dashboard/settings', 
-        icon: <Settings />
-      },
-      { 
-        label: 'Audit Logs', 
-        href: '/dashboard/logs', 
+      {
+        label: 'Audit Logs',
+        href: '/dashboard/logs',
         icon: <ClipboardList />,
         subItems: [
           { label: 'Overview', href: '/dashboard/logs' },
@@ -139,6 +91,66 @@ export const superAdminNav: NavGroupConfig[] = [
           { label: 'Export Logs', href: '/dashboard/logs/export' },
           { label: 'Audit Settings', href: '/dashboard/logs/settings' },
         ]
+      },
+      {
+        label: 'Settings',
+        href: '/dashboard/settings',
+        icon: <Settings />,
+      },
+    ]
+  }
+];
+
+// --- Dedicated Super Admin Settings Sidebar Configuration ---
+
+export const superAdminSettingsNav: NavGroupConfig[] = [
+  {
+    title: 'General',
+    items: [
+      {
+        label: 'General & Branding',
+        href: '/dashboard/settings/general',
+        icon: <Sliders />,
+      },
+    ]
+  },
+  {
+    title: 'Platform & Billing',
+    items: [
+      {
+        label: 'Subscription & Pricing Plans',
+        href: '/dashboard/settings/plans',
+        icon: <Layers />,
+      },
+      {
+        label: 'Payment Gateways & Tax',
+        href: '/dashboard/settings/payments',
+        icon: <Wallet />,
+      },
+      {
+        label: 'Admin Team & Roles',
+        href: '/dashboard/settings/team',
+        icon: <UserCog />,
+      },
+    ]
+  },
+  {
+    title: 'Security & System',
+    items: [
+      {
+        label: 'Email & SMTP / Notifications',
+        href: '/dashboard/settings/notifications',
+        icon: <Mail />,
+      },
+      {
+        label: 'Integrations & API Keys',
+        href: '/dashboard/settings/integrations',
+        icon: <KeyRound />,
+      },
+      {
+        label: 'System & Security',
+        href: '/dashboard/settings/security',
+        icon: <ShieldCheck />,
       },
     ]
   }

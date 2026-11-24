@@ -16,10 +16,10 @@ const textVariants: Variants = {
 
 const letterVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     y: 0,
-    transition: { ease: [0.22, 1, 0.36, 1], duration: 0.6 }
+    transition: { ease: [0.22, 1, 0.36, 1], duration: 0.6 },
   },
 };
 
@@ -42,20 +42,20 @@ export function SplashScreen() {
         <motion.div
           key="splash"
           initial={{ opacity: 1 }}
-          exit={{ 
-            opacity: 0, 
+          exit={{
+            opacity: 0,
             scale: 1.05,
-            transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } 
+            transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
           }}
-          className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-slate-900 overflow-hidden"
+          className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-slate-50 text-slate-900 overflow-hidden"
         >
-          {/* ─── High-Performance Background ─── */}
+          {/* ─── High-Performance Light Background ─── */}
           <div className="absolute inset-0 pointer-events-none">
-            {/* Dark grid background */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:32px_32px]"></div>
-            
-            {/* Center radial glow (static, cheap for GPU) */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] md:w-[40vw] md:h-[40vw] rounded-full bg-blue-500/20 blur-[120px] pointer-events-none"></div>
+            {/* Subtle light grid background */}
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a08_1px,transparent_1px),linear-gradient(to_bottom,#0f172a08_1px,transparent_1px)] bg-[size:32px_32px]" />
+
+            {/* Center radial glow following theme primary & accent */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] md:w-[42vw] md:h-[42vw] rounded-full bg-primary/15 blur-[120px] pointer-events-none" />
           </div>
 
           <motion.div
@@ -71,48 +71,48 @@ export function SplashScreen() {
                   key={i}
                   initial={{ opacity: 0.5, scale: 0.8 }}
                   animate={{ opacity: 0, scale: 3 }}
-                  transition={{ 
-                    duration: 3, 
-                    repeat: Infinity, 
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
                     delay: i * 0.8,
-                    ease: "easeOut"
+                    ease: "easeOut",
                   }}
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full border border-blue-500/30"
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full border border-primary/25"
                 />
               ))}
             </div>
 
             {/* Core Icon */}
-            <motion.div 
+            <motion.div
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="w-24 h-24 mb-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-[2rem] shadow-[0_0_40px_rgba(59,130,246,0.5)] flex items-center justify-center relative z-10 overflow-hidden ring-1 ring-white/20"
+              className="w-24 h-24 mb-8 bg-gradient-to-br from-primary to-primary-active rounded-[2rem] shadow-xl shadow-primary/25 flex items-center justify-center relative z-10 overflow-hidden ring-1 ring-primary-border"
             >
               {/* Glossy overlay */}
               <div className="absolute inset-0 bg-gradient-to-b from-white/30 to-transparent opacity-50" />
-              <GraduationCap className="w-12 h-12 text-white relative z-10 drop-shadow-lg" />
-              
+              <GraduationCap className="w-12 h-12 text-primary-foreground relative z-10 drop-shadow-sm" />
+
               {/* Internal sweeping light */}
-              <motion.div 
+              <motion.div
                 animate={{ x: ["-100%", "200%"] }}
                 transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                 className="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-12"
               />
             </motion.div>
-            
+
             {/* Staggered Typography */}
-            <motion.div 
+            <motion.div
               variants={textVariants}
               initial="hidden"
               animate="visible"
-              className="flex text-5xl font-black tracking-tighter text-white mb-4"
+              className="flex text-5xl font-black tracking-tighter text-slate-900 mb-4"
             >
               {title.split("").map((char, index) => (
-                <motion.span 
-                  key={index} 
+                <motion.span
+                  key={index}
                   variants={letterVariants}
-                  className={index >= 6 ? "text-blue-500" : "text-white"}
+                  className={index >= 6 ? "text-primary" : "text-slate-900"}
                 >
                   {char}
                 </motion.span>
@@ -121,11 +121,11 @@ export function SplashScreen() {
 
             {/* Subtitle */}
             <div className="overflow-hidden mb-12">
-              <motion.p 
+              <motion.p
                 initial={{ y: "100%", opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.8, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                className="text-slate-400 font-medium tracking-[0.2em] text-[11px] uppercase flex items-center justify-center gap-2"
+                className="text-slate-500 font-semibold tracking-[0.2em] text-[11px] uppercase flex items-center justify-center gap-2"
               >
                 Initializing Workspace
                 <motion.span
@@ -139,16 +139,16 @@ export function SplashScreen() {
           </motion.div>
 
           {/* ─── Infinite Loop Loading Bar ─── */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scaleX: 0 }}
             animate={{ opacity: 1, scaleX: 1 }}
             transition={{ delay: 0.4, duration: 0.8, ease: "easeOut" }}
-            className="absolute bottom-16 w-64 h-1 bg-slate-800/50 rounded-full overflow-hidden backdrop-blur-md"
+            className="absolute bottom-16 w-64 h-1 bg-slate-200/90 rounded-full overflow-hidden"
           >
-            <motion.div 
+            <motion.div
               animate={{ x: ["-100%", "100%"] }}
               transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-              className="w-1/2 h-full bg-gradient-to-r from-transparent via-blue-500 to-transparent rounded-full"
+              className="w-1/2 h-full bg-gradient-to-r from-transparent via-primary to-transparent rounded-full"
             />
           </motion.div>
         </motion.div>

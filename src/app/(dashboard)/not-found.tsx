@@ -9,8 +9,8 @@ import {
   ArrowLeft,
   Building2,
   CreditCard,
-  ShieldCheck,
-  FileBarChart,
+  Users,
+  ClipboardList,
   Compass,
   ShieldAlert,
 } from "lucide-react"
@@ -55,16 +55,16 @@ export default function DashboardNotFound() {
       icon: <CreditCard className="w-4 h-4 text-teal-600" />,
     },
     {
-      title: "Identity & Access (IAM)",
-      desc: "Roles & access policies",
-      href: "/dashboard/iam",
-      icon: <ShieldCheck className="w-4 h-4 text-emerald-600" />,
+      title: "User Management",
+      desc: "Platform users & directory",
+      href: "/dashboard/users",
+      icon: <Users className="w-4 h-4 text-emerald-600" />,
     },
     {
-      title: "Reports & Analytics",
-      desc: "Platform statistics & revenue",
-      href: "/dashboard/analytics",
-      icon: <FileBarChart className="w-4 h-4 text-amber-600" />,
+      title: "Audit Logs",
+      desc: "Security events & activity trail",
+      href: "/dashboard/logs",
+      icon: <ClipboardList className="w-4 h-4 text-amber-600" />,
     },
   ]
 

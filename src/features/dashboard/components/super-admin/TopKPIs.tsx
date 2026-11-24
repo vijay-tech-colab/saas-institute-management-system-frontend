@@ -49,7 +49,7 @@ const KPIS: KPIItem[] = [
     trend: '+15.0%',
     trendLabel: 'YoY growth',
     secondaryText: '845k Active Daily',
-    href: '/dashboard/analytics',
+    href: '/dashboard/tenants',
     icon: Users,
   },
   {

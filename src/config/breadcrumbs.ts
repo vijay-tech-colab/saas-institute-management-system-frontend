@@ -15,7 +15,6 @@ export const ROUTE_LABELS: Record<string, string> = {
   "/dashboard/tenants/suspended": "Suspended Institutes",
   "/dashboard/tenants/domains": "Domain Management",
   "/dashboard/tenants/backups": "Backup & Restore",
-  "/dashboard/tenants/support": "Support Desk",
 
   // Subscriptions & Billing
   "/dashboard/subscriptions": "Subscriptions",
@@ -32,29 +31,6 @@ export const ROUTE_LABELS: Record<string, string> = {
   // User Management
   "/dashboard/users": "User Management",
 
-  // Identity & Access Management (IAM)
-  "/dashboard/iam": "IAM",
-  "/dashboard/iam/roles": "Roles",
-  "/dashboard/iam/permissions": "Permissions Builder",
-  "/dashboard/iam/policies": "Access Policies",
-  "/dashboard/iam/hierarchy": "Role Hierarchy",
-  "/dashboard/roles": "Roles",
-
-  // Reports & Analytics
-  "/dashboard/reports": "Reports & Analytics",
-  "/dashboard/analytics": "Analytics Overview",
-  "/dashboard/analytics/revenue": "Revenue & Growth",
-  "/dashboard/analytics/institutes": "Institute Statistics",
-
-  // Support & Help Desk
-  "/dashboard/support": "Support Tickets",
-  "/dashboard/support/tickets": "All Tickets",
-  "/dashboard/support/chat": "Live Chat",
-  "/dashboard/support/faq": "FAQ Setup",
-  "/dashboard/support/reports": "Support Reports",
-  "/dashboard/support/settings": "Support Settings",
-  "/dashboard/help-support": "Help & Support",
-
   // Audit Logs & Security
   "/dashboard/logs": "Audit Logs",
   "/dashboard/logs/login": "Login Logs",
@@ -66,14 +42,20 @@ export const ROUTE_LABELS: Record<string, string> = {
   "/dashboard/logs/settings": "Audit Settings",
   "/dashboard/audit": "Audit Logs",
 
-  // Settings & System
-  "/dashboard/platform-settings": "Platform Settings",
-  "/dashboard/settings": "System Settings",
-
   // Common Modules
   "/dashboard/notifications": "Notifications",
   "/dashboard/messages": "Messages",
   "/dashboard/profile": "Admin Profile",
+
+  // Super Admin Settings
+  "/dashboard/settings": "Settings",
+  "/dashboard/settings/general": "General & Branding",
+  "/dashboard/settings/plans": "Subscription & Pricing Plans",
+  "/dashboard/settings/payments": "Payment Gateways & Tax",
+  "/dashboard/settings/team": "Admin Team & Roles",
+  "/dashboard/settings/notifications": "Email & SMTP / Notifications",
+  "/dashboard/settings/integrations": "Integrations & API Keys",
+  "/dashboard/settings/security": "System & Security",
 }
 
 export function getBreadcrumbItems(pathname: string | null): BreadcrumbItem[] {
@@ -107,18 +89,12 @@ export function getBreadcrumbItems(pathname: string | null): BreadcrumbItem[] {
 
     if (!label) {
       const parentSegment = relevantSegments[i - 1]
-      if (parentSegment === "tickets") {
-        label = `Ticket #${segment}`
-      } else if (parentSegment === "invoices") {
+      if (parentSegment === "invoices") {
         label = `Invoice #${segment}`
       } else if (parentSegment === "tenants") {
         label = `Institute #${segment}`
       } else if (parentSegment === "customers") {
         label = `Customer #${segment}`
-      } else if (parentSegment === "roles") {
-        label = `Role #${segment}`
-      } else if (parentSegment === "policies") {
-        label = `Policy #${segment}`
       } else if (parentSegment === "plans") {
         label = `Plan #${segment}`
       } else {

@@ -36,11 +36,11 @@ const ACTIVITIES: ActivityItem[] = [
   {
     id: '3',
     title: 'Modern Public School',
-    description: 'Critical support ticket #TCK-104 resolved',
+    description: 'Custom domain & SSL certificate verified',
     time: '1 hour ago',
     icon: Ticket,
     badgeClass: 'bg-blue-50 text-blue-700 border-blue-100',
-    href: '/dashboard/support/tickets',
+    href: '/dashboard/tenants/domains',
   },
   {
     id: '4',
@@ -62,12 +62,12 @@ const ACTIVITIES: ActivityItem[] = [
   },
   {
     id: '6',
-    title: 'Identity & Access Policy',
-    description: 'Branch Manager default IAM policy updated',
+    title: 'Security Policy Audit',
+    description: 'Security baseline verification logged for admin session',
     time: '5 hours ago',
     icon: AlertTriangle,
     badgeClass: 'bg-amber-50 text-amber-700 border-amber-100',
-    href: '/dashboard/iam/policies',
+    href: '/dashboard/logs/security',
   },
 ];
 

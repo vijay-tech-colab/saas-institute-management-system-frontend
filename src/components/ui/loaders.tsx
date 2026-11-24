@@ -16,16 +16,16 @@ const sizeClasses = {
 };
 
 const variantClasses = {
-  primary: 'text-blue-600',
+  primary: 'text-primary',
   white: 'text-white',
   muted: 'text-slate-400',
 };
 
 export function Spinner({ size = 'md', variant = 'primary', className, ...props }: SpinnerProps) {
   return (
-    <Loader2 
-      className={cn("animate-spin", sizeClasses[size], variantClasses[variant], className)} 
-      {...props} 
+    <Loader2
+      className={cn("animate-spin", sizeClasses[size], variantClasses[variant], className)}
+      {...props}
     />
   );
 }
@@ -53,8 +53,8 @@ export function ButtonLoader({ text }: { text?: string }) {
 // ─── 4. Table Overlay Loader ─────────────────────────────────────────────────
 export function TableOverlayLoader() {
   return (
-    <div className="absolute inset-0 z-10 bg-white/50 backdrop-blur-[2px] flex items-center justify-center rounded-xl">
-      <div className="bg-white px-6 py-4 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] flex items-center gap-3 border border-slate-100">
+    <div className="absolute inset-0 z-10 bg-white/70 backdrop-blur-[2px] flex items-center justify-center rounded-xl">
+      <div className="bg-white px-6 py-4 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] flex items-center gap-3 border border-slate-200/80">
         <Spinner size="md" />
         <span className="font-semibold text-slate-700">Fetching records...</span>
       </div>
@@ -66,10 +66,10 @@ export function TableOverlayLoader() {
 export function InfiniteScrollLoader() {
   return (
     <div className="py-6 flex justify-center w-full">
-      <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 rounded-full border border-slate-200">
-        <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-        <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-        <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
+      <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-full border border-slate-200 shadow-xs">
+        <div className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+        <div className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+        <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
       </div>
     </div>
   );

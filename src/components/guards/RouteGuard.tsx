@@ -8,15 +8,10 @@ import { superAdminNav } from "@/config/navigation";
 
 const GENERAL_ALLOWED_PREFIXES = [
   "/dashboard",
-  "/dashboard/help-support",
   "/dashboard/profile",
   "/dashboard/messages",
   "/dashboard/notifications",
-  "/dashboard/platform-settings",
   "/dashboard/settings",
-  "/dashboard/analytics",
-  "/dashboard/reports",
-  "/dashboard/roles",
 ];
 
 export function RouteGuard({ children }: { children: React.ReactNode }) {

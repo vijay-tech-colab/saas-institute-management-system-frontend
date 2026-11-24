@@ -11,8 +11,8 @@ export function AIInsightsPanel() {
       title: 'Revenue Acceleration', 
       description: 'MRR is projected to grow by 12% next month based on current institute onboarding velocity.',
       icon: TrendingUp,
-      actionLabel: 'View Forecast',
-      href: '/dashboard/analytics/revenue',
+      actionLabel: 'View Subscriptions',
+      href: '/dashboard/subscriptions',
       badgeColor: 'text-emerald-700 bg-emerald-50 border-emerald-100',
     },
     { 

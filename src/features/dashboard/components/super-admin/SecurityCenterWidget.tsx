@@ -38,8 +38,8 @@ const ACTION_ITEMS: AlertItem[] = [
     title: 'Super Admin API Key Rotation',
     description: 'Production gateway access key is scheduled for routine 90-day security rotation.',
     severity: 'info',
-    actionLabel: 'Rotate Key',
-    href: '/dashboard/platform-settings',
+    actionLabel: 'Review Security',
+    href: '/dashboard/logs/security',
     icon: Key,
   },
 ];
