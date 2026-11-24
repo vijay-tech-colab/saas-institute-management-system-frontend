@@ -22,7 +22,7 @@ export function DashboardHeader() {
   const breadcrumbs = getBreadcrumbItems(pathname)
 
   return (
-    <header className="h-16 border-b border-slate-200/60 bg-white/80 backdrop-blur-xl flex items-center justify-between px-4 lg:px-6 sticky top-0 z-20 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+    <header className="h-16 border-b border-slate-200/60 bg-white/85 backdrop-blur-xl flex items-center justify-between px-4 lg:px-6 sticky top-0 z-[96] shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
 
       {/* ───── Left: Mobile Menu + Breadcrumbs ───── */}
       <div className="flex items-center gap-2 min-w-0 flex-1">
