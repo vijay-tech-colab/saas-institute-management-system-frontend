@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useSyncExternalStore } from "react";
+import React, { useEffect, useRef, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, X } from "lucide-react";
@@ -12,7 +12,7 @@ interface FloatingSheetProps {
   ariaLabel: string;
   /** Width utility for the floating right-side drawer. Defaults to 368px max. */
   widthClassName?: string;
-  /** Lock body scroll while open (recommended for notification/overlay sheets). */
+  /** Lock background scroll and interaction while open. Defaults to true. */
   lockBodyScroll?: boolean;
   className?: string;
   children: React.ReactNode;
@@ -21,17 +21,18 @@ interface FloatingSheetProps {
 /**
  * Canonical floating right-side sheet / slide-over drawer.
  * Slides in smoothly from the right with clean viewport inset margins so it
- * never sits flush against the right edge.
+ * never sits flush against the right edge, and locks background interaction/scroll.
  */
 export function FloatingSheet({
   open,
   onClose,
   ariaLabel,
   widthClassName = "w-[min(368px,calc(100vw-1.5rem))]",
-  lockBodyScroll = false,
+  lockBodyScroll = true,
   className,
   children,
 }: FloatingSheetProps) {
+  const panelRef = useRef<HTMLElement>(null);
   const mounted = useSyncExternalStore(
     () => () => {},
     () => true,
@@ -42,18 +43,55 @@ export function FloatingSheet({
     if (!open) return;
 
     const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        onClose();
+        return;
+      }
+
+      if (!lockBodyScroll) return;
+
+      // Block scroll-triggering keys outside the open sheet
+      const target = e.target as Node | null;
+      const isInsideSheet = !!(target && panelRef.current?.contains(target));
+      if (
+        !isInsideSheet &&
+        [" ", "PageUp", "PageDown", "Home", "End", "ArrowUp", "ArrowDown"].includes(e.key)
+      ) {
+        e.preventDefault();
+      }
+    };
+
+    const preventBackgroundScroll = (e: Event) => {
+      if (!lockBodyScroll) return;
+      const target = e.target as Node | null;
+      if (!target || !panelRef.current?.contains(target)) {
+        e.preventDefault();
+      }
     };
 
     document.addEventListener("keydown", handleKey);
+
+    const prevOverflow = document.body.style.overflow;
+    const prevPaddingRight = document.body.style.paddingRight;
+
     if (lockBodyScroll) {
+      const scrollbarWidth =
+        window.innerWidth - document.documentElement.clientWidth;
+      if (scrollbarWidth > 0) {
+        document.body.style.paddingRight = `${scrollbarWidth}px`;
+      }
       document.body.style.overflow = "hidden";
+      document.addEventListener("wheel", preventBackgroundScroll, { passive: false });
+      document.addEventListener("touchmove", preventBackgroundScroll, { passive: false });
     }
 
     return () => {
       document.removeEventListener("keydown", handleKey);
       if (lockBodyScroll) {
-        document.body.style.overflow = "";
+        document.body.style.overflow = prevOverflow;
+        document.body.style.paddingRight = prevPaddingRight;
+        document.removeEventListener("wheel", preventBackgroundScroll);
+        document.removeEventListener("touchmove", preventBackgroundScroll);
       }
     };
   }, [open, onClose, lockBodyScroll]);
@@ -71,22 +109,29 @@ export function FloatingSheet({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.18, ease: "easeOut" }}
+            transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
             onClick={onClose}
-            className="fixed inset-0 z-[9998] bg-slate-950/15 backdrop-blur-[1.5px]"
+            aria-hidden="true"
+            className="fixed inset-0 z-[9998] bg-slate-900/10 backdrop-blur-[2px] overscroll-none"
           />
 
           <motion.aside
+            ref={panelRef}
             key="floating-sheet-panel"
             role="dialog"
             aria-modal="true"
             aria-label={ariaLabel}
-            initial={{ opacity: 0, x: 56, scale: 0.985 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: 56, scale: 0.985 }}
-            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            initial={{ x: "calc(100% + 24px)" }}
+            animate={{ x: 0 }}
+            exit={{ x: "calc(100% + 24px)" }}
+            transition={{
+              type: "spring",
+              stiffness: 320,
+              damping: 33,
+              mass: 0.85,
+            }}
             className={cn(
-              "fixed top-3 right-3 bottom-3 sm:top-4 sm:right-3 sm:bottom-4 z-[9999] bg-white border border-slate-200/90 rounded-2xl shadow-[0_24px_60px_-15px_rgba(15,23,42,0.22),0_0_0_1px_rgba(15,23,42,0.04)] flex flex-col overflow-hidden",
+              "fixed top-3 right-3 bottom-3 sm:top-4 sm:right-3 sm:bottom-4 z-[9999] bg-white border border-slate-200/90 rounded-2xl shadow-[0_24px_60px_-15px_rgba(15,23,42,0.22),0_0_0_1px_rgba(15,23,42,0.04)] flex flex-col overflow-hidden overscroll-contain will-change-transform",
               widthClassName,
               className
             )}

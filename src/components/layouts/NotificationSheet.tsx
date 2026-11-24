@@ -2,7 +2,6 @@
 
 import React, { useState } from "react"
 import Link from "next/link"
-import { motion } from "framer-motion"
 import { CheckCheck, Settings } from "lucide-react"
 import {
   FloatingSheet,
@@ -138,11 +137,7 @@ export function NotificationSheet({
       {/* Grouped Notifications List */}
       <FloatingSheetBody>
         {filtered.length > 0 ? (
-          <motion.div
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.2, delay: 0.04 }}
-          >
+          <div>
             {GROUPS.map((group) => {
               const items = filtered.filter((n) => n.group === group)
               if (items.length === 0) return null
@@ -165,7 +160,7 @@ export function NotificationSheet({
                 </div>
               )
             })}
-          </motion.div>
+          </div>
         ) : (
           <NotificationEmptyState
             title={activeTab === "unread" ? "All caught up!" : "No notifications"}
