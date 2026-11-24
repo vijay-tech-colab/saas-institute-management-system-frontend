@@ -94,7 +94,7 @@ export const superAdminNav: NavGroupConfig[] = [
       },
       {
         label: 'Settings',
-        href: '/dashboard/settings',
+        href: '/dashboard/settings/general',
         icon: <Settings />,
       },
     ]

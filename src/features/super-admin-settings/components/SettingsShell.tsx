@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { SettingsSectionId } from "../types";
 import { GeneralBrandingSection } from "./sections/GeneralBrandingSection";
 import { SubscriptionPlansSection } from "./sections/SubscriptionPlansSection";
@@ -30,18 +30,15 @@ export function SettingsShell({ section }: SettingsShellProps) {
 
   return (
     <div className="flex-1 p-4 md:p-6 w-full">
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.div
-          key={section}
-          initial={{ opacity: 0, y: 4 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -3 }}
-          transition={{ duration: 0.14, ease: "easeOut" }}
-          className="w-full"
-        >
-          <ActiveSection />
-        </motion.div>
-      </AnimatePresence>
+      <motion.div
+        key={section}
+        initial={{ opacity: 0, y: 4 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.12, ease: "easeOut" }}
+        className="w-full"
+      >
+        <ActiveSection />
+      </motion.div>
     </div>
   );
 }

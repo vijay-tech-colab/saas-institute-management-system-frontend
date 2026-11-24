@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Crown, Users, HardDrive, Store, Check, Plus, CreditCard, IndianRupee, Settings2, Trash2, Edit2, PlayCircle, PauseCircle, Copy, CheckCircle2, ShieldCheck, Filter, Search, XCircle, Zap, GitBranch, MoreHorizontal, AlertCircle, Loader2, Package, Activity, Eye, Database, DownloadCloud, FileText } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import { Crown, Users, HardDrive, Store, Check, Plus, CreditCard, IndianRupee, Settings2, Trash2, Edit2, PlayCircle, PauseCircle, Copy, CheckCircle2, ShieldCheck, Search, XCircle, Zap, GitBranch, MoreHorizontal, AlertCircle, Loader2, Package, Activity, Eye, Database, DownloadCloud, FileText } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { AnimatePresence } from 'framer-motion';
 import { ExportProgressModal } from '@/components/ui/export-progress';
@@ -25,7 +25,10 @@ import type { Plan } from '../types';
 import { motion } from 'framer-motion';
 import { DataTablePagination } from "@/components/ui/pagination";
 import { TableSkeleton } from "@/components/ui/skeleton";
+import { RowActionMenu, TABLE_STICKY } from "@/components/ui/row-action-menu";
+import { ColumnHeaderLabel, TableColumnDef, TableFieldsButton, useTableColumns } from "@/components/ui/table-configurator";
 import { ActionTooltip } from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 
 const FILTER_OPTIONS = [
   { label: 'All Plans', value: 'all' },
@@ -367,6 +370,102 @@ export function PlansManagement() {
     setExportModalType('report');
   };
 
+  const planColumns: TableColumnDef<Plan>[] = useMemo(() => [
+    {
+      id: 'name',
+      label: 'Plan Name',
+      icon: Package,
+      defaultVisible: true,
+      renderCell: (plan) => (
+        <>
+          <p className="font-semibold text-[13px] text-slate-900">{plan.name}</p>
+          <p className="text-[11px] text-slate-400">{plan.subscribersCount} subscribers</p>
+        </>
+      ),
+    },
+    {
+      id: 'monthly',
+      label: 'Monthly',
+      icon: IndianRupee,
+      defaultVisible: true,
+      renderCell: (plan) => <span className="text-[13px] font-semibold text-slate-700 tabular-nums">₹{plan.monthlyPrice.toLocaleString('en-IN')}</span>,
+    },
+    {
+      id: 'yearly',
+      label: 'Yearly',
+      icon: IndianRupee,
+      defaultVisible: true,
+      renderCell: (plan) => <span className="text-[13px] font-semibold text-slate-700 tabular-nums">₹{plan.yearlyPrice.toLocaleString('en-IN')}</span>,
+    },
+    {
+      id: 'branches',
+      label: 'Branches',
+      icon: GitBranch,
+      defaultVisible: true,
+      renderCell: (plan) => <span className="text-[13px] text-slate-600">{plan.features.branchLimit >= 999 ? '∞' : plan.features.branchLimit}</span>,
+    },
+    {
+      id: 'students',
+      label: 'Students',
+      icon: Users,
+      defaultVisible: true,
+      renderCell: (plan) => <span className="text-[13px] text-slate-600">{plan.features.studentLimit >= 99999 ? '∞' : plan.features.studentLimit.toLocaleString()}</span>,
+    },
+    {
+      id: 'faculty',
+      label: 'Faculty',
+      icon: Users,
+      defaultVisible: true,
+      renderCell: (plan) => <span className="text-[13px] text-slate-600">{plan.features.facultyLimit >= 9999 ? '∞' : plan.features.facultyLimit.toLocaleString()}</span>,
+    },
+    {
+      id: 'storage',
+      label: 'Storage',
+      icon: Database,
+      defaultVisible: true,
+      renderCell: (plan) => <span className="text-[13px] text-slate-600">{plan.features.storage}GB</span>,
+    },
+    {
+      id: 'apiAccess',
+      label: 'API',
+      icon: Zap,
+      defaultVisible: true,
+      renderCell: (plan) => (
+        plan.features.apiAccess
+          ? <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+          : <XCircle className="w-4 h-4 text-slate-300" />
+      ),
+    },
+    {
+      id: 'featuresCount',
+      label: 'Features',
+      icon: Settings2,
+      defaultVisible: true,
+      renderCell: (plan) => <span className="text-[13px] text-slate-600">{plan.featuresCount}</span>,
+    },
+    {
+      id: 'status',
+      label: 'Status',
+      icon: Activity,
+      defaultVisible: true,
+      renderCell: (plan) => <StatusBadge status={plan.status} />,
+    },
+  ], []);
+
+  const {
+    orderedColumns,
+    visibleColumns,
+    hiddenSet,
+    toggleColumn,
+    hideAllOptional,
+    showAll,
+    resetColumns,
+    moveColumn,
+    isCustomized,
+  } = useTableColumns('subscriptions-plans', planColumns);
+
+  const totalCols = visibleColumns.length + 3;
+
   return (
     <div className="flex-1 w-full flex flex-col min-h-0">
       <PageHeader
@@ -376,28 +475,38 @@ export function PlansManagement() {
       >
         <button
           onClick={() => setShowCreateModal(true)}
-          className="flex items-center gap-2 px-4 py-2 text-sm bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-all active:scale-95 shadow-sm shadow-indigo-200"
+          className="flex items-center gap-2 px-3.5 py-2 text-xs bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary-hover transition-all shadow-2xs cursor-pointer"
         >
-          <Plus className="w-4 h-4" /> Create Plan
+          <Plus className="w-3.5 h-3.5" /> Create Plan
         </button>
       </PageHeader>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <StatCard title="Total Plans" value={totalPlans} icon={<Package size={20} />} iconColor="text-indigo-600" iconBg="bg-indigo-50" />
-        <StatCard title="Active Plans" value={activePlans} icon={<Activity size={20} />} iconColor="text-emerald-600" iconBg="bg-emerald-50" />
-        <StatCard title="Total Subscribers" value={totalSubscribers} icon={<Users size={20} />} iconColor="text-indigo-600" iconBg="bg-indigo-50" trend={5.4} trendLabel="vs last month" />
-        <StatCard title="Avg Monthly Price" value={avgMonthlyPrice} prefix="₹" icon={<IndianRupee size={20} />} iconColor="text-amber-600" iconBg="bg-amber-50" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3.5 mb-4">
+        <StatCard title="Total Plans" value={totalPlans} icon={<Package size={18} />} tone="primary" />
+        <StatCard title="Active Plans" value={activePlans} icon={<Activity size={18} />} tone="success" />
+        <StatCard title="Total Subscribers" value={totalSubscribers} icon={<Users size={18} />} tone="info" trend={5.4} trendLabel="vs last month" />
+        <StatCard title="Avg Monthly Price" value={avgMonthlyPrice} prefix="₹" icon={<IndianRupee size={18} />} tone="neutral" />
       </div>
 
-      <div className="bg-white border border-slate-100 rounded-xl shadow-sm flex flex-col flex-1 overflow-hidden min-h-0">
+      <div className="bg-white border border-slate-200/80 rounded-2xl shadow-2xs flex flex-col flex-1 overflow-hidden min-h-0">
         {/* Toolbar */}
         <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shrink-0 bg-slate-50/50">
-          <div className="flex items-center gap-3">
-            <SearchInput value={search} onChange={setSearch} placeholder="Search plans..." className="w-full sm:w-80" />
-            <button className="p-2 border border-slate-200 rounded-xl bg-white text-slate-500 hover:bg-slate-50 transition-colors shadow-sm">
-              <Filter className="w-4 h-4" />
-            </button>
+          <div className="flex items-center gap-2.5 flex-wrap">
+            <SearchInput value={search} onChange={setSearch} placeholder="Search plans..." className="w-full sm:w-72" />
+            {viewMode === 'table' && (
+              <TableFieldsButton
+                columns={orderedColumns}
+                hiddenSet={hiddenSet}
+                onToggle={toggleColumn}
+                onMove={moveColumn}
+                onHideAll={hideAllOptional}
+                onShowAll={showAll}
+                onReset={resetColumns}
+                isCustomized={isCustomized}
+                idFieldLabel="Plan ID"
+              />
+            )}
           </div>
           <div className="flex items-center gap-3 flex-wrap">
             <FilterChips 
@@ -492,11 +601,11 @@ export function PlansManagement() {
 
           {/* Plans Table */}
           {viewMode === 'table' && (
-            <div className="overflow-x-auto">
-              <table className="w-full bg-white">
+            <div className="overflow-x-auto thin-scrollbar">
+              <table className="w-full min-w-[1120px] bg-white text-left border-collapse">
                 <thead>
-                  <tr className="bg-slate-50/50 border-b border-slate-100">
-                    <th className="py-3 px-4 w-12 text-center align-middle">
+                  <tr className="bg-slate-50 border-b border-slate-100">
+                    <th className={cn("py-2.5 px-3 text-center align-middle", TABLE_STICKY.checkboxTh)}>
                       <div className="flex items-center justify-center">
                         <Checkbox 
                           checked={selectedPlans.length === paginatedData.length && paginatedData.length > 0} 
@@ -504,61 +613,64 @@ export function PlansManagement() {
                         />
                       </div>
                     </th>
-                    {['Plan Name', 'Monthly', 'Yearly', 'Branches', 'Students', 'Faculty', 'Storage', 'API', 'Features', 'Status', 'Actions'].map(h => (
-                      <th key={h} className="text-left py-3 px-4 text-[11px] font-bold text-slate-400 uppercase tracking-wide whitespace-nowrap">{h}</th>
+                    <th className={cn("text-left py-2.5 px-3.5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide", TABLE_STICKY.idThWithCheckbox)}>ID</th>
+                    {visibleColumns.map(col => (
+                      <th key={col.id} className="text-left py-2.5 px-3.5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">
+                        <ColumnHeaderLabel label={col.label} icon={col.icon} />
+                      </th>
                     ))}
+                    <th className={cn("py-2.5 px-3 text-[11px] font-semibold text-slate-500 uppercase tracking-wide", TABLE_STICKY.actionTh)}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {isTableLoading ? (
-                    <TableSkeleton columns={12} rows={pageSize} />
+                    <TableSkeleton columns={totalCols} rows={pageSize} />
                   ) : paginatedData.length > 0 ? (
-                    paginatedData.map((plan, i) => (
+                    paginatedData.map((plan, i) => {
+                      const isSelected = selectedPlans.includes(plan.id);
+                      return (
                       <motion.tr
                         key={plan.id}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ delay: i * 0.04 }}
-                        className={`border-b hover:bg-indigo-50/30 transition-colors cursor-pointer ${selectedPlans.includes(plan.id) ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
+                        transition={{ delay: i * 0.03 }}
+                        className={cn(
+                          "border-b transition-colors cursor-pointer group",
+                          isSelected ? "bg-primary-light border-primary-border" : "bg-white hover:bg-slate-50 border-slate-100"
+                        )}
                       >
-                        <td className="py-3.5 px-4 text-center align-middle">
+                        <td className={cn("py-2.5 px-3 text-center align-middle", TABLE_STICKY.checkboxTd, isSelected && "bg-primary-light group-hover:bg-primary-light")}>
                           <div className="flex items-center justify-center">
                             <Checkbox 
-                              checked={selectedPlans.includes(plan.id)} 
+                              checked={isSelected} 
                               onCheckedChange={() => toggleSelect(plan.id, { stopPropagation: () => {} } as any)} 
                               onClick={(e) => e.stopPropagation()}
                             />
                           </div>
                         </td>
-                        <td className="py-3.5 px-4">
-                          <p className="font-semibold text-sm text-slate-900">{plan.name}</p>
-                          <p className="text-[11px] text-slate-400">{plan.subscribersCount} subscribers</p>
+                        <td className={cn("py-2.5 px-3.5 text-[13px] font-medium text-slate-700 tabular-nums", TABLE_STICKY.idTdWithCheckbox, isSelected && "bg-primary-light group-hover:bg-primary-light")}>
+                          {plan.id}
                         </td>
-                        <td className="py-3.5 px-4 text-sm font-semibold text-slate-700">₹{plan.monthlyPrice.toLocaleString('en-IN')}</td>
-                        <td className="py-3.5 px-4 text-sm font-semibold text-slate-700">₹{plan.yearlyPrice.toLocaleString('en-IN')}</td>
-                        <td className="py-3.5 px-4 text-sm text-slate-600">{plan.features.branchLimit >= 999 ? '∞' : plan.features.branchLimit}</td>
-                        <td className="py-3.5 px-4 text-sm text-slate-600">{plan.features.studentLimit >= 99999 ? '∞' : plan.features.studentLimit.toLocaleString()}</td>
-                        <td className="py-3.5 px-4 text-sm text-slate-600">{plan.features.facultyLimit >= 9999 ? '∞' : plan.features.facultyLimit.toLocaleString()}</td>
-                        <td className="py-3.5 px-4 text-sm text-slate-600">{plan.features.storage}GB</td>
-                        <td className="py-3.5 px-4">
-                          {plan.features.apiAccess
-                            ? <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                            : <XCircle className="w-4 h-4 text-slate-300" />}
-                        </td>
-                        <td className="py-3.5 px-4 text-sm text-slate-600">{plan.featuresCount}</td>
-                        <td className="py-3.5 px-4"><StatusBadge status={plan.status} /></td>
-                        <td className="py-3.5 px-4">
-                          <div className="flex items-center gap-1.5">
-                            <ActionTooltip icon={Eye} tooltip="View Plan" onClick={() => router.push(`/dashboard/subscriptions/plans/${plan.id}`)} />
-                            <ActionTooltip icon={Edit2} tooltip="Edit Plan" onClick={() => alert(`Edit: ${plan.name}`)} />
-                            <ActionTooltip icon={Trash2} tooltip="Delete Plan" variant="danger" onClick={() => handleDeletePlan(plan)} />
-                          </div>
+                        {visibleColumns.map(col => (
+                          <td key={col.id} className="py-2.5 px-3.5 whitespace-nowrap">
+                            {col.renderCell(plan, i)}
+                          </td>
+                        ))}
+                        <td className={cn("py-2.5 px-3", TABLE_STICKY.actionTd, isSelected && "bg-primary-light group-hover:bg-primary-light")}>
+                          <RowActionMenu
+                            items={[
+                              { label: 'View Plan', icon: Eye, onClick: () => router.push(`/dashboard/subscriptions/plans/${plan.id}`) },
+                              { label: 'Edit Plan', icon: Edit2, onClick: () => alert(`Edit: ${plan.name}`) },
+                              { label: 'Delete Plan', icon: Trash2, variant: 'danger', onClick: () => handleDeletePlan(plan) },
+                            ]}
+                          />
                         </td>
                       </motion.tr>
-                    ))
+                      );
+                    })
                   ) : (
                     <tr>
-                      <td colSpan={12} className="p-8">
+                      <td colSpan={totalCols} className="p-8">
                         <EmptyState 
                           icon={Package}
                           title="No plans found"

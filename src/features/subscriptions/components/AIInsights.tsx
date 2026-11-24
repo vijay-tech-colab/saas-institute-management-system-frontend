@@ -117,7 +117,7 @@ export function AIInsights() {
           <span className="text-sm font-semibold text-blue-400">AI Analysis Complete</span>
           <span className="text-xs text-slate-400">Updated 2 min ago</span>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3.5">
           {[
             { label: 'Insights Found', value: mockAIInsights.length, icon: <Target className="w-4 h-4" />, color: 'text-blue-400' },
             { label: 'High Priority', value: highPriority.length, icon: <AlertTriangle className="w-4 h-4" />, color: 'text-red-400' },

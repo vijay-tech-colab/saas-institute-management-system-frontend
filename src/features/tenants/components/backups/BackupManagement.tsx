@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { PageHeader, SearchInput, FilterChips } from '@/features/subscriptions/components/shared/UIComponents';
-import { Database, Download, RotateCcw, Clock, HardDrive, Filter } from 'lucide-react';
+import { Database, Download, RotateCcw, Clock, HardDrive, Building2, Activity, Globe, ShieldCheck } from 'lucide-react';
 import { StatCard } from '@/features/subscriptions/components/shared/StatCard';
 import { StatusBadge } from '@/features/subscriptions/components/shared/StatusBadge';
 import { mockTenants } from '../../data/mock-data';
@@ -10,15 +10,11 @@ import { format, subHours } from 'date-fns';
 import { motion } from 'framer-motion';
 import { DataTablePagination } from '@/components/ui/pagination';
 import { TableSkeleton } from '@/components/ui/skeleton';
-import { ActionTooltip } from '@/components/ui/tooltip';
+import { RowActionMenu, TABLE_STICKY } from '@/components/ui/row-action-menu';
+import { ColumnHeaderLabel, TableColumnDef, TableFieldsButton, useTableColumns } from '@/components/ui/table-configurator';
+import { cn } from '@/lib/utils';
 import { Checkbox } from "@/components/ui/checkbox";
 import { EmptyState } from '@/components/ui/empty-state';
-
-const FILTER_OPTIONS = [
-  { label: 'All', value: 'all' },
-  { label: 'Manual', value: 'Manual' },
-  { label: 'Automated', value: 'Automated' },
-];
 
 export function BackupManagement() {
   const [search, setSearch] = useState('');
@@ -34,15 +30,17 @@ export function BackupManagement() {
     return () => clearTimeout(timer);
   }, [pageIndex, pageSize, search, filter]);
 
-  const allBackups = mockTenants.map((t, i) => ({
+  const allBackups = useMemo(() => mockTenants.map((t, i) => ({
     id: `BKP-2026-${String(i + 1).padStart(3, '0')}`,
     tenantId: t.id,
     institute: t.name,
-    size: (Math.floor(Math.random() * 20) + 5) + ' GB',
+    size: `${((i * 7) % 18) + 6} GB`,
     type: i % 3 === 0 ? 'Manual' : 'Automated',
-    timestamp: subHours(new Date(), i * 14).toISOString(),
+    region: i % 2 === 0 ? 'ap-south-1 (Mumbai)' : 'us-east-1 (Virginia)',
+    encryption: 'AES-256',
+    timestamp: subHours(new Date('2026-03-01T00:00:00Z'), i * 14).toISOString(),
     status: 'completed',
-  }));
+  })), []);
 
   const filtered = allBackups.filter(b => {
     const matchSearch =
@@ -72,6 +70,67 @@ export function BackupManagement() {
   const manualCount = allBackups.filter(b => b.type === 'Manual').length;
   const autoCount = allBackups.filter(b => b.type === 'Automated').length;
 
+  type BackupRow = (typeof allBackups)[number];
+
+  const columns: TableColumnDef<BackupRow>[] = useMemo(() => [
+    {
+      id: 'institute',
+      label: 'Institute',
+      icon: Building2,
+      defaultVisible: true,
+      renderCell: (backup) => <span className="text-[13px] font-medium text-slate-800">{backup.institute}</span>,
+    },
+    {
+      id: 'type',
+      label: 'Type',
+      icon: Activity,
+      defaultVisible: true,
+      renderCell: (backup) => <StatusBadge status={backup.type.toLowerCase() as any} />,
+    },
+    {
+      id: 'size',
+      label: 'Size',
+      icon: HardDrive,
+      defaultVisible: true,
+      renderCell: (backup) => <span className="text-[13px] text-slate-600 tabular-nums">{backup.size}</span>,
+    },
+    {
+      id: 'timestamp',
+      label: 'Timestamp',
+      icon: Clock,
+      defaultVisible: true,
+      renderCell: (backup) => <span className="text-xs text-slate-500">{format(new Date(backup.timestamp), 'MMM d, yyyy HH:mm')}</span>,
+    },
+    {
+      id: 'region',
+      label: 'Region',
+      icon: Globe,
+      defaultVisible: false,
+      renderCell: (backup) => <span className="text-[13px] text-slate-600">{backup.region}</span>,
+    },
+    {
+      id: 'encryption',
+      label: 'Encryption',
+      icon: ShieldCheck,
+      defaultVisible: false,
+      renderCell: (backup) => <span className="text-xs font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/70">{backup.encryption}</span>,
+    },
+  ], []);
+
+  const {
+    orderedColumns,
+    visibleColumns,
+    hiddenSet,
+    toggleColumn,
+    hideAllOptional,
+    showAll,
+    resetColumns,
+    moveColumn,
+    isCustomized,
+  } = useTableColumns('tenants-backups', columns);
+
+  const totalCols = visibleColumns.length + 3;
+
   return (
     <div className="flex-1 w-full flex flex-col min-h-0">
       <PageHeader
@@ -79,27 +138,35 @@ export function BackupManagement() {
         description="Manage automated and manual database/file backups for all tenants."
         breadcrumbs={[{ label: 'Tenants' }, { label: 'Backups' }]}
       >
-        <button className="flex items-center gap-2 px-4 py-2 text-sm bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-all active:scale-95 shadow-sm shadow-indigo-200">
-          <Database className="w-4 h-4" /> Run Manual Backup
+        <button className="flex items-center gap-2 px-4 py-2 text-xs bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary-hover transition-all shadow-2xs cursor-pointer">
+          <Database className="w-3.5 h-3.5" /> Run Manual Backup
         </button>
       </PageHeader>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-        <StatCard title="Total Backup Storage" value={`${totalSize} GB`} icon={<HardDrive size={20} />} iconColor="text-slate-600" iconBg="bg-slate-100" />
-        <StatCard title="Manual Backups" value={manualCount} icon={<Database size={20} />} iconColor="text-indigo-600" iconBg="bg-indigo-50" />
-        <StatCard title="Automated Backups" value={autoCount} icon={<Clock size={20} />} iconColor="text-emerald-600" iconBg="bg-emerald-50" trend={100} trendLabel="success rate (30d)" />
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 mb-4">
+        <StatCard title="Total Backup Storage" value={`${totalSize} GB`} icon={<HardDrive size={18} />} tone="neutral" />
+        <StatCard title="Manual Backups" value={manualCount} icon={<Database size={18} />} tone="primary" />
+        <StatCard title="Automated Backups" value={autoCount} icon={<Clock size={18} />} tone="success" trend={100} trendLabel="success rate (30d)" />
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-slate-100 rounded-xl shadow-sm flex flex-col flex-1 overflow-hidden min-h-0">
+      <div className="bg-white border border-slate-200/80 rounded-2xl shadow-2xs flex flex-col flex-1 overflow-hidden min-h-0">
         {/* Toolbar */}
         <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shrink-0 bg-slate-50/50">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5 flex-wrap">
             <SearchInput value={search} onChange={setSearch} placeholder="Search backups..." className="w-full sm:w-72" />
-            <button className="p-2 border border-slate-200 rounded-xl bg-white text-slate-500 hover:bg-slate-50 transition-colors shadow-sm">
-              <Filter className="w-4 h-4" />
-            </button>
+            <TableFieldsButton
+              columns={orderedColumns}
+              hiddenSet={hiddenSet}
+              onToggle={toggleColumn}
+              onMove={moveColumn}
+              onHideAll={hideAllOptional}
+              onShowAll={showAll}
+              onReset={resetColumns}
+              isCustomized={isCustomized}
+              idFieldLabel="Backup ID"
+            />
           </div>
           <FilterChips
             options={[
@@ -113,11 +180,11 @@ export function BackupManagement() {
         </div>
 
         {/* Table Body */}
-        <div className="flex-1 overflow-auto bg-white">
-          <table className="w-full">
+        <div className="flex-1 overflow-x-auto bg-white thin-scrollbar">
+          <table className="w-full min-w-[760px] text-left border-collapse">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-100">
-                <th className="py-3 px-4 w-12 text-center align-middle">
+                <th className={cn("py-2.5 px-3 text-center align-middle", TABLE_STICKY.checkboxTh)}>
                   <div className="flex items-center justify-center">
                     <Checkbox
                       checked={selectedBackups.size === paginatedData.length && paginatedData.length > 0}
@@ -125,63 +192,68 @@ export function BackupManagement() {
                     />
                   </div>
                 </th>
-                {['Backup ID', 'Institute', 'Type', 'Size', 'Timestamp', 'Actions'].map(h => (
-                  <th key={h} className="text-left py-3 px-4 text-[11px] font-bold text-slate-400 uppercase tracking-wide whitespace-nowrap last:text-right">
-                    {h}
+                <th className={cn("text-left py-2.5 px-3.5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide", TABLE_STICKY.idThWithCheckbox)}>ID</th>
+                {visibleColumns.map(col => (
+                  <th key={col.id} className="text-left py-2.5 px-3.5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">
+                    <ColumnHeaderLabel label={col.label} icon={col.icon} />
                   </th>
                 ))}
+                <th className={cn("py-2.5 px-3 text-[11px] font-semibold text-slate-500 uppercase tracking-wide", TABLE_STICKY.actionTh)}>Actions</th>
               </tr>
             </thead>
             <tbody>
               {isTableLoading ? (
-                <TableSkeleton columns={6} rows={pageSize} />
+                <TableSkeleton columns={totalCols} rows={pageSize} />
               ) : filtered.length > 0 ? (
-                paginatedData.map((backup, i) => (
+                paginatedData.map((backup, i) => {
+                  const isSelected = selectedBackups.has(backup.id);
+                  return (
                   <motion.tr
                     key={backup.id}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: i * 0.04 }}
-                    className={`border-b hover:bg-indigo-50/20 transition-colors group cursor-pointer ${selectedBackups.has(backup.id) ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
+                    transition={{ delay: i * 0.03 }}
+                    className={cn(
+                      "border-b transition-colors group cursor-pointer",
+                      isSelected ? "bg-primary-light border-primary-border" : "bg-white hover:bg-slate-50 border-slate-100"
+                    )}
                     onClick={() => toggleSelect(backup.id)}
                   >
-                    <td className="py-3.5 px-4 text-center align-middle">
+                    <td className={cn("py-2.5 px-3 text-center align-middle", TABLE_STICKY.checkboxTd, isSelected && "bg-primary-light group-hover:bg-primary-light")}>
                       <div className="flex items-center justify-center">
                         <Checkbox
-                          checked={selectedBackups.has(backup.id)}
+                          checked={isSelected}
                           onCheckedChange={() => toggleSelect(backup.id)}
                           onClick={(e) => e.stopPropagation()}
                         />
                       </div>
                     </td>
-                    <td className="py-3.5 px-4">
-                      <span className="px-2.5 py-1 bg-slate-900 text-white font-mono text-[11px] font-bold rounded-lg tracking-widest">
-                        {backup.id}
-                      </span>
+                    <td className={cn("py-2.5 px-3.5 text-[13px] font-medium text-slate-700 tabular-nums", TABLE_STICKY.idTdWithCheckbox, isSelected && "bg-primary-light group-hover:bg-primary-light")}>
+                      {backup.id}
                     </td>
-                    <td className="py-3.5 px-4 text-sm font-medium text-slate-800">{backup.institute}</td>
-                    <td className="py-3.5 px-4">
-                      <StatusBadge status={backup.type.toLowerCase() as any} />
-                    </td>
-                    <td className="py-3.5 px-4 text-sm text-slate-600">{backup.size}</td>
-                    <td className="py-3.5 px-4 text-xs text-slate-500 whitespace-nowrap">
-                      {format(new Date(backup.timestamp), 'MMM d, yyyy HH:mm')}
-                    </td>
-                    <td className="py-3.5 px-4" onClick={(e) => e.stopPropagation()}>
-                      <div className="flex items-center justify-end gap-1.5">
-                        <ActionTooltip icon={RotateCcw} tooltip="Restore Data" />
-                        <ActionTooltip icon={Download} tooltip="Download Archive" />
-                      </div>
+                    {visibleColumns.map(col => (
+                      <td key={col.id} className="py-2.5 px-3.5 whitespace-nowrap">
+                        {col.renderCell(backup, i)}
+                      </td>
+                    ))}
+                    <td className={cn("py-2.5 px-3", TABLE_STICKY.actionTd, isSelected && "bg-primary-light group-hover:bg-primary-light")} onClick={(e) => e.stopPropagation()}>
+                      <RowActionMenu
+                        items={[
+                          { label: 'Restore Data', icon: RotateCcw, onClick: () => {} },
+                          { label: 'Download Archive', icon: Download, onClick: () => {} },
+                        ]}
+                      />
                     </td>
                   </motion.tr>
-                ))
+                  );
+                })
               ) : (
                 <tr>
-                  <td colSpan={10} className="p-8">
+                  <td colSpan={totalCols} className="p-8">
                     <EmptyState 
                       icon={Database}
                       title="No backups found"
-                      description="No no backups found found."
+                      description="There are no backups matching your current filters."
                     />
                   </td>
                 </tr>

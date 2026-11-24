@@ -32,3 +32,31 @@ Status indicators communicate immediate psychological state. **Never mix brand c
    - The primary theme (Nordic Teal) is exclusively for navigation, interactive primary buttons, and user focus. It must never substitute for semantic statuses.
 5. **Soft Accessible Contrast**:
    - Always ensure WCAG 2.1 AA text contrast. Pair soft tinted backgrounds (`bg-emerald-50`, `bg-amber-50`, `bg-rose-50`, `bg-sky-50`, `bg-slate-100`) with dark saturated text (`text-emerald-700`, `text-amber-700`, `text-rose-700`, `text-sky-700`, `text-slate-600`) and delicate matching borders (`border-emerald-200`, `border-amber-200`, `border-rose-200`, etc.).
+
+---
+
+### Canonical Stat / KPI Card Standard (Mandatory Across App):
+Whenever creating or updating any stats/KPI card anywhere in the application, ALWAYS follow this exact pattern:
+1. **Use the Shared Notched Stat Card Primitive**:
+   - Always use `<NotchedStatCard />` from `@/components/ui/notched-stat-card` (or `<StatCard />` from `@/features/subscriptions/components/shared/StatCard`, which wraps `NotchedStatCard`).
+   - Do **NOT** use `...` (three-dot) buttons in the top-right corner of stat cards. Always place the metric's meaningful icon inside the separated floating top-right badge with the concentric concave corner cutout (`cutout`).
+2. **Colors Must Communicate Domain Meaning (No Arbitrary / Decorative Card Colors)**:
+   - Never assign random colors like pink/rose for healthy revenue or amber/yellow for healthy active counts.
+   - Always choose `tone` based on what the metric denotes:
+     - `success` (Soft Emerald): Financial revenue, MRR, ARR, collected payments, resolved/healthy growth.
+     - `primary` (Soft Nordic Teal): Core platform entities (`Active Institutes`, plans, active tenant totals).
+     - `info` (Soft Sky Blue): Scale/reach/informational metrics (`Platform Students`, API volume, open tickets).
+     - `warning` (Soft Amber): Attention needed (`Expiring Trials`, `Pending Approvals`, `Unpaid`, degraded metrics).
+     - `danger` (Soft Rose/Red): Critical issues (`Suspended Institutes`, `Failed Payments`, `Overdue`, security threats).
+     - `neutral` (Clean Slate): Rates, percentages, benchmarks, or inactive/archived counts.
+
+---
+
+### Canonical Floating Right-Side Sheet / Slider Standard (Mandatory Across App):
+Whenever creating or updating any right-side slide-over sheet, drawer, or slider panel anywhere in the application (such as Table Fields configuration, Notifications, Detail Drawers, or Filter Sliders), ALWAYS follow this exact standard:
+1. **Use the Shared Floating Sheet Primitives**:
+   - Always use `<FloatingSheet />`, `<FloatingSheetHeader />`, `<FloatingSheetBody />`, and `<FloatingSheetFooter />` from `@/components/ui/floating-sheet`.
+   - Do **NOT** render edge-to-edge drawers anchored flush at `right-0 top-0 bottom-0`.
+2. **Consistent Floating Geometry & Motion**:
+   - Sheets must slide smoothly from the right with clean viewport inset margins (`top-3 right-3 bottom-3 sm:top-4 sm:right-3 sm:bottom-4`), `rounded-2xl`, subtle border (`border-slate-200/90`), elevated shadow, and a soft blurred backdrop (`bg-slate-950/15 backdrop-blur-[1.5px]`).
+   - Always include the standardized header (`<- Title` + optional count badge + `X` close button) and sticky footer for primary actions (`Done`, `Reset`, `Preferences`, etc.).

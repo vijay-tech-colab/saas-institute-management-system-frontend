@@ -66,8 +66,8 @@ export function DataTablePagination({
           key={p}
           onClick={() => setPageIndex(p)}
           className={cn(
-            "flex h-8 w-8 items-center justify-center rounded-lg text-xs font-semibold transition-all cursor-pointer",
-            isActive ? "bg-blue-600 text-white shadow-sm shadow-blue-200" : "text-slate-500 hover:bg-slate-100"
+            "flex h-7.5 w-7.5 items-center justify-center rounded-lg text-xs font-semibold transition-all cursor-pointer",
+            isActive ? "bg-primary text-primary-foreground shadow-xs" : "text-slate-500 hover:bg-slate-100"
           )}
         >
           {p + 1}
@@ -77,7 +77,7 @@ export function DataTablePagination({
   };
 
   return (
-    <div className="flex flex-col sm:flex-row items-center px-4 py-3 border-t border-slate-100 gap-4">
+    <div className="flex flex-col sm:flex-row items-center justify-between px-3 sm:px-4 py-2.5 border-t border-slate-100 gap-2.5 flex-wrap">
       {/* Left side: Rows per page */}
       <div className="flex-1 flex justify-start items-center gap-2">
         <span className="text-xs font-medium text-slate-500">Rows per page</span>

@@ -13,6 +13,8 @@ import {
   MapPin, User, Mail, Phone, Calendar, Download, RefreshCcw, Ban, HardDrive
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { RowActionMenu, TABLE_STICKY } from '@/components/ui/row-action-menu';
+import { cn } from '@/lib/utils';
 
 const TABS = [
   { id: 'overview', label: 'Overview', icon: <BarChart3 className="w-4 h-4" /> },
@@ -85,7 +87,7 @@ function Tab_Overview({ customer }: { customer: CustomerSubscription }) {
       </div>
       
       {/* Quick Stats Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3.5">
         <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:border-indigo-200 transition-colors group">
           <div className="flex items-center justify-between mb-4">
             <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-colors">
@@ -228,34 +230,50 @@ function Tab_Billing({ customer }: { customer: CustomerSubscription }) {
       <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
           <h3 className="text-sm font-bold text-slate-900">Billing History</h3>
-          <button className="text-sm font-semibold text-indigo-600 hover:text-indigo-700">View All</button>
+          <button className="text-sm font-semibold text-primary hover:text-primary-dark">View All</button>
         </div>
-        <table className="w-full text-left">
-          <thead className="bg-slate-50">
-            <tr>
-              <th className="py-3 px-6 text-xs font-bold text-slate-500 uppercase">Invoice</th>
-              <th className="py-3 px-6 text-xs font-bold text-slate-500 uppercase">Amount</th>
-              <th className="py-3 px-6 text-xs font-bold text-slate-500 uppercase">Date</th>
-              <th className="py-3 px-6 text-xs font-bold text-slate-500 uppercase">Status</th>
-              <th className="py-3 px-6 text-right text-xs font-bold text-slate-500 uppercase">Action</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
-            {[1, 2, 3].map(i => (
-              <tr key={i} className="hover:bg-slate-50/50 transition-colors">
-                <td className="py-4 px-6 text-sm font-medium text-slate-900">INV-2024-00{i}</td>
-                <td className="py-4 px-6 text-sm text-slate-600">₹{(customer.monthlyRevenue * (customer.billingCycle === 'yearly' ? 12 : 1)).toLocaleString()}</td>
-                <td className="py-4 px-6 text-sm text-slate-600">{format(new Date(customer.startDate), 'MMM d, yyyy')}</td>
-                <td className="py-4 px-6">
-                  <span className="px-2 py-1 bg-emerald-50 text-emerald-700 text-xs font-bold rounded border border-emerald-200">Paid</span>
-                </td>
-                <td className="py-4 px-6 text-right">
-                  <button className="text-slate-400 hover:text-indigo-600"><Download className="w-4 h-4" /></button>
-                </td>
+        <div className="overflow-x-auto thin-scrollbar">
+          <table className="w-full min-w-[680px] text-left">
+            <thead className="bg-slate-50 border-b border-slate-100">
+              <tr>
+                <th className={cn("py-3 px-4 text-xs font-bold text-slate-500 uppercase", TABLE_STICKY.idTh)}>ID</th>
+                <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase">Invoice</th>
+                <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase">Amount</th>
+                <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase">Date</th>
+                <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase">Status</th>
+                <th className={cn("py-3 px-4 text-right text-xs font-bold text-slate-500 uppercase", TABLE_STICKY.actionTh)}>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {[1, 2, 3].map(i => (
+                <tr key={i} className="group hover:bg-slate-50 transition-colors">
+                  <td className={cn("py-3.5 px-4 text-sm font-medium text-slate-700 tabular-nums", TABLE_STICKY.idTd)}>
+                    BIL-00{i}
+                  </td>
+                  <td className="py-3.5 px-4 text-sm font-medium text-slate-900">INV-2024-00{i}</td>
+                  <td className="py-3.5 px-4 text-sm text-slate-600">₹{(customer.monthlyRevenue * (customer.billingCycle === 'yearly' ? 12 : 1)).toLocaleString()}</td>
+                  <td className="py-3.5 px-4 text-sm text-slate-600">{format(new Date(customer.startDate), 'MMM d, yyyy')}</td>
+                  <td className="py-3.5 px-4">
+                    <StatusBadge status="paid" />
+                  </td>
+                  <td className={cn("py-3.5 px-4 text-right", TABLE_STICKY.actionTd)}>
+                    <RowActionMenu
+                      ariaLabel={`Actions for INV-2024-00${i}`}
+                      items={[
+                        {
+                          label: 'Download Invoice',
+                          icon: Download,
+                          variant: 'primary',
+                          onClick: () => {},
+                        },
+                      ]}
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

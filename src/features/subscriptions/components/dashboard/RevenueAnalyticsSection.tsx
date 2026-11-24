@@ -22,20 +22,20 @@ export function RevenueAnalyticsSection() {
 
   const getColor = () => {
     switch (metric) {
-      case 'mrr': return '#4F46E5'; // Indigo
-      case 'arr': return '#0EA5E9'; // Light Blue
-      case 'renewals': return '#10B981'; // Emerald
-      case 'refunds': return '#F43F5E'; // Rose
-      default: return '#4F46E5';
+      case 'mrr': return '#0d9488'; // Nordic Teal Primary
+      case 'arr': return '#0284c7'; // Info Sky
+      case 'renewals': return '#16a34a'; // Success Emerald
+      case 'refunds': return '#dc2626'; // Danger Rose
+      default: return '#0d9488';
     }
   };
 
   return (
-    <div className="bg-white border border-slate-100 rounded-xl p-5 shadow-sm">
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
+    <div className="bg-white border border-slate-200/80 rounded-2xl p-4 sm:p-5 shadow-2xs">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-5">
         <div>
-          <h2 className="text-lg font-bold text-slate-900">Revenue Analytics</h2>
-          <p className="text-sm text-slate-500 mt-0.5">Track your recurring revenue, renewals, and refunds.</p>
+          <h2 className="text-sm sm:text-base font-semibold text-slate-900 tracking-tight">Revenue Analytics</h2>
+          <p className="text-xs text-slate-500 mt-0.5">Track your recurring revenue, renewals, and refunds.</p>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">

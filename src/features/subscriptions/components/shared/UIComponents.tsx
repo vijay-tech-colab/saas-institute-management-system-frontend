@@ -17,13 +17,13 @@ interface SearchInputProps {
 export function SearchInput({ value, onChange, placeholder = 'Search...', className }: SearchInputProps) {
   return (
     <div className={cn('relative flex items-center', className)}>
-      <Search className="absolute left-3 w-4 h-4 text-slate-400 pointer-events-none" />
+      <Search className="absolute left-3 w-3.5 h-3.5 text-slate-400 pointer-events-none" />
       <input
         type="text"
         value={value}
         onChange={e => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full pl-9 pr-9 py-2 text-sm bg-white border border-slate-200/90 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 placeholder:text-slate-400 transition-all shadow-xs"
+        className="w-full h-9 pl-8.5 pr-8.5 text-[13px] bg-white border border-slate-200/90 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary placeholder:text-slate-400 transition-all shadow-xs"
       />
       <AnimatePresence>
         {value && (
@@ -32,7 +32,7 @@ export function SearchInput({ value, onChange, placeholder = 'Search...', classN
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             onClick={() => onChange('')}
-            className="absolute right-3 p-0.5 rounded-full hover:bg-slate-100 transition-colors"
+            className="absolute right-2.5 p-0.5 rounded-full hover:bg-slate-100 transition-colors cursor-pointer"
           >
             <X className="w-3.5 h-3.5 text-slate-400" />
           </motion.button>
@@ -53,21 +53,21 @@ interface FilterChipsProps {
 
 export function FilterChips({ options, selected, onChange, className }: FilterChipsProps) {
   return (
-    <div className={cn('flex items-center gap-1.5 flex-wrap', className)}>
+    <div className={cn('flex items-center gap-1.5 overflow-x-auto max-w-full pb-0.5 thin-scrollbar', className)}>
       {options.map(opt => (
         <button
           key={opt.value}
           onClick={() => onChange(opt.value)}
           className={cn(
-            'px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 border',
+            'px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-150 border whitespace-nowrap shrink-0 cursor-pointer',
             selected === opt.value
-              ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs'
+              ? 'bg-primary text-primary-foreground border-primary shadow-xs font-semibold'
               : 'bg-white text-slate-600 border-slate-200/90 hover:border-slate-300 hover:text-slate-900 shadow-xs'
           )}
         >
           {opt.label}
           {opt.count !== undefined && (
-            <span className={cn('ml-1.5 px-1.5 py-0.5 rounded-full text-[10px]', selected === opt.value ? 'bg-white/20' : 'bg-slate-100')}>
+            <span className={cn('ml-1.5 px-1.5 py-0.5 rounded-full text-[10px]', selected === opt.value ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500')}>
               {opt.count}
             </span>
           )}
@@ -130,29 +130,29 @@ interface PageHeaderProps {
 
 export function PageHeader({ title, description, children, breadcrumbs }: PageHeaderProps) {
   return (
-    <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-      <div className="space-y-1 min-w-0">
+    <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+      <div className="space-y-0.5 min-w-0">
         {breadcrumbs && breadcrumbs.length > 0 && (
-          <div className="flex items-center gap-1.5 mb-1">
+          <div className="flex items-center gap-1.5 mb-0.5 flex-wrap">
             {breadcrumbs.map((b, i) => (
               <React.Fragment key={i}>
-                <span className="text-xs text-slate-400">{b.label}</span>
-                {i < breadcrumbs.length - 1 && <span className="text-slate-300 text-xs">/</span>}
+                <span className="text-[11px] text-slate-400">{b.label}</span>
+                {i < breadcrumbs.length - 1 && <span className="text-slate-300 text-[11px]">/</span>}
               </React.Fragment>
             ))}
           </div>
         )}
-        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 truncate">{title}</h1>
-        {description && <p className="text-xs sm:text-sm text-slate-500 leading-relaxed max-w-2xl">{description}</p>}
+        <h1 className="text-lg sm:text-xl font-semibold tracking-tight text-slate-900 truncate">{title}</h1>
+        {description && <p className="text-xs sm:text-[13px] text-slate-500 leading-relaxed max-w-2xl">{description}</p>}
       </div>
-      {children && <div className="flex items-center gap-2.5 flex-wrap flex-shrink-0">{children}</div>}
+      {children && <div className="flex items-center gap-2 flex-wrap flex-shrink-0">{children}</div>}
     </header>
   );
 }
 
 // ─── Progress Bar ────────────────────────────────────────────
 interface ProgressBarProps { value: number; max: number; color?: string; showLabel?: boolean; size?: 'sm' | 'md' }
-export function ProgressBar({ value, max, color = 'bg-indigo-600', showLabel = true, size = 'sm' }: ProgressBarProps) {
+export function ProgressBar({ value, max, color = 'bg-primary', showLabel = true, size = 'sm' }: ProgressBarProps) {
   const pct = Math.min(100, (value / max) * 100);
   const barColor = pct > 90 ? 'bg-rose-500' : pct > 70 ? 'bg-amber-500' : color;
   return (
@@ -180,15 +180,15 @@ export function Toggle({ checked, onChange, label }: ToggleProps) {
         role="switch"
         aria-checked={checked}
         onClick={() => onChange(!checked)}
-        className={cn('relative w-8 h-4.5 rounded-full transition-colors duration-200 flex-shrink-0', checked ? 'bg-indigo-600' : 'bg-slate-200')}
+        className={cn('relative w-9 h-5 rounded-full transition-colors duration-200 flex-shrink-0 cursor-pointer', checked ? 'bg-primary' : 'bg-slate-200')}
       >
         <motion.span
           layout
           transition={{ type: 'spring', stiffness: 700, damping: 30 }}
-          className={cn('absolute top-0.5 w-3.5 h-3.5 rounded-full bg-white shadow-xs', checked ? 'right-0.5 left-auto' : 'left-0.5 right-auto')}
+          className={cn('absolute top-0.5 w-4 h-4 rounded-full bg-white shadow-xs', checked ? 'right-0.5 left-auto' : 'left-0.5 right-auto')}
         />
       </button>
-      {label && <span className="text-sm text-slate-600">{label}</span>}
+      {label && <span className="text-[13px] text-slate-600">{label}</span>}
     </label>
   );
 }
@@ -277,14 +277,14 @@ export function CustomSelect({ options, value, onChange, className, placeholder 
                 setIsOpen(false);
               }}
               className={cn(
-                'flex items-center justify-between w-full text-left px-2.5 py-2 text-xs rounded-lg transition-colors cursor-pointer',
+                'flex items-center justify-between w-full text-left px-2.5 py-1.5 text-xs rounded-lg transition-colors cursor-pointer',
                 value === option.value
-                  ? 'bg-indigo-50 text-indigo-700 font-bold'
+                  ? 'bg-primary-light text-primary font-semibold'
                   : 'text-slate-600 hover:bg-slate-50 font-medium hover:text-slate-900'
               )}
             >
               {option.label}
-              {value === option.value && <Check className="w-3.5 h-3.5 text-indigo-600 shrink-0" />}
+              {value === option.value && <Check className="w-3.5 h-3.5 text-primary shrink-0" />}
             </button>
           ))}
         </div>
@@ -300,7 +300,7 @@ export function CustomSelect({ options, value, onChange, className, placeholder 
         type="button"
         onClick={() => setIsOpen(o => !o)}
         className={cn(
-          'flex items-center justify-between w-full min-w-[140px] gap-2 text-xs font-semibold bg-white border border-slate-200 text-slate-700 rounded-lg px-3 py-1.5 outline-none hover:bg-slate-50 hover:border-slate-300 focus:ring-2 focus:ring-indigo-500/20 focus:border-blue-400 transition-all shadow-sm',
+          'flex items-center justify-between w-full min-w-[130px] gap-2 h-9 text-xs font-medium bg-white border border-slate-200 text-slate-700 rounded-lg px-3 py-1.5 outline-none hover:bg-slate-50 hover:border-slate-300 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all shadow-xs cursor-pointer',
           buttonClassName
         )}
       >

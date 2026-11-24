@@ -1,7 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Plus, Tag, Percent, IndianRupee, Clock, CheckCircle2, XCircle, Trash2, Edit2, Copy, BarChart2, TrendingUp, DollarSign, Filter, AlertCircle, Loader2 } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import {
+  Plus, Tag, Percent, IndianRupee, Clock, Trash2, Edit2, Copy, BarChart2, TrendingUp, DollarSign, Loader2,
+  Calendar, Activity, Users, AlertCircle
+} from 'lucide-react';
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -11,7 +14,9 @@ import { DatePicker } from "@/components/ui/date-picker";
 import { format } from "date-fns";
 import { DataTablePagination } from "@/components/ui/pagination";
 import { TableSkeleton } from "@/components/ui/skeleton";
-import { ActionTooltip } from "@/components/ui/tooltip";
+import { RowActionMenu, TABLE_STICKY } from "@/components/ui/row-action-menu";
+import { ColumnHeaderLabel, TableColumnDef, TableFieldsButton, useTableColumns } from "@/components/ui/table-configurator";
+import { cn } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
 import { EmptyState } from '@/components/ui/empty-state';
 import { motion } from "framer-motion";
@@ -27,59 +32,6 @@ const FILTER_OPTIONS = [
   { label: 'Inactive', value: 'inactive' },
   { label: 'Expired', value: 'expired' },
 ];
-
-function CouponRow({ coupon, index, selected, onToggle }: { coupon: Coupon; index: number; selected: boolean; onToggle: () => void }) {
-  const usagePct = (coupon.usageCount / coupon.maximumUsage) * 100;
-  return (
-    <motion.tr
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: index * 0.04 }}
-      className={`border-b hover:bg-indigo-50/20 transition-colors group cursor-pointer ${selected ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
-      onClick={onToggle}
-    >
-      <td className="py-3.5 px-4 text-center align-middle">
-        <div className="flex items-center justify-center">
-          <Checkbox
-            checked={selected}
-            onCheckedChange={onToggle}
-            onClick={(e) => e.stopPropagation()}
-          />
-        </div>
-      </td>
-      <td className="py-3.5 px-4">
-        <div className="flex items-center gap-2.5">
-          <span className="px-2.5 py-1 bg-slate-900 text-white font-mono text-[11px] font-bold rounded-lg tracking-widest">{coupon.code}</span>
-        </div>
-      </td>
-      <td className="py-3.5 px-4">
-        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${coupon.discountType === 'percentage' ? 'bg-indigo-50 text-indigo-700' : 'bg-purple-50 text-purple-700'}`}>
-          {coupon.discountType === 'percentage' ? `${coupon.discountValue}%` : `₹${coupon.discountValue}`}
-          <span className="opacity-60">{coupon.discountType === 'percentage' ? 'OFF' : 'flat'}</span>
-        </span>
-      </td>
-      <td className="py-3.5 px-4">
-        <div className="flex items-center gap-2">
-          <div className="flex-1 bg-slate-100 rounded-full h-1.5 w-20">
-            <div className="h-full rounded-full bg-indigo-500" style={{ width: `${Math.min(100, usagePct)}%` }} />
-          </div>
-          <span className="text-xs text-slate-500 whitespace-nowrap">{coupon.usageCount}/{coupon.maximumUsage}</span>
-        </div>
-      </td>
-      <td className="py-3.5 px-4 text-xs text-slate-500">{coupon.startDate}</td>
-      <td className="py-3.5 px-4 text-xs text-slate-500">{coupon.endDate}</td>
-      <td className="py-3.5 px-4 text-xs font-semibold text-emerald-600">₹{coupon.revenueGenerated.toLocaleString('en-IN')}</td>
-      <td className="py-3.5 px-4"><StatusBadge status={coupon.status as 'active' | 'inactive' | 'expired'} /></td>
-      <td className="py-3.5 px-4" onClick={(e) => e.stopPropagation()}>
-        <div className="flex items-center gap-1.5">
-          <ActionTooltip icon={Edit2} tooltip="Edit Coupon" />
-          <ActionTooltip icon={Copy} tooltip="Duplicate" />
-          <ActionTooltip icon={Trash2} tooltip="Delete Coupon" variant="danger" />
-        </div>
-      </td>
-    </motion.tr>
-  );
-}
 
 const createCouponSchema = z.object({
   code: z.string().min(3, "Code must be at least 3 characters").toUpperCase(),
@@ -295,6 +247,89 @@ export function CouponManagement() {
   const activeCoupons = mockCoupons.filter(c => c.status === 'active').length;
   const expiredCoupons = mockCoupons.filter(c => c.status === 'expired').length;
 
+  const couponColumns: TableColumnDef<Coupon>[] = useMemo(() => [
+    {
+      id: 'code',
+      label: 'Coupon Code',
+      icon: Tag,
+      defaultVisible: true,
+      renderCell: (coupon) => (
+        <span className="px-2 py-0.5 bg-slate-100 text-slate-800 border border-slate-200 font-mono text-xs font-semibold rounded-md tracking-wide">{coupon.code}</span>
+      ),
+    },
+    {
+      id: 'discount',
+      label: 'Discount',
+      icon: Percent,
+      defaultVisible: true,
+      renderCell: (coupon) => (
+        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold ${coupon.discountType === 'percentage' ? 'bg-primary-light text-primary' : 'bg-sky-50 text-sky-700'}`}>
+          {coupon.discountType === 'percentage' ? `${coupon.discountValue}%` : `₹${coupon.discountValue}`}
+          <span className="opacity-70">{coupon.discountType === 'percentage' ? 'OFF' : 'flat'}</span>
+        </span>
+      ),
+    },
+    {
+      id: 'usage',
+      label: 'Usage',
+      icon: Users,
+      defaultVisible: true,
+      renderCell: (coupon) => {
+        const usagePct = (coupon.usageCount / coupon.maximumUsage) * 100;
+        return (
+          <div className="flex items-center gap-2">
+            <div className="bg-slate-100 rounded-full h-1.5 w-16 overflow-hidden">
+              <div className="h-full rounded-full bg-primary" style={{ width: `${Math.min(100, usagePct)}%` }} />
+            </div>
+            <span className="text-xs text-slate-500 whitespace-nowrap">{coupon.usageCount}/{coupon.maximumUsage}</span>
+          </div>
+        );
+      },
+    },
+    {
+      id: 'startDate',
+      label: 'Start Date',
+      icon: Calendar,
+      defaultVisible: true,
+      renderCell: (coupon) => <span className="text-xs text-slate-500">{coupon.startDate}</span>,
+    },
+    {
+      id: 'endDate',
+      label: 'End Date',
+      icon: Calendar,
+      defaultVisible: true,
+      renderCell: (coupon) => <span className="text-xs text-slate-500">{coupon.endDate}</span>,
+    },
+    {
+      id: 'revenue',
+      label: 'Revenue',
+      icon: IndianRupee,
+      defaultVisible: true,
+      renderCell: (coupon) => <span className="text-xs font-semibold text-emerald-600 tabular-nums">₹{coupon.revenueGenerated.toLocaleString('en-IN')}</span>,
+    },
+    {
+      id: 'status',
+      label: 'Status',
+      icon: Activity,
+      defaultVisible: true,
+      renderCell: (coupon) => <StatusBadge status={coupon.status as 'active' | 'inactive' | 'expired'} />,
+    },
+  ], []);
+
+  const {
+    orderedColumns,
+    visibleColumns,
+    hiddenSet,
+    toggleColumn,
+    hideAllOptional,
+    showAll,
+    resetColumns,
+    moveColumn,
+    isCustomized,
+  } = useTableColumns('subscriptions-coupons', couponColumns);
+
+  const totalCols = visibleColumns.length + 3;
+
   return (
     <div className="flex-1 w-full flex flex-col min-h-0">
       <PageHeader
@@ -302,27 +337,35 @@ export function CouponManagement() {
         description="Create and manage discount coupons, track usage and revenue impact."
         breadcrumbs={[{ label: 'Subscriptions' }, { label: 'Coupons' }]}
       >
-        <button onClick={() => setShowCreate(true)} className="flex items-center gap-2 px-4 py-2 text-sm bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-all active:scale-95 shadow-sm shadow-indigo-200">
-          <Plus className="w-4 h-4" /> Create Coupon
+        <button onClick={() => setShowCreate(true)} className="flex items-center gap-2 px-3.5 py-2 text-xs bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary-hover transition-all shadow-2xs cursor-pointer">
+          <Plus className="w-3.5 h-3.5" /> Create Coupon
         </button>
       </PageHeader>
 
       {/* Analytics Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <StatCard title="Revenue Generated" value={totalRevenue} prefix="₹" icon={<TrendingUp size={20} />} iconColor="text-emerald-600" iconBg="bg-emerald-50" trend={22.4} trendLabel="vs last month" />
-        <StatCard title="Total Usage" value={totalUsage} icon={<BarChart2 size={20} />} iconColor="text-indigo-600" iconBg="bg-indigo-50" trend={15.1} trendLabel="vs last month" />
-        <StatCard title="Active Coupons" value={activeCoupons} icon={<Tag size={20} />} iconColor="text-purple-600" iconBg="bg-purple-50" />
-        <StatCard title="Expired Coupons" value={expiredCoupons} icon={<DollarSign size={20} />} iconColor="text-slate-400" iconBg="bg-slate-100" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3.5 mb-4">
+        <StatCard title="Revenue Generated" value={totalRevenue} prefix="₹" icon={<TrendingUp size={18} />} tone="success" trend={22.4} trendLabel="vs last month" />
+        <StatCard title="Total Usage" value={totalUsage} icon={<BarChart2 size={18} />} tone="primary" trend={15.1} trendLabel="vs last month" />
+        <StatCard title="Active Coupons" value={activeCoupons} icon={<Tag size={18} />} tone="info" />
+        <StatCard title="Expired Coupons" value={expiredCoupons} icon={<DollarSign size={18} />} tone="neutral" />
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-slate-100 rounded-xl shadow-sm flex flex-col flex-1 overflow-hidden min-h-0">
+      <div className="bg-white border border-slate-200/80 rounded-2xl shadow-2xs flex flex-col flex-1 overflow-hidden min-h-0">
         <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shrink-0 bg-slate-50/50">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5 flex-wrap">
             <SearchInput value={search} onChange={setSearch} placeholder="Search coupon code..." className="w-full sm:w-72" />
-            <button className="p-2 border border-slate-200 rounded-xl bg-white text-slate-500 hover:bg-slate-50 transition-colors shadow-sm">
-              <Filter className="w-4 h-4" />
-            </button>
+            <TableFieldsButton
+              columns={orderedColumns}
+              hiddenSet={hiddenSet}
+              onToggle={toggleColumn}
+              onMove={moveColumn}
+              onHideAll={hideAllOptional}
+              onShowAll={showAll}
+              onReset={resetColumns}
+              isCustomized={isCustomized}
+              idFieldLabel="Coupon ID"
+            />
           </div>
           <FilterChips 
             options={[
@@ -334,11 +377,11 @@ export function CouponManagement() {
             onChange={setFilter} 
           />
         </div>
-        <div className="flex-1 overflow-auto bg-white">
-          <table className="w-full">
+        <div className="flex-1 overflow-x-auto bg-white thin-scrollbar">
+          <table className="w-full min-w-[920px] text-left border-collapse">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-100">
-                <th className="py-3 px-4 w-12 text-center align-middle">
+                <th className={cn("py-2.5 px-3 text-center align-middle", TABLE_STICKY.checkboxTh)}>
                   <div className="flex items-center justify-center">
                     <Checkbox
                       checked={selectedCoupons.size === paginatedData.length && paginatedData.length > 0}
@@ -346,19 +389,65 @@ export function CouponManagement() {
                     />
                   </div>
                 </th>
-                {['Coupon Code', 'Discount', 'Usage', 'Start Date', 'End Date', 'Revenue', 'Status', 'Actions'].map(h => (
-                  <th key={h} className="text-left py-3 px-4 text-[11px] font-bold text-slate-400 uppercase tracking-wide whitespace-nowrap">{h}</th>
+                <th className={cn("text-left py-2.5 px-3.5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide", TABLE_STICKY.idThWithCheckbox)}>ID</th>
+                {visibleColumns.map(col => (
+                  <th key={col.id} className="text-left py-2.5 px-3.5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">
+                    <ColumnHeaderLabel label={col.label} icon={col.icon} />
+                  </th>
                 ))}
+                <th className={cn("py-2.5 px-3 text-[11px] font-semibold text-slate-500 uppercase tracking-wide", TABLE_STICKY.actionTh)}>Actions</th>
               </tr>
             </thead>
             <tbody>
               {isTableLoading ? (
-                <TableSkeleton columns={9} rows={pageSize} />
+                <TableSkeleton columns={totalCols} rows={pageSize} />
               ) : filtered.length > 0 ? (
-                paginatedData.map((c, i) => <CouponRow key={c.id} coupon={c} index={i} selected={selectedCoupons.has(c.id)} onToggle={() => toggleSelect(c.id)} />)
+                paginatedData.map((coupon, i) => {
+                  const selected = selectedCoupons.has(coupon.id);
+                  return (
+                    <motion.tr
+                      key={coupon.id}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: i * 0.03 }}
+                      className={cn(
+                        "border-b transition-colors group cursor-pointer",
+                        selected ? "bg-primary-light border-primary-border" : "bg-white hover:bg-slate-50 border-slate-100"
+                      )}
+                      onClick={() => toggleSelect(coupon.id)}
+                    >
+                      <td className={cn("py-2.5 px-3 text-center align-middle", TABLE_STICKY.checkboxTd, selected && "bg-primary-light group-hover:bg-primary-light")}>
+                        <div className="flex items-center justify-center">
+                          <Checkbox
+                            checked={selected}
+                            onCheckedChange={() => toggleSelect(coupon.id)}
+                            onClick={(e) => e.stopPropagation()}
+                          />
+                        </div>
+                      </td>
+                      <td className={cn("py-2.5 px-3.5 text-[13px] font-medium text-slate-700 tabular-nums", TABLE_STICKY.idTdWithCheckbox, selected && "bg-primary-light group-hover:bg-primary-light")}>
+                        {coupon.id}
+                      </td>
+                      {visibleColumns.map(col => (
+                        <td key={col.id} className="py-2.5 px-3.5 whitespace-nowrap">
+                          {col.renderCell(coupon, i)}
+                        </td>
+                      ))}
+                      <td className={cn("py-2.5 px-3", TABLE_STICKY.actionTd, selected && "bg-primary-light group-hover:bg-primary-light")} onClick={(e) => e.stopPropagation()}>
+                        <RowActionMenu
+                          items={[
+                            { label: 'Edit Coupon', icon: Edit2, onClick: () => {} },
+                            { label: 'Duplicate', icon: Copy, onClick: () => {} },
+                            { label: 'Delete Coupon', icon: Trash2, variant: 'danger', onClick: () => {} },
+                          ]}
+                        />
+                      </td>
+                    </motion.tr>
+                  );
+                })
               ) : (
                 <tr>
-                  <td colSpan={10} className="p-8">
+                  <td colSpan={totalCols} className="p-8">
                     <EmptyState 
                       icon={Tag}
                       title="No coupons found"

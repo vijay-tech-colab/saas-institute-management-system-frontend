@@ -26,11 +26,11 @@ function AnalyticsCardsGrid() {
   const trialTenants = mockTenants.filter(t => t.status === 'trial').length;
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-      <StatCard title="Total Institutes" value={totalTenants} icon={<Store size={20} />} iconColor="text-indigo-600" iconBg="bg-indigo-50" trend={15.2} trendLabel="vs last month" />
-      <StatCard title="Active Institutes" value={activeTenants} icon={<Activity size={20} />} iconColor="text-emerald-600" iconBg="bg-emerald-50" trend={10.5} trendLabel="vs last month" />
-      <StatCard title="Suspended" value={suspendedTenants} icon={<Ban size={20} />} iconColor="text-rose-600" iconBg="bg-rose-50" />
-      <StatCard title="In Trial" value={trialTenants} icon={<AlertCircle size={20} />} iconColor="text-amber-600" iconBg="bg-amber-50" />
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3.5 mb-4">
+      <StatCard title="Total Institutes" value={totalTenants} icon={<Store size={18} />} tone="primary" trend={15.2} trendLabel="vs last month" />
+      <StatCard title="Active Institutes" value={activeTenants} icon={<Activity size={18} />} tone="success" trend={10.5} trendLabel="vs last month" />
+      <StatCard title="Suspended" value={suspendedTenants} icon={<Ban size={18} />} tone="danger" />
+      <StatCard title="In Trial" value={trialTenants} icon={<AlertCircle size={18} />} tone="warning" />
     </div>
   );
 }
@@ -39,14 +39,14 @@ function InstituteGrowthChart() {
   const max = Math.max(...growthData.map(d => d.institutes));
   
   return (
-    <div className="bg-white border border-slate-200/80 rounded-xl p-6 shadow-sm flex flex-col h-full">
-      <div className="flex items-center justify-between mb-8">
+    <div className="bg-white border border-slate-200/80 rounded-2xl p-4 sm:p-5 shadow-2xs flex flex-col h-full">
+      <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="text-base font-bold text-slate-900">Institute Growth</h3>
-          <p className="text-xs text-slate-500 mt-1">Total onboarded institutes over time</p>
+          <h3 className="text-sm sm:text-base font-semibold text-slate-900 tracking-tight">Institute Growth</h3>
+          <p className="text-xs text-slate-500 mt-0.5">Total onboarded institutes over time</p>
         </div>
-        <div className="p-2 bg-indigo-50 text-indigo-600 rounded-xl">
-          <TrendingUp className="w-5 h-5" />
+        <div className="p-2 bg-primary-light text-primary border border-primary-border rounded-xl">
+          <TrendingUp className="w-4 h-4" />
         </div>
       </div>
       
@@ -60,14 +60,14 @@ function InstituteGrowthChart() {
                   initial={{ height: 0 }}
                   animate={{ height: `${height}%` }}
                   transition={{ duration: 1, delay: i * 0.1, ease: 'easeOut' }}
-                  className="w-full max-w-[40px] bg-indigo-100 rounded-t-xl group-hover:bg-indigo-600 transition-colors relative"
+                  className="w-full max-w-[40px] bg-primary-light border border-primary-border rounded-t-xl group-hover:bg-primary transition-colors relative"
                 >
-                  <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-slate-0 opacity-0 group-hover:opacity-100 group-hover:text-slate-700 transition-all">
+                  <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-[11px] font-semibold text-slate-700 opacity-0 group-hover:opacity-100 transition-all">
                     {d.institutes}
                   </span>
                 </motion.div>
               </div>
-              <span className="text-[10px] font-semibold text-slate-400 group-hover:text-slate-900 transition-colors uppercase">{d.month}</span>
+              <span className="text-[11px] font-medium text-slate-500 group-hover:text-slate-900 transition-colors uppercase">{d.month}</span>
             </div>
           );
         })}
@@ -83,20 +83,20 @@ function UsageMetricsOverview() {
   const totalBranches = mockTenants.reduce((acc, curr) => acc + curr.usage.branches, 0);
 
   return (
-    <div className="bg-white border border-slate-200/80 rounded-xl p-6 shadow-sm h-full flex flex-col">
-      <h3 className="text-base font-bold text-slate-900 mb-6">Platform Usage</h3>
+    <div className="bg-white border border-slate-200/80 rounded-2xl p-4 sm:p-5 shadow-2xs h-full flex flex-col">
+      <h3 className="text-sm sm:text-base font-semibold text-slate-900 tracking-tight mb-5">Platform Usage</h3>
       
-      <div className="space-y-6 flex-1">
+      <div className="space-y-5 flex-1">
         <div>
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
               <Users className="w-4 h-4 text-slate-400" />
-              <p className="text-sm font-semibold text-slate-700">Total Students</p>
+              <p className="text-[13px] font-medium text-slate-700">Total Students</p>
             </div>
-            <p className="text-sm font-bold text-slate-900">{totalStudents.toLocaleString()}</p>
+            <p className="text-[13px] font-semibold text-slate-900 tabular-nums">{totalStudents.toLocaleString()}</p>
           </div>
           <div className="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden">
-             <div className="h-full bg-indigo-500 rounded-full w-[75%]"></div>
+             <div className="h-full bg-primary rounded-full w-[75%]"></div>
           </div>
         </div>
 
@@ -104,12 +104,12 @@ function UsageMetricsOverview() {
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
               <HardDrive className="w-4 h-4 text-slate-400" />
-              <p className="text-sm font-semibold text-slate-700">Storage Used</p>
+              <p className="text-[13px] font-medium text-slate-700">Storage Used</p>
             </div>
-            <p className="text-sm font-bold text-slate-900">{totalStorage.toLocaleString()} GB</p>
+            <p className="text-[13px] font-semibold text-slate-900 tabular-nums">{totalStorage.toLocaleString()} GB</p>
           </div>
           <div className="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden">
-             <div className="h-full bg-indigo-500 rounded-full w-[60%]"></div>
+             <div className="h-full bg-sky-500 rounded-full w-[60%]"></div>
           </div>
         </div>
         
@@ -117,9 +117,9 @@ function UsageMetricsOverview() {
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
               <Building2 className="w-4 h-4 text-slate-400" />
-              <p className="text-sm font-semibold text-slate-700">Total Branches</p>
+              <p className="text-[13px] font-medium text-slate-700">Total Branches</p>
             </div>
-            <p className="text-sm font-bold text-slate-900">{totalBranches.toLocaleString()}</p>
+            <p className="text-[13px] font-semibold text-slate-900 tabular-nums">{totalBranches.toLocaleString()}</p>
           </div>
           <div className="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden">
              <div className="h-full bg-emerald-500 rounded-full w-[45%]"></div>
@@ -134,18 +134,18 @@ function RecentTenantsList() {
   const recentTenants = [...mockTenants].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 5);
 
   return (
-    <div className="bg-white border border-slate-200/80 rounded-xl p-6 shadow-sm">
-      <div className="flex items-center justify-between mb-6">
+    <div className="bg-white border border-slate-200/80 rounded-2xl p-4 sm:p-5 shadow-2xs">
+      <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-base font-bold text-slate-900">Recent Tenants</h3>
-          <p className="text-xs text-slate-500 mt-1">Latest institutes to join</p>
+          <h3 className="text-sm sm:text-base font-semibold text-slate-900 tracking-tight">Recent Tenants</h3>
+          <p className="text-xs text-slate-500 mt-0.5">Latest institutes to join</p>
         </div>
-        <button className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 flex items-center gap-1">
+        <button className="text-xs font-semibold text-primary hover:text-primary-hover flex items-center gap-1 cursor-pointer">
           View All <ChevronRight className="w-3.5 h-3.5" />
         </button>
       </div>
 
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
         {recentTenants.map((tenant, i) => (
           <motion.div 
             key={tenant.id} 
@@ -155,11 +155,11 @@ function RecentTenantsList() {
             className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 transition-colors cursor-pointer border border-transparent hover:border-slate-200/80"
           >
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center shrink-0 text-indigo-600 font-bold text-sm">
+              <div className="w-9 h-9 rounded-lg bg-primary-light border border-primary-border flex items-center justify-center shrink-0 text-primary font-semibold text-xs">
                 {tenant.name.substring(0, 2).toUpperCase()}
               </div>
               <div>
-                <p className="font-semibold text-sm text-slate-900">{tenant.name}</p>
+                <p className="font-semibold text-[13px] text-slate-900">{tenant.name}</p>
                 <div className="flex items-center gap-2 mt-0.5">
                   <p className="text-[11px] text-slate-500">{tenant.plan} Plan</p>
                   <span className="w-1 h-1 rounded-full bg-slate-300"></span>
@@ -177,33 +177,29 @@ function RecentTenantsList() {
 
 export function TenantDashboard() {
   return (
-    <div className="flex-1 w-full flex flex-col min-h-0 space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Tenant Management</h1>
-          <p className="text-sm text-slate-500 mt-1">
-            Overview of all institutes, usage metrics, and growth.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-3">
-          <button className="flex items-center gap-2 px-3 py-2 text-sm bg-white border border-slate-200 text-slate-700 font-medium rounded-xl hover:bg-slate-50 transition-all shadow-sm">
-            <Filter className="w-4 h-4 text-slate-400" /> Filter
+    <div className="flex-1 w-full flex flex-col min-h-0 space-y-5">
+      <PageHeader
+        title="Tenant Management"
+        description="Overview of all institutes, usage metrics, and growth."
+      >
+        <div className="flex flex-wrap items-center gap-2">
+          <button className="inline-flex items-center gap-1.5 h-9 px-3 text-xs bg-white border border-slate-200 text-slate-700 font-medium rounded-lg hover:bg-slate-50 transition-colors shadow-2xs cursor-pointer">
+            <Filter className="w-3.5 h-3.5 text-slate-400" /> Filter
           </button>
           
-          <button className="flex items-center gap-2 px-3 py-2 text-sm bg-white border border-slate-200 text-slate-700 font-medium rounded-xl hover:bg-slate-50 transition-all shadow-sm">
-            <Calendar className="w-4 h-4 text-slate-400" /> Date Range
+          <button className="inline-flex items-center gap-1.5 h-9 px-3 text-xs bg-white border border-slate-200 text-slate-700 font-medium rounded-lg hover:bg-slate-50 transition-colors shadow-2xs cursor-pointer">
+            <Calendar className="w-3.5 h-3.5 text-slate-400" /> Date Range
           </button>
 
-          <button className="flex items-center gap-2 px-3 py-2 text-sm bg-white border border-slate-200 text-slate-700 font-medium rounded-xl hover:bg-slate-50 transition-all shadow-sm">
-            <Download className="w-4 h-4 text-slate-400" /> Export
+          <button className="inline-flex items-center gap-1.5 h-9 px-3 text-xs bg-white border border-slate-200 text-slate-700 font-medium rounded-lg hover:bg-slate-50 transition-colors shadow-2xs cursor-pointer">
+            <Download className="w-3.5 h-3.5 text-slate-400" /> Export
           </button>
           
-          <button className="p-2.5 bg-indigo-50 text-indigo-600 rounded-xl hover:bg-indigo-100 transition-colors group shadow-sm shadow-indigo-100">
-            <RefreshCcw className="w-4 h-4 group-hover:rotate-180 transition-transform duration-500" />
+          <button className="h-9 w-9 inline-flex items-center justify-center bg-primary-light text-primary border border-primary-border rounded-lg hover:bg-primary/15 transition-colors group cursor-pointer">
+            <RefreshCcw className="w-3.5 h-3.5 group-hover:rotate-180 transition-transform duration-500" />
           </button>
         </div>
-      </div>
+      </PageHeader>
 
       <AnalyticsCardsGrid />
 

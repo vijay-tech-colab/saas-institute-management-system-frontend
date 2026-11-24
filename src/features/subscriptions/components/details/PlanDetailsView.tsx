@@ -14,6 +14,8 @@ import {
   MessageSquare, Eye
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { RowActionMenu, TABLE_STICKY } from '@/components/ui/row-action-menu';
+import { cn } from '@/lib/utils';
 
 const TABS = [
   { id: 'overview', label: 'Overview', icon: <Package className="w-4 h-4" /> },
@@ -85,7 +87,7 @@ function Tab_Overview({ plan }: { plan: Plan }) {
       </div>
       
       {/* Key Features Highlights */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3.5">
         <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm hover:border-indigo-200 transition-colors group">
           <div className="flex items-center justify-between mb-4">
             <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-colors">
@@ -234,34 +236,50 @@ function Tab_Subscribers({ plan }: { plan: Plan }) {
           <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
             <Users className="w-4 h-4 text-slate-400" /> Recent Subscribers
           </h3>
-          <button className="text-sm font-semibold text-indigo-600 hover:text-indigo-700">View All {plan.subscribersCount}</button>
+          <button className="text-sm font-semibold text-primary hover:text-primary-dark">View All {plan.subscribersCount}</button>
         </div>
-        <table className="w-full text-left">
-          <thead className="bg-slate-50">
-            <tr>
-              <th className="py-3 px-6 text-xs font-bold text-slate-500 uppercase">Institute Name</th>
-              <th className="py-3 px-6 text-xs font-bold text-slate-500 uppercase">Joined Date</th>
-              <th className="py-3 px-6 text-xs font-bold text-slate-500 uppercase">Billing Cycle</th>
-              <th className="py-3 px-6 text-xs font-bold text-slate-500 uppercase">Status</th>
-              <th className="py-3 px-6 text-right text-xs font-bold text-slate-500 uppercase">Action</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
-            {[1, 2, 3, 4, 5].map(i => (
-              <tr key={i} className="hover:bg-slate-50/50 transition-colors">
-                <td className="py-4 px-6 text-sm font-medium text-slate-900">Institute Name {i}</td>
-                <td className="py-4 px-6 text-sm text-slate-600">{format(new Date(), 'MMM d, yyyy')}</td>
-                <td className="py-4 px-6 text-sm text-slate-600">{i % 2 === 0 ? 'Monthly' : 'Annual'}</td>
-                <td className="py-4 px-6">
-                  <StatusBadge status="active" />
-                </td>
-                <td className="py-4 px-6 text-right">
-                  <button className="text-slate-400 hover:text-indigo-600"><Eye className="w-4 h-4" /></button>
-                </td>
+        <div className="overflow-x-auto thin-scrollbar">
+          <table className="w-full min-w-[680px] text-left">
+            <thead className="bg-slate-50 border-b border-slate-100">
+              <tr>
+                <th className={cn("py-3 px-4 text-xs font-bold text-slate-500 uppercase", TABLE_STICKY.idTh)}>ID</th>
+                <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase">Institute Name</th>
+                <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase">Joined Date</th>
+                <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase">Billing Cycle</th>
+                <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase">Status</th>
+                <th className={cn("py-3 px-4 text-right text-xs font-bold text-slate-500 uppercase", TABLE_STICKY.actionTh)}>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {[1, 2, 3, 4, 5].map(i => (
+                <tr key={i} className="group hover:bg-slate-50 transition-colors">
+                  <td className={cn("py-3.5 px-4 text-sm font-medium text-slate-700 tabular-nums", TABLE_STICKY.idTd)}>
+                    SUB-00{i}
+                  </td>
+                  <td className="py-3.5 px-4 text-sm font-medium text-slate-900">Institute Name {i}</td>
+                  <td className="py-3.5 px-4 text-sm text-slate-600">{format(new Date(), 'MMM d, yyyy')}</td>
+                  <td className="py-3.5 px-4 text-sm text-slate-600">{i % 2 === 0 ? 'Monthly' : 'Annual'}</td>
+                  <td className="py-3.5 px-4">
+                    <StatusBadge status="active" />
+                  </td>
+                  <td className={cn("py-3.5 px-4 text-right", TABLE_STICKY.actionTd)}>
+                    <RowActionMenu
+                      ariaLabel={`Actions for Institute Name ${i}`}
+                      items={[
+                        {
+                          label: 'View Subscriber',
+                          icon: Eye,
+                          variant: 'primary',
+                          onClick: () => {},
+                        },
+                      ]}
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

@@ -12,7 +12,7 @@ import { RightSidebar } from './dashboard/RightSidebar';
 
 export function SubscriptionDashboard() {
   return (
-    <div className="space-y-8 animate-in fade-in duration-500 pb-10">
+    <div className="space-y-4 sm:space-y-5 animate-in fade-in duration-500 pb-6">
       <DashboardHeader />
       <AnalyticsCardsGrid />
       <RevenueAnalyticsSection />

@@ -1,18 +1,23 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Users, TrendingUp, ArrowUpCircle, ArrowDownCircle, PauseCircle, PlayCircle, Eye, Filter, DownloadCloud, FileText, Loader2 } from 'lucide-react';
+import React, { useEffect, useMemo, useState } from 'react';
+import {
+  Users, TrendingUp, ArrowUpCircle, ArrowDownCircle, PauseCircle, PlayCircle, Eye,
+  DownloadCloud, FileText, Building2, CreditCard, HardDrive, GitBranch, IndianRupee, Calendar, Activity, MapPin, AtSign
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExportProgressModal } from '@/components/ui/export-progress';
-import { PageHeader, SearchInput, FilterChips, ProgressBar } from './shared/UIComponents';
+import { PageHeader, SearchInput, FilterChips } from './shared/UIComponents';
 import { StatusBadge } from './shared/StatusBadge';
 import { StatCard } from './shared/StatCard';
 import { mockCustomers } from '../data/mock-data';
 import type { SubscriptionStatus } from '../types';
 import { DataTablePagination } from "@/components/ui/pagination";
 import { TableSkeleton } from "@/components/ui/skeleton";
-import { ActionTooltip } from "@/components/ui/tooltip";
+import { RowActionMenu, TABLE_STICKY } from "@/components/ui/row-action-menu";
+import { ColumnHeaderLabel, TableColumnDef, TableFieldsButton, useTableColumns } from "@/components/ui/table-configurator";
+import { cn } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
 import { EmptyState } from '@/components/ui/empty-state';
 
@@ -71,6 +76,129 @@ export function CustomerSubscriptions() {
     setExportModalType('report');
   };
 
+  type CustomerRow = (typeof mockCustomers)[number];
+
+  const columns: TableColumnDef<CustomerRow>[] = useMemo(() => [
+    {
+      id: 'institute',
+      label: 'Institute',
+      icon: Building2,
+      defaultVisible: true,
+      renderCell: (customer) => (
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-primary-light text-primary border border-primary-border flex items-center justify-center font-bold text-xs flex-shrink-0">
+            {customer.instituteName.charAt(0)}
+          </div>
+          <div>
+            <p className="font-semibold text-[13px] text-slate-900 line-clamp-1">{customer.instituteName}</p>
+            <p className="text-[11px] text-slate-400 line-clamp-1">{customer.ownerName} · {customer.city}</p>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: 'email',
+      label: 'Email',
+      icon: AtSign,
+      defaultVisible: false,
+      renderCell: (customer) => <span className="text-[13px] text-slate-600">{customer.email}</span>,
+    },
+    {
+      id: 'plan',
+      label: 'Plan',
+      icon: CreditCard,
+      defaultVisible: true,
+      renderCell: (customer) => <span className="text-[11px] font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full">{customer.currentPlan}</span>,
+    },
+    {
+      id: 'storage',
+      label: 'Storage',
+      icon: HardDrive,
+      defaultVisible: true,
+      tdClassName: 'min-w-[110px]',
+      renderCell: (customer) => (
+        <div className="flex items-center gap-2">
+          <div className="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+            <div className="h-full bg-primary rounded-full" style={{ width: `${Math.min(100, (customer.storageUsed / customer.storageLimit) * 100)}%` }} />
+          </div>
+          <span className="text-[11px] font-semibold text-slate-500">{customer.storageUsed}/{customer.storageLimit}</span>
+        </div>
+      ),
+    },
+    {
+      id: 'students',
+      label: 'Students',
+      icon: Users,
+      defaultVisible: true,
+      tdClassName: 'min-w-[110px]',
+      renderCell: (customer) => (
+        <div className="flex items-center gap-2">
+          <div className="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+            <div className="h-full bg-primary rounded-full" style={{ width: `${Math.min(100, (customer.studentsUsed / customer.studentsLimit) * 100)}%` }} />
+          </div>
+          <span className="text-[11px] font-semibold text-slate-500">{customer.studentsUsed}</span>
+        </div>
+      ),
+    },
+    {
+      id: 'branches',
+      label: 'Branches',
+      icon: GitBranch,
+      defaultVisible: true,
+      renderCell: (customer) => <span className="text-xs font-semibold text-slate-600">{customer.branchesUsed}/{customer.branchesLimit}</span>,
+    },
+    {
+      id: 'mrr',
+      label: 'MRR',
+      icon: IndianRupee,
+      defaultVisible: true,
+      renderCell: (customer) => (
+        <span className="text-xs font-semibold text-emerald-600 tabular-nums">
+          ₹{customer.monthlyRevenue > 0 ? customer.monthlyRevenue.toLocaleString('en-IN') : '—'}
+        </span>
+      ),
+    },
+    {
+      id: 'renewal',
+      label: 'Renewal',
+      icon: Calendar,
+      defaultVisible: true,
+      renderCell: (customer) => (
+        <span className="text-xs font-medium text-slate-500">
+          {new Date(customer.renewalDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+        </span>
+      ),
+    },
+    {
+      id: 'city',
+      label: 'City',
+      icon: MapPin,
+      defaultVisible: false,
+      renderCell: (customer) => <span className="text-[13px] text-slate-600">{customer.city}</span>,
+    },
+    {
+      id: 'status',
+      label: 'Status',
+      icon: Activity,
+      defaultVisible: true,
+      renderCell: (customer) => <StatusBadge status={customer.status as SubscriptionStatus} />,
+    },
+  ], []);
+
+  const {
+    orderedColumns,
+    visibleColumns,
+    hiddenSet,
+    toggleColumn,
+    hideAllOptional,
+    showAll,
+    resetColumns,
+    moveColumn,
+    isCustomized,
+  } = useTableColumns('subscriptions-customers', columns);
+
+  const totalCols = visibleColumns.length + 3;
+
   return (
     <div className="flex-1 w-full flex flex-col min-h-0">
       <PageHeader
@@ -80,21 +208,29 @@ export function CustomerSubscriptions() {
       />
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 shrink-0">
-        <StatCard title="Active Customers" value={active} icon={<Users size={20} />} iconColor="text-indigo-600" iconBg="bg-indigo-50" trend={5.4} trendLabel="vs last month" />
-        <StatCard title="Trial Accounts" value={trial} icon={<TrendingUp size={20} />} iconColor="text-purple-600" iconBg="bg-purple-50" />
-        <StatCard title="Expired/Suspended" value={expired + mockCustomers.filter(c => c.status === 'suspended').length} icon={<PauseCircle size={20} />} iconColor="text-red-500" iconBg="bg-red-50" />
-        <StatCard title="Total MRR" value={totalMRR} prefix="₹" icon={<TrendingUp size={20} />} iconColor="text-emerald-600" iconBg="bg-emerald-50" trend={8.2} trendLabel="vs last month" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3.5 mb-4 shrink-0">
+        <StatCard title="Active Customers" value={active} icon={<Users size={18} />} tone="primary" trend={5.4} trendLabel="vs last month" />
+        <StatCard title="Trial Accounts" value={trial} icon={<TrendingUp size={18} />} tone="warning" />
+        <StatCard title="Expired/Suspended" value={expired + mockCustomers.filter(c => c.status === 'suspended').length} icon={<PauseCircle size={18} />} tone="danger" />
+        <StatCard title="Total MRR" value={totalMRR} prefix="₹" icon={<TrendingUp size={18} />} tone="success" trend={8.2} trendLabel="vs last month" />
       </div>
 
-      <div className="bg-white border border-slate-100 rounded-xl shadow-sm flex flex-col flex-1 overflow-hidden min-h-0">
+      <div className="bg-white border border-slate-200/80 rounded-2xl shadow-2xs flex flex-col flex-1 overflow-hidden min-h-0">
         {/* Toolbar */}
         <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shrink-0 bg-slate-50/50">
-          <div className="flex items-center gap-3">
-            <SearchInput value={search} onChange={setSearch} placeholder="Search institute or owner..." className="w-full sm:w-80" />
-            <button className="p-2 border border-slate-200 rounded-xl bg-white text-slate-500 hover:bg-slate-50 transition-colors shadow-sm">
-              <Filter className="w-4 h-4" />
-            </button>
+          <div className="flex items-center gap-2.5 flex-wrap">
+            <SearchInput value={search} onChange={setSearch} placeholder="Search institute or owner..." className="w-full sm:w-72" />
+            <TableFieldsButton
+              columns={orderedColumns}
+              hiddenSet={hiddenSet}
+              onToggle={toggleColumn}
+              onMove={moveColumn}
+              onHideAll={hideAllOptional}
+              onShowAll={showAll}
+              onReset={resetColumns}
+              isCustomized={isCustomized}
+              idFieldLabel="Customer ID"
+            />
           </div>
           <FilterChips 
             options={[
@@ -116,29 +252,29 @@ export function CustomerSubscriptions() {
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="bg-indigo-50 border-b border-indigo-100 px-4 py-3 flex items-center justify-between overflow-hidden"
+              className="bg-primary-light border-b border-primary-border px-4 py-3 flex items-center justify-between overflow-hidden"
             >
-              <span className="text-sm font-bold text-indigo-900">{selectedCustomers.size} subscriptions selected</span>
+              <span className="text-xs sm:text-sm font-semibold text-slate-900">{selectedCustomers.size} subscriptions selected</span>
               <div className="flex items-center gap-2">
                 <button 
                   onClick={handleExport}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 text-slate-700 text-xs font-bold rounded-lg hover:bg-slate-50 transition-colors shadow-sm"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg hover:bg-slate-50 transition-colors shadow-2xs cursor-pointer"
                 >
                   <DownloadCloud className="w-3.5 h-3.5 text-slate-500" />
                   Export (CSV)
                 </button>
                 <button 
                   onClick={handleReport}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-indigo-200 text-indigo-700 text-xs font-bold rounded-lg hover:bg-indigo-50 transition-colors shadow-sm"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-primary-border text-primary text-xs font-semibold rounded-lg hover:bg-primary-light transition-colors shadow-2xs cursor-pointer"
                 >
-                  <FileText className="w-3.5 h-3.5 text-indigo-500" />
+                  <FileText className="w-3.5 h-3.5 text-primary" />
                   Report (PDF)
                 </button>
-                <div className="w-px h-4 bg-indigo-200 mx-1"></div>
-                <button className="px-3 py-1.5 bg-white border border-indigo-200 text-indigo-700 text-xs font-bold rounded-lg hover:bg-indigo-50 transition-colors shadow-sm">
+                <div className="w-px h-4 bg-slate-200 mx-1"></div>
+                <button className="px-3 py-1.5 bg-white border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg hover:bg-slate-50 transition-colors shadow-2xs cursor-pointer">
                   Send Notice
                 </button>
-                <button className="px-3 py-1.5 bg-white border border-rose-200 text-rose-700 text-xs font-bold rounded-lg hover:bg-rose-50 transition-colors shadow-sm">
+                <button className="px-3 py-1.5 bg-white border border-rose-200 text-rose-700 text-xs font-semibold rounded-lg hover:bg-rose-50 transition-colors shadow-2xs cursor-pointer">
                   Suspend Subscriptions
                 </button>
               </div>
@@ -147,11 +283,11 @@ export function CustomerSubscriptions() {
         </AnimatePresence>
 
         {/* Table */}
-        <div className="flex-1 overflow-auto bg-white">
-          <table className="w-full">
-            <thead className="sticky top-0 bg-slate-50/90 backdrop-blur-sm border-b border-slate-100 z-10">
+        <div className="flex-1 overflow-x-auto bg-white thin-scrollbar">
+          <table className="w-full min-w-[1040px] text-left border-collapse">
+            <thead className="sticky top-0 bg-slate-50 border-b border-slate-100 z-20">
               <tr>
-                <th className="py-3 px-4 w-12 text-center align-middle">
+                <th className={cn("py-2.5 px-3 text-center align-middle", TABLE_STICKY.checkboxTh)}>
                   <div className="flex items-center justify-center">
                     <Checkbox
                       checked={selectedCustomers.size === paginatedData.length && paginatedData.length > 0}
@@ -159,104 +295,77 @@ export function CustomerSubscriptions() {
                     />
                   </div>
                 </th>
-                {['Institute', 'Plan', 'Storage', 'Students', 'Branches', 'MRR', 'Renewal', 'Status', 'Actions'].map(h => (
-                  <th key={h} className="text-left py-3 px-4 text-[11px] font-bold text-slate-400 uppercase tracking-wide whitespace-nowrap">{h}</th>
+                <th className={cn("text-left py-2.5 px-3.5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide", TABLE_STICKY.idThWithCheckbox)}>ID</th>
+                {visibleColumns.map(col => (
+                  <th key={col.id} className="text-left py-2.5 px-3.5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">
+                    <ColumnHeaderLabel label={col.label} icon={col.icon} />
+                  </th>
                 ))}
+                <th className={cn("py-2.5 px-3 text-[11px] font-semibold text-slate-500 uppercase tracking-wide", TABLE_STICKY.actionTh)}>Actions</th>
               </tr>
             </thead>
             <tbody>
               {isTableLoading ? (
-                <TableSkeleton columns={9} rows={pageSize} />
+                <TableSkeleton columns={totalCols} rows={pageSize} />
               ) : filtered.length > 0 ? (
-                paginatedData.map((customer, i) => (
+                paginatedData.map((customer, i) => {
+                  const isSelected = selectedCustomers.has(customer.id);
+                  return (
                   <motion.tr
                     key={customer.id}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: i * 0.04 }}
-                    className={`border-b hover:bg-indigo-50/30 transition-colors cursor-pointer ${selectedCustomers.has(customer.id) ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
+                    transition={{ delay: i * 0.03 }}
+                    className={cn(
+                      "border-b transition-colors group cursor-pointer",
+                      isSelected ? "bg-primary-light border-primary-border" : "bg-white hover:bg-slate-50 border-slate-100"
+                    )}
                     onClick={() => toggleSelect(customer.id)}
                   >
-                    <td className="py-3 px-4 text-center align-middle">
+                    <td className={cn("py-2.5 px-3 text-center align-middle", TABLE_STICKY.checkboxTd, isSelected && "bg-primary-light group-hover:bg-primary-light")}>
                       <div className="flex items-center justify-center">
                         <Checkbox
-                          checked={selectedCustomers.has(customer.id)}
+                          checked={isSelected}
                           onCheckedChange={() => toggleSelect(customer.id)}
                           onClick={(e) => e.stopPropagation()}
                         />
                       </div>
                     </td>
-                    <td className="py-3 px-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xs flex-shrink-0">
-                          {customer.instituteName.charAt(0)}
-                        </div>
-                        <div>
-                          <p className="font-semibold text-sm text-slate-900 line-clamp-1">{customer.instituteName}</p>
-                          <p className="text-[10px] text-slate-400 line-clamp-1">{customer.ownerName} · {customer.city}</p>
-                        </div>
-                      </div>
+                    <td className={cn("py-2.5 px-3.5 text-[13px] font-medium text-slate-700 tabular-nums", TABLE_STICKY.idTdWithCheckbox, isSelected && "bg-primary-light group-hover:bg-primary-light")}>
+                      {customer.id}
                     </td>
-                    <td className="py-3 px-4">
-                      <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">{customer.currentPlan}</span>
-                    </td>
-                    <td className="py-3 px-4 min-w-[100px]">
-                      <div className="flex items-center gap-2">
-                        <div className="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                          <div className="h-full bg-indigo-500 rounded-full" style={{ width: `${Math.min(100, (customer.storageUsed / customer.storageLimit) * 100)}%` }} />
-                        </div>
-                        <span className="text-[10px] font-semibold text-slate-500">{customer.storageUsed}/{customer.storageLimit}</span>
-                      </div>
-                    </td>
-                    <td className="py-3 px-4 min-w-[100px]">
-                      <div className="flex items-center gap-2">
-                        <div className="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                          <div className="h-full bg-indigo-500 rounded-full" style={{ width: `${Math.min(100, (customer.studentsUsed / customer.studentsLimit) * 100)}%` }} />
-                        </div>
-                        <span className="text-[10px] font-semibold text-slate-500">{customer.studentsUsed}</span>
-                      </div>
-                    </td>
-                    <td className="py-3 px-4 text-xs font-semibold text-slate-600">
-                      {customer.branchesUsed}/{customer.branchesLimit}
-                    </td>
-                    <td className="py-3 px-4 text-xs font-bold text-emerald-600">
-                      ₹{customer.monthlyRevenue > 0 ? customer.monthlyRevenue.toLocaleString('en-IN') : '—'}
-                    </td>
-                    <td className="py-3 px-4 text-xs font-medium text-slate-500">
-                      {new Date(customer.renewalDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
-                    </td>
-                    <td className="py-3 px-4">
-                      <StatusBadge status={customer.status as SubscriptionStatus} />
-                    </td>
-                    <td className="py-3 px-4" onClick={(e) => e.stopPropagation()}>
-                      <div className="flex items-center gap-1.5">
-                        <ActionTooltip icon={Eye} tooltip="View Details" onClick={() => router.push(`/dashboard/subscriptions/customers/${customer.id}`)} />
-                        <ActionTooltip icon={ArrowUpCircle} tooltip="Upgrade Plan" onClick={() => alert(`Upgrade: ${customer.instituteName}`)} />
-                        <ActionTooltip icon={ArrowDownCircle} tooltip="Downgrade Plan" onClick={() => alert(`Downgrade: ${customer.instituteName}`)} />
-                        {customer.status === 'suspended' ? (
-                          <ActionTooltip icon={PlayCircle} tooltip="Resume Subscription" variant="success" onClick={() => alert(`Resume: ${customer.instituteName}`)} />
-                        ) : (
-                          <ActionTooltip icon={PauseCircle} tooltip="Suspend Subscription" variant="warning" onClick={() => alert(`Suspend: ${customer.instituteName}`)} />
-                        )}
-                      </div>
+                    {visibleColumns.map(col => (
+                      <td key={col.id} className={cn("py-2.5 px-3.5 whitespace-nowrap", col.tdClassName)}>
+                        {col.renderCell(customer, i)}
+                      </td>
+                    ))}
+                    <td className={cn("py-2.5 px-3", TABLE_STICKY.actionTd, isSelected && "bg-primary-light group-hover:bg-primary-light")} onClick={(e) => e.stopPropagation()}>
+                      <RowActionMenu
+                        items={[
+                          { label: 'View Details', icon: Eye, onClick: () => router.push(`/dashboard/subscriptions/customers/${customer.id}`) },
+                          { label: 'Upgrade Plan', icon: ArrowUpCircle, onClick: () => alert(`Upgrade: ${customer.instituteName}`) },
+                          { label: 'Downgrade Plan', icon: ArrowDownCircle, onClick: () => alert(`Downgrade: ${customer.instituteName}`) },
+                          { label: 'Resume Subscription', icon: PlayCircle, variant: 'success', hidden: customer.status !== 'suspended', onClick: () => alert(`Resume: ${customer.instituteName}`) },
+                          { label: 'Suspend Subscription', icon: PauseCircle, variant: 'warning', hidden: customer.status === 'suspended', onClick: () => alert(`Suspend: ${customer.instituteName}`) },
+                        ]}
+                      />
                     </td>
                   </motion.tr>
-                ))
+                  );
+                })
               ) : (
                 <tr>
-                  <td colSpan={10} className="p-8">
+                  <td colSpan={totalCols} className="p-8">
                     <EmptyState
                       icon={Users}
                       title="No customers found"
-                      description="No no customers found found."
+                      description="No customers match your current filters."
                     />
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
-
-          
         </div>
 
         {/* Pagination */}

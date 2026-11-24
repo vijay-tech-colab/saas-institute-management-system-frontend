@@ -1,7 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
-import { CheckCircle2, XCircle, RefreshCw, Bell, Clock, Filter } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import {
+  CheckCircle2, XCircle, RefreshCw, Bell, Clock, Eye, Building2, CreditCard, IndianRupee, Calendar as CalendarIcon, Activity
+} from 'lucide-react';
 import { motion } from 'framer-motion';
 import { format, isSameDay, parseISO } from 'date-fns';
 import { PageHeader, SearchInput, FilterChips, Toggle } from './shared/UIComponents';
@@ -9,6 +11,9 @@ import { StatusBadge } from './shared/StatusBadge';
 import { StatCard } from './shared/StatCard';
 import { Calendar } from '@/components/ui/calendar';
 import { Checkbox } from "@/components/ui/checkbox";
+import { RowActionMenu, TABLE_STICKY } from "@/components/ui/row-action-menu";
+import { ColumnHeaderLabel, TableColumnDef, TableFieldsButton, useTableColumns } from "@/components/ui/table-configurator";
+import { cn } from "@/lib/utils";
 import { mockRenewals } from '../data/mock-data';
 
 
@@ -62,6 +67,75 @@ export function RenewalManagement() {
     setSelectedRenewals(next);
   };
 
+  type RenewalRow = (typeof mockRenewals)[number];
+
+  const columns: TableColumnDef<RenewalRow>[] = useMemo(() => [
+    {
+      id: 'institute',
+      label: 'Institute',
+      icon: Building2,
+      renderCell: (r) => <p className="text-sm font-medium text-slate-900">{r.instituteName}</p>,
+    },
+    {
+      id: 'plan',
+      label: 'Plan',
+      icon: CreditCard,
+      renderCell: (r) => (
+        <span className="text-xs px-2 py-0.5 bg-slate-100 text-slate-600 rounded-md font-medium">{r.planName}</span>
+      ),
+    },
+    {
+      id: 'amount',
+      label: 'Amount',
+      icon: IndianRupee,
+      renderCell: (r) => <p className="text-sm font-semibold text-slate-900">₹{r.amount.toLocaleString('en-IN')}</p>,
+    },
+    {
+      id: 'renewalDate',
+      label: 'Renewal Date',
+      icon: CalendarIcon,
+      renderCell: (r) => <span className="text-xs text-slate-500">{r.renewalDate}</span>,
+    },
+    {
+      id: 'countdown',
+      label: 'Countdown',
+      icon: Clock,
+      renderCell: (r) => (
+        <span className={`text-xs font-semibold ${r.daysUntilRenewal < 0 ? 'text-rose-500' : r.daysUntilRenewal <= 7 ? 'text-amber-600' : 'text-slate-500'}`}>
+          {r.daysUntilRenewal < 0 ? `${Math.abs(r.daysUntilRenewal)}d overdue` : r.daysUntilRenewal === 0 ? 'Today' : `${r.daysUntilRenewal}d left`}
+        </span>
+      ),
+    },
+    {
+      id: 'autoRenewal',
+      label: 'Auto-Renew',
+      icon: RefreshCw,
+      renderCell: (r) => (
+        <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${r.autoRenewal ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-slate-50 text-slate-500 border-slate-200'}`}>
+          {r.autoRenewal ? 'ON' : 'OFF'}
+        </span>
+      ),
+    },
+    {
+      id: 'status',
+      label: 'Status',
+      icon: Activity,
+      renderCell: (r) => <StatusBadge status={r.status} />,
+    },
+  ], []);
+
+  const {
+    orderedColumns,
+    visibleColumns,
+    hiddenSet,
+    toggleColumn,
+    hideAllOptional,
+    showAll,
+    resetColumns,
+    moveColumn,
+    isCustomized,
+  } = useTableColumns('subscriptions-renewals', columns);
+
   return (
     <div className="flex-1 w-full flex flex-col min-h-0">
       <PageHeader
@@ -71,7 +145,7 @@ export function RenewalManagement() {
       />
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3.5 mb-4">
         <StatCard
           title="Upcoming Renewals" value={upcoming}
           icon={<RefreshCw size={16} />} iconColor="text-indigo-600" iconBg="bg-indigo-50"
@@ -95,13 +169,21 @@ export function RenewalManagement() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Renewal Table — 2 cols */}
-        <div className="lg:col-span-2 bg-white border border-slate-100 rounded-xl shadow-sm overflow-hidden">
+        <div className="lg:col-span-2 bg-white border border-slate-200/80 rounded-2xl shadow-2xs overflow-hidden">
           <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shrink-0 bg-slate-50/50">
-            <div className="flex items-center gap-3">
-              <SearchInput value={search} onChange={setSearch} placeholder="Search institute..." className="w-full sm:w-60" />
-              <button className="p-2 border border-slate-200 rounded-xl bg-white text-slate-500 hover:bg-slate-50 transition-colors shadow-sm">
-                <Filter className="w-4 h-4" />
-              </button>
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <SearchInput value={search} onChange={setSearch} placeholder="Search institute..." className="w-full sm:w-56" />
+              <TableFieldsButton
+                columns={orderedColumns}
+                hiddenSet={hiddenSet}
+                onToggle={toggleColumn}
+                onMove={moveColumn}
+                onHideAll={hideAllOptional}
+                onShowAll={showAll}
+                onReset={resetColumns}
+                isCustomized={isCustomized}
+                idFieldLabel="Renewal ID"
+              />
             </div>
             <FilterChips 
               options={[
@@ -115,11 +197,11 @@ export function RenewalManagement() {
               onChange={setFilter} 
             />
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full">
+          <div className="overflow-x-auto thin-scrollbar">
+            <table className="w-full min-w-[880px]">
               <thead>
-                <tr className="bg-slate-50/70 border-b border-slate-100">
-                  <th className="py-2.5 px-4 w-12 text-center align-middle">
+                <tr className="bg-slate-50 border-b border-slate-100">
+                  <th className={cn("py-2.5 px-4 text-center align-middle", TABLE_STICKY.checkboxTh)}>
                     <div className="flex items-center justify-center">
                       <Checkbox
                         checked={selectedRenewals.size === filtered.length && filtered.length > 0}
@@ -127,55 +209,92 @@ export function RenewalManagement() {
                       />
                     </div>
                   </th>
-                  {['Institute', 'Plan', 'Amount', 'Renewal Date', 'Days', 'Auto', 'Status'].map(h => (
-                    <th key={h} className="text-left py-2.5 px-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">{h}</th>
+                  <th className={cn("text-left py-2.5 px-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap", TABLE_STICKY.idThWithCheckbox)}>
+                    ID
+                  </th>
+                  {visibleColumns.map(col => (
+                    <th key={col.id} className="text-left py-2.5 px-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">
+                      <ColumnHeaderLabel label={col.label} icon={col.icon} />
+                    </th>
                   ))}
+                  <th className={cn("text-right py-2.5 px-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap", TABLE_STICKY.actionTh)}>
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-50">
-                {filtered.map((r, i) => (
+                {filtered.map((r, i) => {
+                  const isSelected = selectedRenewals.has(r.id);
+                  return (
                   <motion.tr
                     key={r.id}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: i * 0.04 }}
-                    className={`border-b hover:bg-slate-50/60 transition-colors cursor-pointer ${selectedRenewals.has(r.id) ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
+                    className={cn(
+                      "group border-b hover:bg-slate-50 transition-colors cursor-pointer",
+                      isSelected ? "bg-primary-light hover:bg-primary-light border-primary/20" : "border-slate-50"
+                    )}
                     onClick={() => toggleSelect(r.id)}
                   >
-                    <td className="py-3 px-4 text-center align-middle">
+                    <td className={cn(
+                      "py-3 px-4 text-center align-middle",
+                      TABLE_STICKY.checkboxTd,
+                      isSelected && "bg-primary-light group-hover:bg-primary-light"
+                    )}>
                       <div className="flex items-center justify-center">
                         <Checkbox
-                          checked={selectedRenewals.has(r.id)}
+                          checked={isSelected}
                           onCheckedChange={() => toggleSelect(r.id)}
                           onClick={(e) => e.stopPropagation()}
                         />
                       </div>
                     </td>
-                    <td className="py-3 px-4 text-sm font-medium text-slate-800">{r.instituteName}</td>
-                    <td className="py-3 px-4 text-xs text-slate-400 max-w-[120px] truncate">{r.planName}</td>
-                    <td className="py-3 px-4 text-sm font-semibold text-slate-900">₹{r.amount.toLocaleString('en-IN')}</td>
-                    <td className="py-3 px-4 text-xs text-slate-500 whitespace-nowrap">{r.renewalDate}</td>
-                    <td className="py-3 px-4">
-                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold ${
-                        r.daysUntilRenewal < 0
-                          ? 'bg-red-50 text-red-600'
-                          : r.daysUntilRenewal <= 7
-                            ? 'bg-orange-50 text-orange-600'
-                            : 'bg-slate-50 text-slate-500'
-                      }`}>
-                        {r.daysUntilRenewal < 0 ? `${Math.abs(r.daysUntilRenewal)}d ago` : `${r.daysUntilRenewal}d`}
-                      </span>
+                    <td className={cn(
+                      "py-3 px-4 text-sm font-medium text-slate-700 tabular-nums whitespace-nowrap",
+                      TABLE_STICKY.idTdWithCheckbox,
+                      isSelected && "bg-primary-light group-hover:bg-primary-light"
+                    )}>
+                      {r.id}
                     </td>
-                    <td className="py-3 px-4">
-                      <span className={`text-[11px] font-bold ${r.autoRenewal ? 'text-emerald-600' : 'text-slate-300'}`}>
-                        {r.autoRenewal ? 'ON' : 'OFF'}
-                      </span>
-                    </td>
-                    <td className="py-3 px-4">
-                      <StatusBadge status={r.status as 'upcoming' | 'expired' | 'cancelled' | 'successful'} />
+                    {visibleColumns.map(col => (
+                      <td key={col.id} className="py-3 px-4 whitespace-nowrap">
+                        {col.renderCell(r, i)}
+                      </td>
+                    ))}
+                    <td
+                      className={cn(
+                        "py-3 px-4 text-right whitespace-nowrap",
+                        TABLE_STICKY.actionTd,
+                        isSelected && "bg-primary-light group-hover:bg-primary-light"
+                      )}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <RowActionMenu
+                        ariaLabel={`Actions for ${r.instituteName}`}
+                        items={[
+                          {
+                            label: 'Renew Now',
+                            icon: RefreshCw,
+                            variant: 'primary',
+                            onClick: () => {},
+                          },
+                          {
+                            label: 'Send Reminder',
+                            icon: Bell,
+                            onClick: () => {},
+                          },
+                          {
+                            label: 'View Details',
+                            icon: Eye,
+                            onClick: () => {},
+                          },
+                        ]}
+                      />
                     </td>
                   </motion.tr>
-                ))}
+                  );
+                })}
               </tbody>
             </table>
             {filtered.length === 0 && (

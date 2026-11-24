@@ -12,6 +12,8 @@ import {
   Download, Mail, Printer, Calendar, IndianRupee, FileText
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { TABLE_STICKY } from '@/components/ui/row-action-menu';
+import { cn } from '@/lib/utils';
 
 const TABS = [
   { id: 'overview', label: 'Invoice Summary', icon: <Receipt className="w-4 h-4" /> },
@@ -35,25 +37,31 @@ function Tab_Overview({ invoice }: { invoice: Invoice }) {
           </div>
 
           <div className="border border-slate-100 rounded-xl overflow-hidden bg-slate-50/50">
-            <table className="w-full text-left">
-              <thead className="bg-slate-100/50 border-b border-slate-100">
-                <tr>
-                  <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase">Description</th>
-                  <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase text-right">Amount</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                <tr>
-                  <td className="py-4 px-4">
-                    <p className="font-semibold text-sm text-slate-900">Subscription: {invoice.planName}</p>
-                    <p className="text-xs text-slate-500 mt-0.5">Software subscription fees for the period</p>
-                  </td>
-                  <td className="py-4 px-4 text-right text-sm font-semibold text-slate-900">
-                    ₹{invoice.amount.toLocaleString('en-IN')}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <div className="overflow-x-auto thin-scrollbar">
+              <table className="w-full min-w-[480px] text-left">
+                <thead className="bg-slate-50 border-b border-slate-100">
+                  <tr>
+                    <th className={cn("py-3 px-4 text-xs font-bold text-slate-500 uppercase", TABLE_STICKY.idTh)}>ID</th>
+                    <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase">Description</th>
+                    <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase text-right">Amount</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 bg-white">
+                  <tr className="group hover:bg-slate-50 transition-colors">
+                    <td className={cn("py-4 px-4 text-sm font-medium text-slate-700 tabular-nums", TABLE_STICKY.idTd)}>
+                      ITEM-01
+                    </td>
+                    <td className="py-4 px-4">
+                      <p className="font-semibold text-sm text-slate-900">Subscription: {invoice.planName}</p>
+                      <p className="text-xs text-slate-500 mt-0.5">Software subscription fees for the period</p>
+                    </td>
+                    <td className="py-4 px-4 text-right text-sm font-semibold text-slate-900">
+                      ₹{invoice.amount.toLocaleString('en-IN')}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
             
             <div className="p-4 border-t border-slate-100 flex flex-col items-end gap-2 bg-white">
               <div className="flex justify-between w-64 text-sm">

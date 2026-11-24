@@ -1,10 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Check, Star } from 'lucide-react';
+import {
+  Check, Star, Edit2, RefreshCw, IndianRupee, Percent, Tag, Activity, Calendar
+} from 'lucide-react';
 import { PageHeader, Toggle } from './shared/UIComponents';
 import { Checkbox } from "@/components/ui/checkbox";
+import { RowActionMenu, TABLE_STICKY } from "@/components/ui/row-action-menu";
+import { ColumnHeaderLabel, TableColumnDef, TableFieldsButton, useTableColumns } from "@/components/ui/table-configurator";
+import { cn } from "@/lib/utils";
 import { mockPricingTiers, mockPlans } from '../data/mock-data';
 import type { BillingCycle } from '../types';
 
@@ -18,6 +23,11 @@ const CYCLE_LABELS: Record<BillingCycle, string> = {
 
 const CYCLE_ORDER: BillingCycle[] = ['monthly', 'quarterly', 'half-yearly', 'yearly', 'lifetime'];
 
+interface PricingTierRow {
+  cycle: BillingCycle;
+  tier: (typeof mockPricingTiers)[number] | undefined;
+}
+
 export function PricingManagement() {
   const [selectedCycle, setSelectedCycle] = useState<BillingCycle>('yearly');
   const [selectedPlan, setSelectedPlan] = useState('plan-growth');
@@ -27,7 +37,7 @@ export function PricingManagement() {
   const tier = mockPricingTiers.find(t => t.planId === selectedPlan && t.cycle === selectedCycle);
 
   const planFeatures = plan ? Object.entries(plan.features)
-    .filter(([k, v]) => typeof v === 'boolean')
+    .filter(([, v]) => typeof v === 'boolean')
     .map(([k, v]) => ({ label: k.replace(/([A-Z])/g, ' $1').trim(), enabled: Boolean(v) })) : [];
 
   const toggleSelectAll = () => {
@@ -43,6 +53,95 @@ export function PricingManagement() {
     if (next.has(cycle)) { next.delete(cycle); } else { next.add(cycle); }
     setSelectedRows(next);
   };
+
+  const pricingRows: PricingTierRow[] = useMemo(
+    () => CYCLE_ORDER.map((cycle) => ({
+      cycle,
+      tier: mockPricingTiers.find(t2 => t2.planId === selectedPlan && t2.cycle === cycle),
+    })),
+    [selectedPlan]
+  );
+
+  const columns: TableColumnDef<PricingTierRow>[] = useMemo(() => [
+    {
+      id: 'cycle',
+      label: 'Cycle',
+      icon: Calendar,
+      renderCell: ({ cycle }) => (
+        <span className="text-sm font-semibold text-slate-700">{CYCLE_LABELS[cycle]}</span>
+      ),
+    },
+    {
+      id: 'original',
+      label: 'Original',
+      icon: IndianRupee,
+      renderCell: ({ tier: t }) => (
+        <span className="text-sm text-slate-600 tabular-nums">
+          {t ? `₹${t.originalPrice.toLocaleString('en-IN')}` : '—'}
+        </span>
+      ),
+    },
+    {
+      id: 'discount',
+      label: 'Discount',
+      icon: Percent,
+      renderCell: ({ tier: t }) => (
+        <span className="text-sm text-emerald-600 font-semibold tabular-nums">
+          {t ? `${t.discount}%` : '—'}
+        </span>
+      ),
+    },
+    {
+      id: 'gst',
+      label: 'GST',
+      icon: Percent,
+      renderCell: ({ tier: t }) => (
+        <span className="text-sm text-slate-500 tabular-nums">{t ? `${t.gst}%` : '—'}</span>
+      ),
+    },
+    {
+      id: 'finalPrice',
+      label: 'Final Price',
+      icon: IndianRupee,
+      renderCell: ({ tier: t }) => (
+        <span className="text-sm font-bold text-slate-900 tabular-nums">
+          {t ? `₹${t.finalPrice.toLocaleString('en-IN')}` : '—'}
+        </span>
+      ),
+    },
+    {
+      id: 'offer',
+      label: 'Offer',
+      icon: Tag,
+      renderCell: ({ tier: t }) => (
+        t?.offerBadge
+          ? <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 text-[11px] font-bold rounded-full border border-emerald-200">{t.offerBadge}</span>
+          : <span className="text-slate-300 text-xs">—</span>
+      ),
+    },
+    {
+      id: 'autoRenew',
+      label: 'Auto-Renew',
+      icon: Activity,
+      renderCell: ({ tier: t }) => (
+        <span className="text-xs font-semibold text-slate-500">
+          {t ? (t.autoRenewal ? 'ON' : 'OFF') : '—'}
+        </span>
+      ),
+    },
+  ], []);
+
+  const {
+    orderedColumns,
+    visibleColumns,
+    hiddenSet,
+    toggleColumn,
+    hideAllOptional,
+    showAll,
+    resetColumns,
+    moveColumn,
+    isCustomized,
+  } = useTableColumns('subscriptions-pricing', columns);
 
   return (
     <div className="flex-1 w-full flex flex-col min-h-0">
@@ -167,15 +266,26 @@ export function PricingManagement() {
       </div>
 
       {/* All Cycles Summary */}
-      <div className="bg-white border border-slate-100 rounded-xl shadow-sm overflow-hidden">
-        <div className="px-5 py-4 border-b border-slate-100">
-          <h2 className="font-bold text-slate-900">All Pricing Tiers — {plan?.name}</h2>
+      <div className="bg-white border border-slate-200/80 rounded-2xl shadow-2xs overflow-hidden">
+        <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between gap-3 flex-wrap">
+          <h2 className="font-semibold text-slate-900">All Pricing Tiers — {plan?.name}</h2>
+          <TableFieldsButton
+            columns={orderedColumns}
+            hiddenSet={hiddenSet}
+            onToggle={toggleColumn}
+            onMove={moveColumn}
+            onHideAll={hideAllOptional}
+            onShowAll={showAll}
+            onReset={resetColumns}
+            isCustomized={isCustomized}
+            idFieldLabel="Tier ID"
+          />
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full">
+        <div className="overflow-x-auto thin-scrollbar">
+          <table className="w-full min-w-[820px]">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-100">
-                <th className="py-3 px-4 w-12 text-center align-middle">
+                <th className={cn("py-3 px-4 text-center align-middle", TABLE_STICKY.checkboxTh)}>
                   <div className="flex items-center justify-center">
                     <Checkbox
                       checked={selectedRows.size === CYCLE_ORDER.length && CYCLE_ORDER.length > 0}
@@ -183,38 +293,84 @@ export function PricingManagement() {
                     />
                   </div>
                 </th>
-                {['Cycle', 'Original', 'Discount', 'GST', 'Final Price', 'Offer', 'Auto-Renew'].map(h => (
-                  <th key={h} className="text-left py-3 px-4 text-[11px] font-bold text-slate-400 uppercase tracking-wide">{h}</th>
+                <th className={cn("text-left py-3 px-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap", TABLE_STICKY.idThWithCheckbox)}>
+                  ID
+                </th>
+                {visibleColumns.map(col => (
+                  <th key={col.id} className="text-left py-3 px-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">
+                    <ColumnHeaderLabel label={col.label} icon={col.icon} />
+                  </th>
                 ))}
+                <th className={cn("text-right py-3 px-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap", TABLE_STICKY.actionTh)}>
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
-              {CYCLE_ORDER.map((cycle, i) => {
-                const t = mockPricingTiers.find(t2 => t2.planId === selectedPlan && t2.cycle === cycle);
+              {pricingRows.map((row, idx) => {
+                const { cycle, tier: t } = row;
+                const isSelected = selectedRows.has(cycle);
+                const rowId = t?.id ?? `TIER-${cycle.toUpperCase()}`;
                 return (
-                  <tr 
-                    key={cycle} 
-                    className={`border-b hover:bg-indigo-50/20 transition-colors cursor-pointer ${selectedCycle === cycle ? 'bg-indigo-50/40 border-slate-100' : 'border-slate-50'} ${selectedRows.has(cycle) ? 'bg-indigo-50/50 border-indigo-100' : ''}`}
+                  <tr
+                    key={cycle}
+                    className={cn(
+                      "group border-b transition-colors cursor-pointer hover:bg-slate-50",
+                      selectedCycle === cycle ? "bg-slate-50/70 border-slate-100" : "border-slate-50",
+                      isSelected && "bg-primary-light hover:bg-primary-light border-primary/20"
+                    )}
                     onClick={() => toggleSelect(cycle)}
                   >
-                    <td className="py-3.5 px-4 text-center align-middle">
+                    <td className={cn(
+                      "py-3.5 px-4 text-center align-middle",
+                      TABLE_STICKY.checkboxTd,
+                      isSelected && "bg-primary-light group-hover:bg-primary-light"
+                    )}>
                       <div className="flex items-center justify-center">
                         <Checkbox
-                          checked={selectedRows.has(cycle)}
+                          checked={isSelected}
                           onCheckedChange={() => toggleSelect(cycle)}
                           onClick={(e) => e.stopPropagation()}
                         />
                       </div>
                     </td>
-                    <td className="py-3.5 px-4 text-sm font-semibold text-slate-700">{CYCLE_LABELS[cycle]}</td>
-                    <td className="py-3.5 px-4 text-sm text-slate-600">{t ? `₹${t.originalPrice.toLocaleString('en-IN')}` : '—'}</td>
-                    <td className="py-3.5 px-4 text-sm text-emerald-600 font-semibold">{t ? `${t.discount}%` : '—'}</td>
-                    <td className="py-3.5 px-4 text-sm text-slate-500">{t ? `${t.gst}%` : '—'}</td>
-                    <td className="py-3.5 px-4 text-sm font-bold text-slate-900">{t ? `₹${t.finalPrice.toLocaleString('en-IN')}` : '—'}</td>
-                    <td className="py-3.5 px-4">
-                      {t?.offerBadge ? <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 text-[11px] font-bold rounded-full">{t.offerBadge}</span> : <span className="text-slate-300 text-xs">—</span>}
+                    <td className={cn(
+                      "py-3.5 px-4 text-sm font-medium text-slate-700 tabular-nums whitespace-nowrap",
+                      TABLE_STICKY.idTdWithCheckbox,
+                      isSelected && "bg-primary-light group-hover:bg-primary-light"
+                    )}>
+                      {rowId}
                     </td>
-                    <td className="py-3.5 px-4 text-xs font-semibold text-slate-500">{t ? (t.autoRenewal ? 'ON' : 'OFF') : '—'}</td>
+                    {visibleColumns.map(col => (
+                      <td key={col.id} className="py-3.5 px-4 whitespace-nowrap">
+                        {col.renderCell(row, idx)}
+                      </td>
+                    ))}
+                    <td
+                      className={cn(
+                        "py-3.5 px-4 text-right whitespace-nowrap",
+                        TABLE_STICKY.actionTd,
+                        isSelected && "bg-primary-light group-hover:bg-primary-light"
+                      )}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <RowActionMenu
+                        ariaLabel={`Actions for ${CYCLE_LABELS[cycle]} tier`}
+                        items={[
+                          {
+                            label: 'Configure Tier',
+                            icon: Edit2,
+                            variant: 'primary',
+                            onClick: () => setSelectedCycle(cycle),
+                          },
+                          {
+                            label: 'Select for Comparison',
+                            icon: RefreshCw,
+                            onClick: () => toggleSelect(cycle),
+                          },
+                        ]}
+                      />
+                    </td>
                   </tr>
                 );
               })}

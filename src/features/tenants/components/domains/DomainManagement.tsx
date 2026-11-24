@@ -1,14 +1,16 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { PageHeader, SearchInput, FilterChips } from '@/features/subscriptions/components/shared/UIComponents';
 import { StatCard } from '@/features/subscriptions/components/shared/StatCard';
-import { Globe, CheckCircle2, AlertCircle, ExternalLink, RefreshCw, ShieldAlert, Filter, Plus } from 'lucide-react';
+import { Globe, CheckCircle2, AlertCircle, ExternalLink, RefreshCw, ShieldAlert, Plus, Building2, Link2, ShieldCheck, Server } from 'lucide-react';
 import { mockTenants } from '../../data/mock-data';
 import { motion } from 'framer-motion';
 import { DataTablePagination } from '@/components/ui/pagination';
 import { TableSkeleton } from '@/components/ui/skeleton';
-import { ActionTooltip } from '@/components/ui/tooltip';
+import { RowActionMenu, TABLE_STICKY } from '@/components/ui/row-action-menu';
+import { ColumnHeaderLabel, TableColumnDef, TableFieldsButton, useTableColumns } from '@/components/ui/table-configurator';
+import { cn } from '@/lib/utils';
 import { Checkbox } from "@/components/ui/checkbox";
 import { EmptyState } from '@/components/ui/empty-state';
 export function DomainManagement() {
@@ -25,15 +27,16 @@ export function DomainManagement() {
     return () => clearTimeout(timer);
   }, [pageIndex, pageSize, search, filter]);
 
-  const allDomains = mockTenants.map(t => ({
+  const allDomains = useMemo(() => mockTenants.map((t, i) => ({
     id: t.id,
     institute: t.name,
     code: t.code,
     subdomain: `${t.code.toLowerCase()}.instituteos.com`,
     customDomain: t.id === 'TEN-001' ? 'portal.globaltech.edu' : null,
     sslStatus: t.id === 'TEN-001' ? 'active' : 'pending',
+    dnsProvider: i % 2 === 0 ? 'Cloudflare DNS' : 'Route 53',
     status: t.status,
-  }));
+  })), []);
 
   const activeSubdomains = allDomains.length;
   const customDomains = allDomains.filter(d => d.customDomain).length;
@@ -68,6 +71,95 @@ export function DomainManagement() {
     setSelectedDomains(next);
   };
 
+  type DomainRow = (typeof allDomains)[number];
+
+  const columns: TableColumnDef<DomainRow>[] = useMemo(() => [
+    {
+      id: 'institute',
+      label: 'Institute',
+      icon: Building2,
+      defaultVisible: true,
+      renderCell: (domain) => (
+        <>
+          <p className="text-[13px] font-semibold text-slate-900">{domain.institute}</p>
+          <p className="text-[11px] text-slate-400">{domain.code}</p>
+        </>
+      ),
+    },
+    {
+      id: 'subdomain',
+      label: 'System Subdomain',
+      icon: Link2,
+      defaultVisible: true,
+      renderCell: (domain) => (
+        <a href={`https://${domain.subdomain}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-[13px] text-slate-600 hover:text-primary transition-colors">
+          {domain.subdomain} <ExternalLink className="w-3 h-3 opacity-60" />
+        </a>
+      ),
+    },
+    {
+      id: 'customDomain',
+      label: 'Custom Domain',
+      icon: Globe,
+      defaultVisible: true,
+      renderCell: (domain) => (
+        domain.customDomain ? (
+          <a href={`https://${domain.customDomain}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-slate-800 hover:text-primary transition-colors">
+            {domain.customDomain} <ExternalLink className="w-3 h-3 opacity-60" />
+          </a>
+        ) : (
+          <button className="inline-flex items-center gap-1 text-xs font-semibold text-primary bg-primary-light px-2.5 py-1 rounded-lg hover:bg-primary/15 transition-colors cursor-pointer">
+            <Plus className="w-3 h-3" /> Add Domain
+          </button>
+        )
+      ),
+    },
+    {
+      id: 'sslStatus',
+      label: 'SSL Status',
+      icon: ShieldCheck,
+      defaultVisible: true,
+      renderCell: (domain) => (
+        domain.customDomain ? (
+          domain.sslStatus === 'active' ? (
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/70">
+              <CheckCircle2 className="w-3.5 h-3.5" /> Active
+            </span>
+          ) : (
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200/70">
+              <RefreshCw className="w-3.5 h-3.5 animate-spin" /> Pending
+            </span>
+          )
+        ) : (
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+            <AlertCircle className="w-3.5 h-3.5" /> Managed SSL
+          </span>
+        )
+      ),
+    },
+    {
+      id: 'dnsProvider',
+      label: 'DNS Provider',
+      icon: Server,
+      defaultVisible: false,
+      renderCell: (domain) => <span className="text-[13px] text-slate-600">{domain.dnsProvider}</span>,
+    },
+  ], []);
+
+  const {
+    orderedColumns,
+    visibleColumns,
+    hiddenSet,
+    toggleColumn,
+    hideAllOptional,
+    showAll,
+    resetColumns,
+    moveColumn,
+    isCustomized,
+  } = useTableColumns('tenants-domains', columns);
+
+  const totalCols = visibleColumns.length + 3;
+
   return (
     <div className="flex-1 w-full flex flex-col min-h-0">
       <PageHeader
@@ -75,27 +167,35 @@ export function DomainManagement() {
         description="Manage subdomains, custom domains, and SSL certificates across all tenants."
         breadcrumbs={[{ label: 'Tenants' }, { label: 'Domains' }]}
       >
-        <button className="flex items-center gap-2 px-4 py-2 text-sm bg-white border border-slate-200 text-slate-700 font-semibold rounded-xl hover:bg-slate-50 transition-all active:scale-95 shadow-sm">
-          <RefreshCw className="w-4 h-4" /> Refresh DNS Records
+        <button className="flex items-center gap-2 px-4 py-2 text-xs bg-white border border-slate-200 text-slate-700 font-semibold rounded-lg hover:bg-slate-50 transition-all shadow-2xs cursor-pointer">
+          <RefreshCw className="w-3.5 h-3.5" /> Refresh DNS Records
         </button>
       </PageHeader>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-        <StatCard title="Active Subdomains" value={activeSubdomains} icon={<Globe size={20} />} iconColor="text-indigo-600" iconBg="bg-indigo-50" />
-        <StatCard title="Custom Domains" value={customDomains} icon={<CheckCircle2 size={20} />} iconColor="text-emerald-600" iconBg="bg-emerald-50" />
-        <StatCard title="SSL Pending" value={sslPending} icon={<ShieldAlert size={20} />} iconColor="text-amber-600" iconBg="bg-amber-50" />
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 mb-4">
+        <StatCard title="Active Subdomains" value={activeSubdomains} icon={<Globe size={18} />} tone="primary" />
+        <StatCard title="Custom Domains" value={customDomains} icon={<CheckCircle2 size={18} />} tone="success" />
+        <StatCard title="SSL Pending" value={sslPending} icon={<ShieldAlert size={18} />} tone="warning" />
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-slate-100 rounded-xl shadow-sm flex flex-col flex-1 overflow-hidden min-h-0">
+      <div className="bg-white border border-slate-200/80 rounded-2xl shadow-2xs flex flex-col flex-1 overflow-hidden min-h-0">
         {/* Toolbar */}
         <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shrink-0 bg-slate-50/50">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5 flex-wrap">
             <SearchInput value={search} onChange={setSearch} placeholder="Search domains..." className="w-full sm:w-72" />
-            <button className="p-2 border border-slate-200 rounded-xl bg-white text-slate-500 hover:bg-slate-50 transition-colors shadow-sm">
-              <Filter className="w-4 h-4" />
-            </button>
+            <TableFieldsButton
+              columns={orderedColumns}
+              hiddenSet={hiddenSet}
+              onToggle={toggleColumn}
+              onMove={moveColumn}
+              onHideAll={hideAllOptional}
+              onShowAll={showAll}
+              onReset={resetColumns}
+              isCustomized={isCustomized}
+              idFieldLabel="Domain ID"
+            />
           </div>
           <FilterChips
             options={[
@@ -110,11 +210,11 @@ export function DomainManagement() {
         </div>
 
         {/* Table Body */}
-        <div className="flex-1 overflow-auto bg-white">
-          <table className="w-full">
+        <div className="flex-1 overflow-x-auto bg-white thin-scrollbar">
+          <table className="w-full min-w-[880px] text-left border-collapse">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-100">
-                <th className="py-3 px-4 w-12 text-center align-middle">
+                <th className={cn("py-2.5 px-3 text-center align-middle", TABLE_STICKY.checkboxTh)}>
                   <div className="flex items-center justify-center">
                     <Checkbox
                       checked={selectedDomains.size === paginatedData.length && paginatedData.length > 0}
@@ -122,83 +222,64 @@ export function DomainManagement() {
                     />
                   </div>
                 </th>
-                {['Institute', 'System Subdomain', 'Custom Domain', 'SSL Status', 'Actions'].map(h => (
-                  <th key={h} className="text-left py-3 px-4 text-[11px] font-bold text-slate-400 uppercase tracking-wide whitespace-nowrap last:text-right">
-                    {h}
+                <th className={cn("text-left py-2.5 px-3.5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide", TABLE_STICKY.idThWithCheckbox)}>ID</th>
+                {visibleColumns.map(col => (
+                  <th key={col.id} className="text-left py-2.5 px-3.5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">
+                    <ColumnHeaderLabel label={col.label} icon={col.icon} />
                   </th>
                 ))}
+                <th className={cn("py-2.5 px-3 text-[11px] font-semibold text-slate-500 uppercase tracking-wide", TABLE_STICKY.actionTh)}>Actions</th>
               </tr>
             </thead>
             <tbody>
               {isTableLoading ? (
-                <TableSkeleton columns={5} rows={pageSize} />
+                <TableSkeleton columns={totalCols} rows={pageSize} />
               ) : paginatedData.length > 0 ? (
-                paginatedData.map((domain, i) => (
+                paginatedData.map((domain, i) => {
+                  const isSelected = selectedDomains.has(domain.id);
+                  return (
                   <motion.tr
                     key={domain.id}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: i * 0.04 }}
-                    className={`border-b hover:bg-indigo-50/20 transition-colors group cursor-pointer ${selectedDomains.has(domain.id) ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
+                    transition={{ delay: i * 0.03 }}
+                    className={cn(
+                      "border-b transition-colors group cursor-pointer",
+                      isSelected ? "bg-primary-light border-primary-border" : "bg-white hover:bg-slate-50 border-slate-100"
+                    )}
                     onClick={() => toggleSelect(domain.id)}
                   >
-                    <td className="py-3.5 px-4 text-center align-middle">
+                    <td className={cn("py-2.5 px-3 text-center align-middle", TABLE_STICKY.checkboxTd, isSelected && "bg-primary-light group-hover:bg-primary-light")}>
                       <div className="flex items-center justify-center">
                         <Checkbox
-                          checked={selectedDomains.has(domain.id)}
+                          checked={isSelected}
                           onCheckedChange={() => toggleSelect(domain.id)}
                           onClick={(e) => e.stopPropagation()}
                         />
                       </div>
                     </td>
-                    <td className="py-3.5 px-4">
-                      <p className="text-sm font-semibold text-slate-900">{domain.institute}</p>
-                      <p className="text-[11px] text-slate-400">{domain.code}</p>
+                    <td className={cn("py-2.5 px-3.5 text-[13px] font-medium text-slate-700 tabular-nums", TABLE_STICKY.idTdWithCheckbox, isSelected && "bg-primary-light group-hover:bg-primary-light")}>
+                      {domain.id}
                     </td>
-                    <td className="py-3.5 px-4 text-sm text-slate-600">
-                      <a href={`https://${domain.subdomain}`} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 hover:text-indigo-600 transition-colors">
-                        {domain.subdomain} <ExternalLink className="w-3 h-3 opacity-60" />
-                      </a>
-                    </td>
-                    <td className="py-3.5 px-4">
-                      {domain.customDomain ? (
-                        <a href={`https://${domain.customDomain}`} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-sm font-medium text-slate-800 hover:text-indigo-600 transition-colors">
-                          {domain.customDomain} <ExternalLink className="w-3 h-3 opacity-60" />
-                        </a>
-                      ) : (
-                        <button className="flex items-center gap-1 text-xs font-semibold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-lg hover:bg-indigo-100 transition-colors">
-                          <Plus className="w-3 h-3" /> Add Domain
-                        </button>
-                      )}
-                    </td>
-                    <td className="py-3.5 px-4">
-                      {domain.customDomain ? (
-                        domain.sslStatus === 'active' ? (
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">
-                            <CheckCircle2 className="w-3.5 h-3.5" /> Active
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700">
-                            <RefreshCw className="w-3.5 h-3.5 animate-spin" /> Pending
-                          </span>
-                        )
-                      ) : (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-500">
-                          <AlertCircle className="w-3.5 h-3.5" /> Managed SSL
-                        </span>
-                      )}
-                    </td>
-                    <td className="py-3.5 px-4" onClick={(e) => e.stopPropagation()}>
-                      <div className="flex items-center justify-end gap-1.5">
-                        <ActionTooltip icon={Globe} tooltip="Manage DNS" />
-                        <ActionTooltip icon={RefreshCw} tooltip="Refresh DNS" />
-                      </div>
+                    {visibleColumns.map(col => (
+                      <td key={col.id} className="py-2.5 px-3.5 whitespace-nowrap">
+                        {col.renderCell(domain, i)}
+                      </td>
+                    ))}
+                    <td className={cn("py-2.5 px-3", TABLE_STICKY.actionTd, isSelected && "bg-primary-light group-hover:bg-primary-light")} onClick={(e) => e.stopPropagation()}>
+                      <RowActionMenu
+                        items={[
+                          { label: 'Manage DNS', icon: Globe, onClick: () => {} },
+                          { label: 'Refresh DNS', icon: RefreshCw, onClick: () => {} },
+                        ]}
+                      />
                     </td>
                   </motion.tr>
-                ))
+                  );
+                })
               ) : (
                 <tr>
-                  <td colSpan={6} className="p-8">
+                  <td colSpan={totalCols} className="p-8">
                     <EmptyState 
                       icon={Globe}
                       title="No domains found"

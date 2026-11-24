@@ -193,30 +193,14 @@ textarea {
 }
 
 
-/* Global scaling for UI to look more compact and fit more on screen properly */
+/* Global scaling for clean, consistent SaaS density across all viewports */
 html {
-  /* Make 1rem = 14px instead of default 16px on standard desktops */
   font-size: 14px;
 }
 
 @media (min-width: 1536px) {
   html {
-    /* Scale back to 16px on extra large screens */
-    font-size: 16px; 
-  }
-}
-
-@media (max-width: 1024px) {
-  html {
-    /* Slightly smaller on tablets/laptops */
-    font-size: 13px; 
-  }
-}
-
-@media (max-width: 640px) {
-  html {
-    /* Scale down more on mobile devices so UI doesn't look clumped */
-    font-size: 12px; 
+    font-size: 14.5px;
   }
 }
 

@@ -1,7 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Download, Mail, Printer, Eye, Search, FileText, CheckCircle2, Clock, AlertCircle, XCircle, Plus, Loader2, Edit2, Trash2, Send, Filter } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import {
+  Download, Mail, Eye, FileText, CheckCircle2, Clock, AlertCircle, XCircle, Plus, Loader2,
+  Building2, CreditCard, IndianRupee, Percent, Calendar, Activity, Hash
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,7 +15,9 @@ import { DatePicker } from "@/components/ui/date-picker";
 import { format } from "date-fns";
 import { DataTablePagination } from "@/components/ui/pagination";
 import { TableSkeleton } from "@/components/ui/skeleton";
-import { ActionTooltip } from "@/components/ui/tooltip";
+import { RowActionMenu, TABLE_STICKY } from "@/components/ui/row-action-menu";
+import { ColumnHeaderLabel, TableColumnDef, TableFieldsButton, useTableColumns } from "@/components/ui/table-configurator";
+import { cn } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
 import { EmptyState } from '@/components/ui/empty-state';
 import { motion } from "framer-motion";
@@ -223,6 +228,112 @@ export function InvoiceManagement() {
   const overdue = mockInvoices.filter(i => i.status === 'overdue');
   const totalRevenue = paid.reduce((s, i) => s + i.total, 0);
 
+  type InvoiceRow = (typeof mockInvoices)[number];
+
+  const columns: TableColumnDef<InvoiceRow>[] = useMemo(() => [
+    {
+      id: 'invoiceNumber',
+      label: 'Invoice #',
+      icon: Hash,
+      defaultVisible: true,
+      renderCell: (inv) => (
+        <div className="flex items-center gap-1.5">
+          {getStatusIcon(inv.status)}
+          <span className="text-xs font-mono font-semibold text-slate-700">{inv.invoiceNumber}</span>
+        </div>
+      ),
+    },
+    {
+      id: 'institute',
+      label: 'Institute',
+      icon: Building2,
+      defaultVisible: true,
+      renderCell: (inv) => (
+        <div>
+          <p className="text-[13px] font-semibold text-slate-800">{inv.instituteName}</p>
+          <p className="text-[11px] text-slate-400">{inv.email}</p>
+        </div>
+      ),
+    },
+    {
+      id: 'plan',
+      label: 'Plan',
+      icon: CreditCard,
+      defaultVisible: true,
+      renderCell: (inv) => <span className="text-xs font-medium text-slate-600">{inv.planName}</span>,
+    },
+    {
+      id: 'amount',
+      label: 'Amount',
+      icon: IndianRupee,
+      defaultVisible: true,
+      renderCell: (inv) => <span className="text-[13px] font-semibold text-slate-900 tabular-nums">₹{inv.amount.toLocaleString('en-IN')}</span>,
+    },
+    {
+      id: 'gst',
+      label: 'GST',
+      icon: Percent,
+      defaultVisible: true,
+      renderCell: (inv) => <span className="text-xs text-slate-500 tabular-nums">₹{inv.gst.toLocaleString('en-IN')}</span>,
+    },
+    {
+      id: 'discount',
+      label: 'Discount',
+      icon: Percent,
+      defaultVisible: true,
+      renderCell: (inv) => <span className="text-xs text-emerald-600 font-medium tabular-nums">₹{inv.discount.toLocaleString('en-IN')}</span>,
+    },
+    {
+      id: 'total',
+      label: 'Total',
+      icon: IndianRupee,
+      defaultVisible: true,
+      renderCell: (inv) => <span className="text-[13px] font-semibold text-slate-900 tabular-nums">₹{inv.total.toLocaleString('en-IN')}</span>,
+    },
+    {
+      id: 'paymentMethod',
+      label: 'Payment',
+      icon: CreditCard,
+      defaultVisible: true,
+      renderCell: (inv) => <span className="px-2 py-0.5 bg-slate-100 text-slate-600 text-[11px] font-semibold rounded-full">{inv.paymentMethod}</span>,
+    },
+    {
+      id: 'status',
+      label: 'Status',
+      icon: Activity,
+      defaultVisible: true,
+      renderCell: (inv) => <StatusBadge status={inv.status} />,
+    },
+    {
+      id: 'invoiceDate',
+      label: 'Invoice Date',
+      icon: Calendar,
+      defaultVisible: true,
+      renderCell: (inv) => <span className="text-xs text-slate-500">{new Date(inv.invoiceDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</span>,
+    },
+    {
+      id: 'dueDate',
+      label: 'Due Date',
+      icon: Calendar,
+      defaultVisible: true,
+      renderCell: (inv) => <span className="text-xs text-slate-500">{new Date(inv.dueDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</span>,
+    },
+  ], []);
+
+  const {
+    orderedColumns,
+    visibleColumns,
+    hiddenSet,
+    toggleColumn,
+    hideAllOptional,
+    showAll,
+    resetColumns,
+    moveColumn,
+    isCustomized,
+  } = useTableColumns('subscriptions-invoices', columns);
+
+  const totalCols = visibleColumns.length + 3;
+
   return (
     <div className="flex-1 w-full flex flex-col min-h-0">
       <PageHeader
@@ -230,30 +341,38 @@ export function InvoiceManagement() {
         description="View, download, and manage all invoices across tenants."
         breadcrumbs={[{ label: 'Subscriptions' }, { label: 'Invoices' }]}
       >
-        <button className="flex items-center gap-2 px-4 py-2 text-sm bg-slate-100 text-slate-700 font-semibold rounded-xl hover:bg-slate-200 transition-all">
-          <Download className="w-4 h-4" /> Export CSV
+        <button className="flex items-center gap-2 px-3.5 py-2 text-xs bg-white border border-slate-200 text-slate-700 font-semibold rounded-lg hover:bg-slate-50 transition-all shadow-2xs cursor-pointer">
+          <Download className="w-3.5 h-3.5 text-slate-400" /> Export CSV
         </button>
-        <button onClick={() => setShowCreate(true)} className="flex items-center gap-2 px-4 py-2 text-sm bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-all shadow-sm shadow-indigo-200 active:scale-95">
-          <Plus className="w-4 h-4" /> New Invoice
+        <button onClick={() => setShowCreate(true)} className="flex items-center gap-2 px-3.5 py-2 text-xs bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary-hover transition-all shadow-2xs cursor-pointer">
+          <Plus className="w-3.5 h-3.5" /> New Invoice
         </button>
       </PageHeader>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <StatCard title="Total Revenue" value={totalRevenue} prefix="₹" icon={<CheckCircle2 size={20} />} iconColor="text-emerald-600" iconBg="bg-emerald-50" trend={7.2} trendLabel="vs last month" />
-        <StatCard title="Paid Invoices" value={paid.length} icon={<CheckCircle2 size={20} />} iconColor="text-indigo-600" iconBg="bg-indigo-50" />
-        <StatCard title="Unpaid Invoices" value={unpaid.length} icon={<Clock size={20} />} iconColor="text-amber-600" iconBg="bg-amber-50" />
-        <StatCard title="Overdue" value={overdue.length} icon={<AlertCircle size={20} />} iconColor="text-red-600" iconBg="bg-red-50" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3.5 mb-4">
+        <StatCard title="Total Revenue" value={totalRevenue} prefix="₹" icon={<CheckCircle2 size={18} />} tone="success" trend={7.2} trendLabel="vs last month" />
+        <StatCard title="Paid Invoices" value={paid.length} icon={<CheckCircle2 size={18} />} tone="primary" />
+        <StatCard title="Unpaid Invoices" value={unpaid.length} icon={<Clock size={18} />} tone="warning" />
+        <StatCard title="Overdue" value={overdue.length} icon={<AlertCircle size={18} />} tone="danger" />
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-slate-100 rounded-xl shadow-sm flex flex-col flex-1 overflow-hidden min-h-0">
+      <div className="bg-white border border-slate-200/80 rounded-2xl shadow-2xs flex flex-col flex-1 overflow-hidden min-h-0">
         <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shrink-0 bg-slate-50/50">
-          <div className="flex items-center gap-3">
-            <SearchInput value={search} onChange={setSearch} placeholder="Search invoice or institute..." className="w-full sm:w-80" />
-            <button className="p-2 border border-slate-200 rounded-xl bg-white text-slate-500 hover:bg-slate-50 transition-colors shadow-sm">
-              <Filter className="w-4 h-4" />
-            </button>
+          <div className="flex items-center gap-2.5 flex-wrap">
+            <SearchInput value={search} onChange={setSearch} placeholder="Search invoice or institute..." className="w-full sm:w-72" />
+            <TableFieldsButton
+              columns={orderedColumns}
+              hiddenSet={hiddenSet}
+              onToggle={toggleColumn}
+              onMove={moveColumn}
+              onHideAll={hideAllOptional}
+              onShowAll={showAll}
+              onReset={resetColumns}
+              isCustomized={isCustomized}
+              idFieldLabel="Invoice ID"
+            />
           </div>
           <FilterChips 
             options={[
@@ -266,11 +385,11 @@ export function InvoiceManagement() {
             onChange={setFilter} 
           />
         </div>
-        <div className="flex-1 overflow-auto bg-white">
-          <table className="w-full">
+        <div className="flex-1 overflow-x-auto bg-white thin-scrollbar">
+          <table className="w-full min-w-[1160px] text-left border-collapse">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-100">
-                <th className="py-3 px-4 w-12 text-center align-middle">
+                <th className={cn("py-2.5 px-3 text-center align-middle", TABLE_STICKY.checkboxTh)}>
                   <div className="flex items-center justify-center">
                     <Checkbox
                       checked={selectedInvoices.size === paginatedData.length && paginatedData.length > 0}
@@ -278,77 +397,75 @@ export function InvoiceManagement() {
                     />
                   </div>
                 </th>
-                {['Invoice #', 'Institute', 'Plan', 'Amount', 'GST', 'Discount', 'Total', 'Payment', 'Status', 'Invoice Date', 'Due Date', 'Actions'].map(h => (
-                  <th key={h} className="text-left py-3 px-4 text-[11px] font-bold text-slate-400 uppercase tracking-wide whitespace-nowrap">{h}</th>
+                <th className={cn("text-left py-2.5 px-3.5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide", TABLE_STICKY.idThWithCheckbox)}>ID</th>
+                {visibleColumns.map(col => (
+                  <th key={col.id} className="text-left py-2.5 px-3.5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">
+                    <ColumnHeaderLabel label={col.label} icon={col.icon} />
+                  </th>
                 ))}
+                <th className={cn("py-2.5 px-3 text-[11px] font-semibold text-slate-500 uppercase tracking-wide", TABLE_STICKY.actionTh)}>Actions</th>
               </tr>
             </thead>
             <tbody>
               {isTableLoading ? (
-                <TableSkeleton columns={12} rows={pageSize} />
+                <TableSkeleton columns={totalCols} rows={pageSize} />
               ) : filtered.length > 0 ? (
-                paginatedData.map((inv, i) => (
+                paginatedData.map((inv, i) => {
+                  const isSelected = selectedInvoices.has(inv.id);
+                  return (
                   <motion.tr
                     key={inv.id}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: i * 0.04 }}
-                    className={`border-b hover:bg-indigo-50/20 transition-colors group cursor-pointer ${selectedInvoices.has(inv.id) ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
+                    transition={{ delay: i * 0.03 }}
+                    className={cn(
+                      "border-b transition-colors group cursor-pointer",
+                      isSelected ? "bg-primary-light border-primary-border" : "bg-white hover:bg-slate-50 border-slate-100"
+                    )}
                     onClick={() => toggleSelect(inv.id)}
                   >
-                    <td className="py-3.5 px-4 text-center align-middle">
+                    <td className={cn("py-2.5 px-3 text-center align-middle", TABLE_STICKY.checkboxTd, isSelected && "bg-primary-light group-hover:bg-primary-light")}>
                       <div className="flex items-center justify-center">
                         <Checkbox
-                          checked={selectedInvoices.has(inv.id)}
+                          checked={isSelected}
                           onCheckedChange={() => toggleSelect(inv.id)}
                           onClick={(e) => e.stopPropagation()}
                         />
                       </div>
                     </td>
-                    <td className="py-3.5 px-4">
-                      <div className="flex items-center gap-1.5">
-                        {getStatusIcon(inv.status)}
-                        <span className="text-xs font-mono font-semibold text-slate-700">{inv.invoiceNumber}</span>
-                      </div>
+                    <td className={cn("py-2.5 px-3.5 text-[13px] font-medium text-slate-700 tabular-nums", TABLE_STICKY.idTdWithCheckbox, isSelected && "bg-primary-light group-hover:bg-primary-light")}>
+                      {inv.id}
                     </td>
-                    <td className="py-3.5 px-4">
-                      <p className="text-sm font-semibold text-slate-800">{inv.instituteName}</p>
-                      <p className="text-[10px] text-slate-400">{inv.email}</p>
-                    </td>
-                    <td className="py-3.5 px-4 text-[11px] font-semibold text-slate-600">{inv.planName}</td>
-                    <td className="py-3.5 px-4 text-sm font-bold text-slate-900">₹{inv.amount.toLocaleString('en-IN')}</td>
-                    <td className="py-3.5 px-4 text-xs text-slate-500">₹{inv.gst.toLocaleString('en-IN')}</td>
-                    <td className="py-3.5 px-4 text-xs text-emerald-600 font-medium">₹{inv.discount.toLocaleString('en-IN')}</td>
-                    <td className="py-3.5 px-4 text-sm font-black text-slate-900">₹{inv.total.toLocaleString('en-IN')}</td>
-                    <td className="py-3.5 px-4">
-                      <span className="px-2 py-0.5 bg-slate-100 text-slate-600 text-[10px] font-semibold rounded-full">{inv.paymentMethod}</span>
-                    </td>
-                    <td className="py-3.5 px-4"><StatusBadge status={inv.status} /></td>
-                    <td className="py-3.5 px-4 text-xs text-slate-500">{new Date(inv.invoiceDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
-                    <td className="py-3.5 px-4 text-xs text-slate-500">{new Date(inv.dueDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
-                    <td className="py-3.5 px-4" onClick={(e) => e.stopPropagation()}>
-                      <div className="flex items-center gap-1.5">
-                        <ActionTooltip icon={Eye} tooltip="View Details" onClick={() => router.push(`/dashboard/subscriptions/invoices/${inv.id}`)} />
-                        <ActionTooltip icon={Download} tooltip="Download PDF" />
-                        <ActionTooltip icon={Mail} tooltip="Send Email" />
-                      </div>
+                    {visibleColumns.map(col => (
+                      <td key={col.id} className="py-2.5 px-3.5 whitespace-nowrap">
+                        {col.renderCell(inv, i)}
+                      </td>
+                    ))}
+                    <td className={cn("py-2.5 px-3", TABLE_STICKY.actionTd, isSelected && "bg-primary-light group-hover:bg-primary-light")} onClick={(e) => e.stopPropagation()}>
+                      <RowActionMenu
+                        items={[
+                          { label: 'View Details', icon: Eye, onClick: () => router.push(`/dashboard/subscriptions/invoices/${inv.id}`) },
+                          { label: 'Download PDF', icon: Download, onClick: () => {} },
+                          { label: 'Send Email', icon: Mail, onClick: () => {} },
+                        ]}
+                      />
                     </td>
                   </motion.tr>
-                ))
+                  );
+                })
               ) : (
                 <tr>
-                  <td colSpan={10} className="p-8">
+                  <td colSpan={totalCols} className="p-8">
                     <EmptyState 
                       icon={FileText}
                       title="No invoices found"
-                      description="No no invoices found found."
+                      description="No invoices match your current filters."
                     />
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
-          
         </div>
         <div className="border-t border-slate-100 bg-white shrink-0 mt-auto">
           <DataTablePagination

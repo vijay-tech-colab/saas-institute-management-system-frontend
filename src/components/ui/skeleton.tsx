@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils"
+import { TABLE_STICKY } from "@/components/ui/row-action-menu"
 
 function Skeleton({
   className,
@@ -12,36 +13,73 @@ function Skeleton({
   )
 }
 
-export function TableSkeleton({ columns = 5, rows = 5 }: { columns?: number, rows?: number }) {
+export function TableSkeleton({
+  columns = 5,
+  rows = 5,
+  hasCheckbox = true,
+  hasActions = true,
+}: {
+  columns?: number;
+  rows?: number;
+  hasCheckbox?: boolean;
+  hasActions?: boolean;
+}) {
   return (
     <>
       {Array.from({ length: rows }).map((_, rowIndex) => (
-        <tr key={rowIndex} className="border-b border-slate-50">
+        <tr key={rowIndex} className="border-b border-slate-100 bg-white">
           {Array.from({ length: columns }).map((_, colIndex) => {
-            const isFirst = colIndex === 0;
-            const isLast = colIndex === columns - 1;
-            const isSecond = colIndex === 1;
+            const isCheckbox = hasCheckbox && colIndex === 0;
+            const isId = hasCheckbox ? colIndex === 1 : colIndex === 0;
+            const isPrimary = hasCheckbox ? colIndex === 2 : colIndex === 1;
+            const isLast = hasActions && colIndex === columns - 1;
+
+            if (isCheckbox) {
+              return (
+                <td key={colIndex} className={cn("py-3 px-3 text-center align-middle", TABLE_STICKY.checkboxTd)}>
+                  <div className="flex items-center justify-center">
+                    <Skeleton className="h-4 w-4 rounded-[4px]" />
+                  </div>
+                </td>
+              );
+            }
+
+            if (isId) {
+              return (
+                <td
+                  key={colIndex}
+                  className={cn(
+                    "py-3 px-3.5 align-middle",
+                    hasCheckbox ? TABLE_STICKY.idTdWithCheckbox : TABLE_STICKY.idTd
+                  )}
+                >
+                  <Skeleton className="h-4 w-16 rounded-md" />
+                </td>
+              );
+            }
+
+            if (isLast) {
+              return (
+                <td key={colIndex} className={cn("py-3 px-3 align-middle", TABLE_STICKY.actionTd)}>
+                  <div className="flex items-center justify-center">
+                    <Skeleton className="h-7 w-7 rounded-lg" />
+                  </div>
+                </td>
+              );
+            }
 
             return (
-              <td key={colIndex} className="py-4 px-4 align-middle">
-                {isFirst ? (
-                   <Skeleton className="h-5 w-16" />
-                ) : isSecond ? (
-                   <div className="space-y-2">
-                     <Skeleton className="h-4 w-32" />
-                     <Skeleton className="h-3 w-20" />
-                   </div>
-                ) : isLast ? (
-                   <div className="flex items-center gap-1.5 opacity-70">
-                     <Skeleton className="h-7 w-7 rounded-lg" />
-                     <Skeleton className="h-7 w-7 rounded-lg" />
-                     <Skeleton className="h-7 w-7 rounded-lg" />
-                   </div>
+              <td key={colIndex} className="py-3 px-3.5 align-middle">
+                {isPrimary ? (
+                  <div className="space-y-1.5">
+                    <Skeleton className="h-3.5 w-32 rounded-md" />
+                    <Skeleton className="h-3 w-20 rounded-md" />
+                  </div>
                 ) : (
-                   <Skeleton className={cn("h-4 rounded-md", ['w-16', 'w-24', 'w-20', 'w-28'][colIndex % 4])} />
+                  <Skeleton className={cn("h-4 rounded-md", ['w-16', 'w-24', 'w-20', 'w-28'][colIndex % 4])} />
                 )}
               </td>
-            )
+            );
           })}
         </tr>
       ))}

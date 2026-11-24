@@ -1,11 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Clock, CheckCircle2, XCircle, Users, Settings, Filter } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import {
+  Clock, CheckCircle2, XCircle, Users, Settings, ArrowUpRight, Ban,
+  Building2, AtSign, CreditCard, Calendar, Activity, Phone
+} from 'lucide-react';
 import { motion } from 'framer-motion';
 import { PageHeader, SearchInput, FilterChips, Toggle } from './shared/UIComponents';
 import { StatusBadge } from './shared/StatusBadge';
 import { Checkbox } from "@/components/ui/checkbox";
+import { RowActionMenu, TABLE_STICKY } from "@/components/ui/row-action-menu";
+import { ColumnHeaderLabel, TableColumnDef, TableFieldsButton, useTableColumns } from "@/components/ui/table-configurator";
+import { cn } from "@/lib/utils";
 import { StatCard } from './shared/StatCard';
 import { mockTrialUsers, mockTrialSettings } from '../data/mock-data';
 
@@ -41,6 +47,78 @@ export function TrialManagement() {
     setSelectedTrials(next);
   };
 
+  type TrialRow = (typeof mockTrialUsers)[number];
+
+  const columns: TableColumnDef<TrialRow>[] = useMemo(() => [
+    {
+      id: 'institute',
+      label: 'Institute',
+      icon: Building2,
+      renderCell: (t) => <p className="text-sm font-medium text-slate-900">{t.instituteName}</p>,
+    },
+    {
+      id: 'email',
+      label: 'Email',
+      icon: AtSign,
+      renderCell: (t) => <span className="text-xs text-slate-600">{t.email}</span>,
+    },
+    {
+      id: 'phone',
+      label: 'Phone',
+      icon: Phone,
+      defaultVisible: false,
+      renderCell: (t) => <span className="text-xs text-slate-500 tabular-nums">{t.phone}</span>,
+    },
+    {
+      id: 'plan',
+      label: 'Trial Plan',
+      icon: CreditCard,
+      renderCell: (t) => (
+        <span className="text-xs px-2 py-0.5 bg-slate-100 text-slate-600 rounded-md font-medium">{t.planName}</span>
+      ),
+    },
+    {
+      id: 'startDate',
+      label: 'Start Date',
+      icon: Calendar,
+      renderCell: (t) => <span className="text-xs text-slate-500">{t.startDate}</span>,
+    },
+    {
+      id: 'endDate',
+      label: 'End Date',
+      icon: Calendar,
+      renderCell: (t) => <span className="text-xs text-slate-500">{t.endDate}</span>,
+    },
+    {
+      id: 'daysLeft',
+      label: 'Days Left',
+      icon: Clock,
+      renderCell: (t) => (
+        <span className={`text-xs font-bold ${t.daysRemaining <= 3 ? 'text-rose-600' : t.daysRemaining <= 7 ? 'text-amber-600' : 'text-slate-600'}`}>
+          {t.daysRemaining}d
+        </span>
+      ),
+    },
+    {
+      id: 'status',
+      label: 'Status',
+      icon: Activity,
+      renderCell: (t) => <StatusBadge status={t.status} />,
+    },
+  ], []);
+
+  const {
+    orderedColumns,
+    visibleColumns,
+    hiddenSet,
+    toggleColumn,
+    hideAllOptional,
+    showAll,
+    resetColumns,
+    moveColumn,
+    isCustomized,
+  } = useTableColumns('subscriptions-trials', columns);
+
   return (
     <div className="flex-1 w-full flex flex-col min-h-0">
       <PageHeader
@@ -50,22 +128,30 @@ export function TrialManagement() {
       />
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <StatCard title="Active Trials" value={active} icon={<Clock size={20} />} iconColor="text-indigo-600" iconBg="bg-indigo-50" trend={12} trendLabel="vs last month" />
-        <StatCard title="Ending Soon" value={endingSoon} icon={<Clock size={20} />} iconColor="text-orange-600" iconBg="bg-orange-50" />
-        <StatCard title="Trial Expired" value={expired} icon={<XCircle size={20} />} iconColor="text-slate-400" iconBg="bg-slate-100" />
-        <StatCard title="Converted" value={converted} icon={<CheckCircle2 size={20} />} iconColor="text-emerald-600" iconBg="bg-emerald-50" trend={68.4} trendLabel="conversion rate" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3.5 mb-4">
+        <StatCard title="Active Trials" value={active} icon={<Clock size={18} />} tone="primary" trend={12} trendLabel="vs last month" />
+        <StatCard title="Ending Soon" value={endingSoon} icon={<Clock size={18} />} tone="warning" />
+        <StatCard title="Trial Expired" value={expired} icon={<XCircle size={18} />} tone="neutral" />
+        <StatCard title="Converted" value={converted} icon={<CheckCircle2 size={18} />} tone="success" trend={68.4} trendLabel="conversion rate" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Trial Users Table — 2 cols */}
-        <div className="lg:col-span-2 bg-white border border-slate-100 rounded-xl shadow-sm overflow-hidden">
+        <div className="lg:col-span-2 bg-white border border-slate-200/80 rounded-2xl shadow-2xs overflow-hidden">
           <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50 shrink-0">
-            <div className="flex items-center gap-3">
-              <SearchInput value={search} onChange={setSearch} placeholder="Search institute or email..." className="w-full sm:w-72" />
-              <button className="p-2 border border-slate-200 rounded-xl bg-white text-slate-500 hover:bg-slate-50 transition-colors shadow-sm">
-                <Filter className="w-4 h-4" />
-              </button>
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <SearchInput value={search} onChange={setSearch} placeholder="Search institute or email..." className="w-full sm:w-64" />
+              <TableFieldsButton
+                columns={orderedColumns}
+                hiddenSet={hiddenSet}
+                onToggle={toggleColumn}
+                onMove={moveColumn}
+                onHideAll={hideAllOptional}
+                onShowAll={showAll}
+                onReset={resetColumns}
+                isCustomized={isCustomized}
+                idFieldLabel="Trial ID"
+              />
             </div>
             <FilterChips 
               options={[
@@ -79,11 +165,11 @@ export function TrialManagement() {
               onChange={setFilter} 
             />
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full">
+          <div className="overflow-x-auto thin-scrollbar">
+            <table className="w-full min-w-[920px]">
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-100">
-                  <th className="py-3 px-4 w-12 text-center align-middle">
+                  <th className={cn("py-3 px-4 text-center align-middle", TABLE_STICKY.checkboxTh)}>
                     <div className="flex items-center justify-center">
                       <Checkbox
                         checked={selectedTrials.size === filtered.length && filtered.length > 0}
@@ -91,55 +177,94 @@ export function TrialManagement() {
                       />
                     </div>
                   </th>
-                  {['Institute', 'Email', 'Plan', 'Start', 'End', 'Days Left', 'Status'].map(h => (
-                    <th key={h} className="text-left py-3 px-4 text-[11px] font-bold text-slate-400 uppercase tracking-wide whitespace-nowrap">{h}</th>
+                  <th className={cn("text-left py-3 px-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap", TABLE_STICKY.idThWithCheckbox)}>
+                    ID
+                  </th>
+                  {visibleColumns.map(col => (
+                    <th key={col.id} className="text-left py-3 px-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">
+                      <ColumnHeaderLabel label={col.label} icon={col.icon} />
+                    </th>
                   ))}
+                  <th className={cn("text-right py-3 px-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap", TABLE_STICKY.actionTh)}>
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((t, i) => (
+                {filtered.map((t, i) => {
+                  const isSelected = selectedTrials.has(t.id);
+                  return (
                   <motion.tr
                     key={t.id}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: i * 0.05 }}
-                    className={`border-b hover:bg-indigo-50/20 transition-colors cursor-pointer ${selectedTrials.has(t.id) ? 'bg-indigo-50/50 border-indigo-100' : 'border-slate-50'}`}
+                    className={cn(
+                      "group border-b hover:bg-slate-50 transition-colors cursor-pointer",
+                      isSelected ? "bg-primary-light hover:bg-primary-light border-primary/20" : "border-slate-50"
+                    )}
                     onClick={() => toggleSelect(t.id)}
                   >
-                    <td className="py-3.5 px-4 text-center align-middle">
+                    <td className={cn(
+                      "py-3.5 px-4 text-center align-middle",
+                      TABLE_STICKY.checkboxTd,
+                      isSelected && "bg-primary-light group-hover:bg-primary-light"
+                    )}>
                       <div className="flex items-center justify-center">
                         <Checkbox
-                          checked={selectedTrials.has(t.id)}
+                          checked={isSelected}
                           onCheckedChange={() => toggleSelect(t.id)}
                           onClick={(e) => e.stopPropagation()}
                         />
                       </div>
                     </td>
-                    <td className="py-3.5 px-4">
-                      <p className="text-sm font-semibold text-slate-800">{t.instituteName}</p>
-                      <p className="text-[10px] text-slate-400">{t.phone}</p>
+                    <td className={cn(
+                      "py-3.5 px-4 text-sm font-medium text-slate-700 tabular-nums whitespace-nowrap",
+                      TABLE_STICKY.idTdWithCheckbox,
+                      isSelected && "bg-primary-light group-hover:bg-primary-light"
+                    )}>
+                      {t.id}
                     </td>
-                    <td className="py-3.5 px-4 text-xs text-slate-500">{t.email}</td>
-                    <td className="py-3.5 px-4">
-                      <span className="px-2 py-0.5 bg-indigo-50 text-indigo-700 text-[11px] font-semibold rounded-full">{t.planName}</span>
-                    </td>
-                    <td className="py-3.5 px-4 text-xs text-slate-500">{t.startDate}</td>
-                    <td className="py-3.5 px-4 text-xs text-slate-500">{t.endDate}</td>
-                    <td className="py-3.5 px-4">
-                      {t.daysRemaining > 0 ? (
-                        <div className="flex items-center gap-2">
-                          <div className="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                            <div className={`h-full rounded-full ${t.daysRemaining <= 2 ? 'bg-red-500' : t.daysRemaining <= 5 ? 'bg-orange-500' : 'bg-indigo-500'}`} style={{ width: `${(t.daysRemaining / 14) * 100}%` }} />
-                          </div>
-                          <span className="text-xs font-semibold text-slate-700">{t.daysRemaining}d</span>
-                        </div>
-                      ) : (
-                        <span className="text-xs text-slate-400">—</span>
+                    {visibleColumns.map(col => (
+                      <td key={col.id} className="py-3.5 px-4 whitespace-nowrap">
+                        {col.renderCell(t, i)}
+                      </td>
+                    ))}
+                    <td
+                      className={cn(
+                        "py-3.5 px-4 text-right whitespace-nowrap",
+                        TABLE_STICKY.actionTd,
+                        isSelected && "bg-primary-light group-hover:bg-primary-light"
                       )}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <RowActionMenu
+                        ariaLabel={`Actions for ${t.instituteName}`}
+                        items={[
+                          {
+                            label: 'Extend Trial (+7d)',
+                            icon: Clock,
+                            variant: 'primary',
+                            onClick: () => {},
+                          },
+                          {
+                            label: 'Convert to Paid',
+                            icon: ArrowUpRight,
+                            variant: 'success',
+                            onClick: () => {},
+                          },
+                          {
+                            label: 'End Trial',
+                            icon: Ban,
+                            variant: 'danger',
+                            onClick: () => {},
+                          },
+                        ]}
+                      />
                     </td>
-                    <td className="py-3.5 px-4"><StatusBadge status={t.status as 'active' | 'ending_soon' | 'expired' | 'converted'} /></td>
                   </motion.tr>
-                ))}
+                  );
+                })}
               </tbody>
             </table>
             {filtered.length === 0 && (
