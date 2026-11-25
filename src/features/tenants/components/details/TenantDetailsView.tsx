@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { SegmentedTabs } from '@/components/ui/tabs';
 import { RowActionMenu, TABLE_STICKY } from '@/components/ui/row-action-menu';
 import { cn } from '@/lib/utils';
 import { StatusBadge } from '@/features/subscriptions/components/shared/StatusBadge';
@@ -195,26 +196,26 @@ function Tab_Subscription({ tenant }: { tenant: Tenant }) {
           <button className="text-xs font-semibold text-primary hover:text-primary-hover cursor-pointer">View All</button>
         </div>
         <div className="overflow-x-auto thin-scrollbar">
-          <table className="w-full min-w-[580px] text-left border-collapse">
+          <table className="w-full min-w-[680px] text-left border-collapse">
             <thead className="bg-slate-50 border-b border-slate-100">
               <tr>
-                <th className={cn("py-2.5 px-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wide", TABLE_STICKY.idTh)}>ID</th>
-                <th className="py-2.5 px-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">Amount</th>
-                <th className="py-2.5 px-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">Date</th>
-                <th className="py-2.5 px-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">Status</th>
-                <th className={cn("py-2.5 px-3 text-[11px] font-semibold text-slate-500 uppercase tracking-wide", TABLE_STICKY.actionTh)}>Actions</th>
+                <th className={cn("py-3 px-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide", TABLE_STICKY.idTh)}>ID</th>
+                <th className="py-3 px-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">Amount</th>
+                <th className="py-3 px-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">Date</th>
+                <th className="py-3 px-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">Status</th>
+                <th className={cn("py-3 px-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wide", TABLE_STICKY.actionTh)}>Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {[1, 2, 3].map(i => (
                 <tr key={i} className="group bg-white hover:bg-slate-50 transition-colors">
-                  <td className={cn("py-3 px-4 text-[13px] font-medium text-slate-700 tabular-nums", TABLE_STICKY.idTd)}>INV-2026-00{i}</td>
-                  <td className="py-3 px-4 text-[13px] text-slate-600 whitespace-nowrap">$1,188.00</td>
-                  <td className="py-3 px-4 text-[13px] text-slate-600 whitespace-nowrap">{format(new Date(tenant.createdAt), 'MMM d, yyyy')}</td>
-                  <td className="py-3 px-4 whitespace-nowrap">
+                  <td className={cn("py-3.5 px-5 text-[13px] font-medium text-slate-700 tabular-nums", TABLE_STICKY.idTd)}>INV-2026-00{i}</td>
+                  <td className="py-3.5 px-5 text-[13px] text-slate-600 whitespace-nowrap">$1,188.00</td>
+                  <td className="py-3.5 px-5 text-[13px] text-slate-600 whitespace-nowrap">{format(new Date(tenant.createdAt), 'MMM d, yyyy')}</td>
+                  <td className="py-3.5 px-5 whitespace-nowrap">
                     <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded border border-emerald-200">Paid</span>
                   </td>
-                  <td className={cn("py-3 px-3", TABLE_STICKY.actionTd)}>
+                  <td className={cn("py-3.5 px-4", TABLE_STICKY.actionTd)}>
                     <RowActionMenu
                       items={[
                         { label: 'Download Invoice', icon: Download, onClick: () => {} },
@@ -526,24 +527,18 @@ export function TenantDetailsView({ tenantId }: { tenantId: string }) {
               </div>
             </div>
 
-            <nav className="-mb-4 overflow-x-auto border-t border-slate-100 pt-1 sm:-mb-5 thin-scrollbar" aria-label="Institute details sections">
-              <div className="flex min-w-max items-center gap-4 sm:gap-5">
-                {TABS.map(tab => (
-                  <button
-                    type="button"
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center gap-1.5 border-b-2 py-3 text-[13px] font-semibold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
-                      activeTab === tab.id
-                        ? 'border-primary text-primary'
-                        : 'border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-800'
-                    }`}
-                  >
-                    {tab.icon} {tab.label}
-                  </button>
-                ))}
-              </div>
-            </nav>
+            <div className="border-t border-slate-100 pt-3.5">
+              <SegmentedTabs
+                ariaLabel="Institute details sections"
+                value={activeTab}
+                onChange={setActiveTab}
+                options={TABS.map(tab => ({
+                  value: tab.id,
+                  label: tab.label,
+                  icon: tab.icon,
+                }))}
+              />
+            </div>
           </div>
         </header>
 

@@ -125,7 +125,6 @@ const step3Schema = z.object({
   paymentStatus: z.string().min(1, 'Please select a payment status'),
   startDate: z.string().min(1, 'Start date is required'),
   expiryDate: z.string().min(1, 'Expiry date is required'),
-  couponCode: z.string().optional(),
 });
 
 const step5Schema = z.object({
@@ -449,11 +448,6 @@ function Step3_Subscription({ onNext, onPrev }: { onNext: (data: Step3Data) => v
               value={field.value} onChange={field.onChange}
             />
           )} />
-        </div>
-        <div>
-          <Field label="Coupon Code">
-            <Input id="couponCode" placeholder="Promo code" className="h-9 text-sm" {...register('couponCode')} />
-          </Field>
         </div>
         <div>
           <Field label="Start Date" required error={errors.startDate?.message}>

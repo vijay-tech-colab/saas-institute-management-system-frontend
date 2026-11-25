@@ -64,7 +64,6 @@ export const superAdminNav: NavGroupConfig[] = [
           { label: 'Active Customers', href: '/dashboard/subscriptions/customers' },
           { label: 'Invoices', href: '/dashboard/subscriptions/invoices' },
           { label: 'Payment History', href: '/dashboard/subscriptions/payments' },
-          { label: 'Coupons & Offers', href: '/dashboard/subscriptions/coupons' },
         ]
       },
       {

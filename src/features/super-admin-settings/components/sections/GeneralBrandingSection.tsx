@@ -4,6 +4,7 @@ import React, { useRef } from "react";
 import { UploadCloud, X, ImageIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { SegmentedTabs } from "@/components/ui/tabs";
 import {
   Select,
   SelectContent,
@@ -216,25 +217,17 @@ export function GeneralBrandingSection() {
               label="Primary Currency"
               hint="Applies to new SaaS plans and checkout totals."
             >
-              <div className="grid grid-cols-2 gap-1.5 p-1 rounded-lg bg-slate-100/80 border border-slate-200/80 h-9.5">
-                {(["INR", "USD"] as const).map((curr) => {
-                  const active = values.currency === curr;
-                  return (
-                    <button
-                      key={curr}
-                      type="button"
-                      onClick={() => updateField("currency", curr)}
-                      className={`rounded-md text-xs font-semibold transition-all cursor-pointer ${
-                        active
-                          ? "bg-primary-light text-primary border border-primary-border shadow-xs"
-                          : "text-slate-600 hover:text-slate-900"
-                      }`}
-                    >
-                      {curr === "INR" ? "INR (₹)" : "USD ($)"}
-                    </button>
-                  );
-                })}
-              </div>
+              <SegmentedTabs
+                fullWidth
+                size="sm"
+                ariaLabel="Primary currency"
+                value={values.currency}
+                onChange={(curr) => updateField("currency", curr)}
+                options={[
+                  { value: "INR", label: "INR (₹)" },
+                  { value: "USD", label: "USD ($)" },
+                ]}
+              />
             </SettingsField>
           </div>
         </SettingsSection>

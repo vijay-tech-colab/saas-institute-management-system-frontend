@@ -22,7 +22,6 @@ export const ROUTE_LABELS: Record<string, string> = {
   "/dashboard/subscriptions/customers": "Active Customers",
   "/dashboard/subscriptions/invoices": "Invoices",
   "/dashboard/subscriptions/payments": "Payment History",
-  "/dashboard/subscriptions/coupons": "Coupons & Offers",
   "/dashboard/subscriptions/pricing": "Pricing Calculator",
   "/dashboard/subscriptions/renewals": "Renewals",
   "/dashboard/subscriptions/trials": "Free Trials",

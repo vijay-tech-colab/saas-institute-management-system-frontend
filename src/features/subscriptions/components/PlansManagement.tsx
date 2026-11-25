@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useMemo, useState } from 'react';
-import { Crown, Users, HardDrive, Store, Check, Plus, CreditCard, IndianRupee, Settings2, Trash2, Edit2, PlayCircle, PauseCircle, Copy, CheckCircle2, ShieldCheck, Search, XCircle, Zap, GitBranch, MoreHorizontal, AlertCircle, Loader2, Package, Activity, Eye, Database, DownloadCloud, FileText } from 'lucide-react';
+import { Crown, Users, HardDrive, Store, Check, Plus, CreditCard, IndianRupee, Settings2, Trash2, Edit2, PlayCircle, PauseCircle, Copy, CheckCircle2, ShieldCheck, Search, XCircle, Zap, GitBranch, MoreHorizontal, AlertCircle, Loader2, Package, Activity, Eye, Database, DownloadCloud, FileText, LayoutGrid, List } from 'lucide-react';
+import { SegmentedTabs } from '@/components/ui/tabs';
 import { useRouter } from 'next/navigation';
 import { AnimatePresence } from 'framer-motion';
 import { ExportProgressModal } from '@/components/ui/export-progress';
@@ -519,13 +520,16 @@ export function PlansManagement() {
               selected={filter}
               onChange={setFilter}
             />
-            <div className="flex items-center gap-1 bg-slate-50 p-1 rounded-xl">
-              {(['grid', 'table'] as const).map(v => (
-                <button key={v} onClick={() => setViewMode(v)} className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${viewMode === v ? 'bg-white text-slate-900 shadow-sm border border-slate-200/50' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-100'}`}>
-                  {v === 'grid' ? '⊞ Grid' : '☰ Table'}
-                </button>
-              ))}
-            </div>
+            <SegmentedTabs
+              size="sm"
+              ariaLabel="Plans view mode"
+              value={viewMode}
+              onChange={setViewMode}
+              options={[
+                { value: 'grid', label: 'Grid', icon: <LayoutGrid className="w-3.5 h-3.5" /> },
+                { value: 'table', label: 'Table', icon: <List className="w-3.5 h-3.5" /> },
+              ]}
+            />
           </div>
         </div>
 
@@ -602,10 +606,10 @@ export function PlansManagement() {
           {/* Plans Table */}
           {viewMode === 'table' && (
             <div className="overflow-x-auto thin-scrollbar">
-              <table className="w-full min-w-[1120px] bg-white text-left border-collapse">
+              <table className="w-full min-w-[1180px] bg-white text-left border-collapse">
                 <thead>
                   <tr className="bg-slate-50 border-b border-slate-100">
-                    <th className={cn("py-2.5 px-3 text-center align-middle", TABLE_STICKY.checkboxTh)}>
+                    <th className={cn("py-3 px-4 text-center align-middle", TABLE_STICKY.checkboxTh)}>
                       <div className="flex items-center justify-center">
                         <Checkbox 
                           checked={selectedPlans.length === paginatedData.length && paginatedData.length > 0} 
@@ -613,13 +617,13 @@ export function PlansManagement() {
                         />
                       </div>
                     </th>
-                    <th className={cn("text-left py-2.5 px-3.5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide", TABLE_STICKY.idThWithCheckbox)}>ID</th>
+                    <th className={cn("text-left py-3 px-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide", TABLE_STICKY.idThWithCheckbox)}>ID</th>
                     {visibleColumns.map(col => (
-                      <th key={col.id} className="text-left py-2.5 px-3.5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">
+                      <th key={col.id} className="text-left py-3 px-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">
                         <ColumnHeaderLabel label={col.label} icon={col.icon} />
                       </th>
                     ))}
-                    <th className={cn("py-2.5 px-3 text-[11px] font-semibold text-slate-500 uppercase tracking-wide", TABLE_STICKY.actionTh)}>Actions</th>
+                    <th className={cn("py-3 px-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wide", TABLE_STICKY.actionTh)}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -639,7 +643,7 @@ export function PlansManagement() {
                           isSelected ? "bg-primary-light border-primary-border" : "bg-white hover:bg-slate-50 border-slate-100"
                         )}
                       >
-                        <td className={cn("py-2.5 px-3 text-center align-middle", TABLE_STICKY.checkboxTd, isSelected && "bg-primary-light group-hover:bg-primary-light")}>
+                        <td className={cn("py-3.5 px-4 text-center align-middle", TABLE_STICKY.checkboxTd, isSelected && "bg-primary-light group-hover:bg-primary-light")}>
                           <div className="flex items-center justify-center">
                             <Checkbox 
                               checked={isSelected} 
@@ -648,15 +652,15 @@ export function PlansManagement() {
                             />
                           </div>
                         </td>
-                        <td className={cn("py-2.5 px-3.5 text-[13px] font-medium text-slate-700 tabular-nums", TABLE_STICKY.idTdWithCheckbox, isSelected && "bg-primary-light group-hover:bg-primary-light")}>
+                        <td className={cn("py-3.5 px-5 text-[13px] font-medium text-slate-700 tabular-nums", TABLE_STICKY.idTdWithCheckbox, isSelected && "bg-primary-light group-hover:bg-primary-light")}>
                           {plan.id}
                         </td>
                         {visibleColumns.map(col => (
-                          <td key={col.id} className="py-2.5 px-3.5 whitespace-nowrap">
+                          <td key={col.id} className="py-3.5 px-5 whitespace-nowrap">
                             {col.renderCell(plan, i)}
                           </td>
                         ))}
-                        <td className={cn("py-2.5 px-3", TABLE_STICKY.actionTd, isSelected && "bg-primary-light group-hover:bg-primary-light")}>
+                        <td className={cn("py-3.5 px-4", TABLE_STICKY.actionTd, isSelected && "bg-primary-light group-hover:bg-primary-light")}>
                           <RowActionMenu
                             items={[
                               { label: 'View Plan', icon: Eye, onClick: () => router.push(`/dashboard/subscriptions/plans/${plan.id}`) },

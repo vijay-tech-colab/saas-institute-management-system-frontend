@@ -171,10 +171,10 @@ export function SubscriptionsList() {
 
       {/* Table */}
       <div className="overflow-x-auto thin-scrollbar">
-        <table className="w-full min-w-[820px] text-left text-sm whitespace-nowrap">
+        <table className="w-full min-w-[960px] text-left text-sm whitespace-nowrap">
           <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold uppercase tracking-wider text-[11px]">
             <tr>
-              <th className={cn("px-4 py-3.5 text-center align-middle", TABLE_STICKY.checkboxTh)}>
+              <th className={cn("px-4 py-3 text-center align-middle", TABLE_STICKY.checkboxTh)}>
                 <div className="flex items-center justify-center">
                   <Checkbox
                     checked={selectedSubs.size === subscriptions.length && subscriptions.length > 0}
@@ -182,13 +182,13 @@ export function SubscriptionsList() {
                   />
                 </div>
               </th>
-              <th className={cn("px-4 py-3.5", TABLE_STICKY.idThWithCheckbox)}>ID</th>
+              <th className={cn("px-5 py-3", TABLE_STICKY.idThWithCheckbox)}>ID</th>
               {visibleColumns.map(col => (
-                <th key={col.id} className="px-4 py-3.5">
+                <th key={col.id} className="px-5 py-3">
                   <ColumnHeaderLabel label={col.label} icon={col.icon} />
                 </th>
               ))}
-              <th className={cn("px-4 py-3.5 text-right", TABLE_STICKY.actionTh)}>Actions</th>
+              <th className={cn("px-4 py-3 text-right", TABLE_STICKY.actionTh)}>Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
@@ -217,14 +217,14 @@ export function SubscriptionsList() {
                   </div>
                 </td>
                 <td className={cn(
-                  "px-4 py-3.5 text-sm font-medium text-slate-700 tabular-nums",
+                  "px-5 py-3.5 text-sm font-medium text-slate-700 tabular-nums",
                   TABLE_STICKY.idTdWithCheckbox,
                   isSelected && "bg-primary-light group-hover:bg-primary-light"
                 )}>
                   SUB-{String(sub.id).padStart(3, '0')}
                 </td>
                 {visibleColumns.map(col => (
-                  <td key={col.id} className="px-4 py-3.5">
+                  <td key={col.id} className="px-5 py-3.5">
                     {col.renderCell(sub, i)}
                   </td>
                 ))}

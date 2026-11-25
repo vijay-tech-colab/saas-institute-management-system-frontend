@@ -1,6 +1,6 @@
 import type {
   Plan, PricingTier, TrialUser, TrialSettings,
-  CustomerSubscription, Invoice, Payment, Coupon,
+  CustomerSubscription, Invoice, Payment,
   Renewal, AuditLog, RevenueDataPoint, SubscriptionStats, AIInsight,
   TenantHealth, GatewayMetrics, RecentActivity
 } from '../types';
@@ -266,30 +266,6 @@ export const mockPayments: Payment[] = [
   }))
 ];
 
-// ─── Coupons ───────────────────────────────────────────────
-export const mockCoupons: Coupon[] = [
-  { id: 'cup-1', code: 'LAUNCH50', discountType: 'percentage', discountValue: 50, maxDiscount: 5000, applicablePlans: ['plan-starter', 'plan-growth'], minimumPurchase: 1000, maximumUsage: 100, usageCount: 87, oneTimeUse: false, startDate: '2024-01-01', endDate: '2024-12-31', status: 'active', revenueGenerated: 124500 },
-  { id: 'cup-2', code: 'SAVE2000', discountType: 'flat', discountValue: 2000, applicablePlans: ['plan-growth', 'plan-pro'], minimumPurchase: 5000, maximumUsage: 50, usageCount: 50, oneTimeUse: false, startDate: '2024-05-01', endDate: '2024-06-30', status: 'expired', revenueGenerated: 89000 },
-  { id: 'cup-3', code: 'PRO30', discountType: 'percentage', discountValue: 30, maxDiscount: 3000, applicablePlans: ['plan-pro'], minimumPurchase: 2000, maximumUsage: 30, usageCount: 12, oneTimeUse: true, startDate: '2024-06-01', endDate: '2024-07-31', status: 'active', revenueGenerated: 42000 },
-  { id: 'cup-4', code: 'WELCOME10', discountType: 'percentage', discountValue: 10, applicablePlans: ['plan-starter', 'plan-growth', 'plan-pro'], minimumPurchase: 500, maximumUsage: 999, usageCount: 234, oneTimeUse: true, startDate: '2024-01-01', endDate: '2024-12-31', status: 'active', revenueGenerated: 312000 },
-  ...Array.from({ length: 400 }).map((_, i) => ({
-    id: `cup-${i + 5}`,
-    code: `OFFER${i + 5}`,
-    discountType: (['percentage', 'flat'] as const)[i % 2],
-    discountValue: i % 2 === 0 ? 10 + (i % 40) : 500 + (i * 10),
-    maxDiscount: 5000,
-    applicablePlans: ['plan-growth'],
-    minimumPurchase: 1000,
-    maximumUsage: 100,
-    usageCount: i % 50,
-    oneTimeUse: i % 2 === 0,
-    startDate: '2024-01-01',
-    endDate: '2024-12-31',
-    status: (['active', 'expired'] as const)[i % 2],
-    revenueGenerated: 10000 + (i * 100)
-  }))
-];
-
 // ─── Renewals ──────────────────────────────────────────────
 export const mockRenewals: Renewal[] = [
   { id: 'ren-1', instituteName: 'Sunshine Academy', planName: 'Growth (Yearly)', amount: 26989, renewalDate: '2025-01-15', status: 'upcoming', autoRenewal: true, daysUntilRenewal: 200, reminderSent: false },
@@ -314,7 +290,7 @@ export const mockRenewals: Renewal[] = [
 // ─── Audit Logs ────────────────────────────────────────────
 export const mockAuditLogs: AuditLog[] = [
   { id: 'aud-1', user: 'Super Admin', userRole: 'SUPER_ADMIN', action: 'Plan Updated', entity: 'Growth Plan', oldValue: '₹2,299/month', newValue: '₹2,499/month', ipAddress: '192.168.1.10', date: '2024-06-20', time: '14:32:15' },
-  { id: 'aud-2', user: 'Admin', userRole: 'ADMIN', action: 'Coupon Created', entity: 'PRO30', oldValue: '-', newValue: '30% off for Pro plan', ipAddress: '10.0.0.5', date: '2024-06-19', time: '11:15:42' },
+  { id: 'aud-2', user: 'Admin', userRole: 'ADMIN', action: 'Plan Feature Enabled', entity: 'Enterprise Plan', oldValue: 'Disabled', newValue: 'AI Insights enabled', ipAddress: '10.0.0.5', date: '2024-06-19', time: '11:15:42' },
   { id: 'aud-3', user: 'Super Admin', userRole: 'SUPER_ADMIN', action: 'Subscription Suspended', entity: 'Smart Institute Jaipur', oldValue: 'Active', newValue: 'Suspended', ipAddress: '192.168.1.10', date: '2024-06-18', time: '09:04:11' },
   { id: 'aud-4', user: 'Super Admin', userRole: 'SUPER_ADMIN', action: 'Invoice Sent', entity: 'INV-2024-0142', oldValue: '-', newValue: 'Email sent to rajesh@sunshine.edu', ipAddress: '192.168.1.10', date: '2024-06-15', time: '10:28:55' },
   { id: 'aud-5', user: 'System', userRole: 'SYSTEM', action: 'Trial Expired', entity: 'Digital Minds Academy', oldValue: 'Trial Active', newValue: 'Trial Expired', ipAddress: '127.0.0.1', date: '2024-06-15', time: '00:00:01' },
@@ -357,7 +333,6 @@ export const mockStats: SubscriptionStats = {
   todayRevenue: 28450,
   pendingRenewals: 23,
   failedPayments: 7,
-  activeCoupons: 3,
   mrr: 624000,
   arr: 7488000,
   trialConversionRate: 68.4,
@@ -402,6 +377,5 @@ export const mockRecentActivities: RecentActivity[] = [
   { id: 'act-2', type: 'plan_changed', title: 'Plan Upgraded', description: 'Upgraded from Starter to Professional', timeAgo: '2 hours ago', instituteName: 'Future Tech Institute' },
   { id: 'act-3', type: 'payment_received', title: 'Payment Received', description: '₹140,389 via Bank Transfer', timeAgo: '5 hours ago', instituteName: 'Apex Learning Hub' },
   { id: 'act-4', type: 'trial_started', title: 'New Trial Started', description: '14-day trial for Professional Plan', timeAgo: '1 day ago', instituteName: 'Digital Minds Academy' },
-  { id: 'act-5', type: 'coupon_applied', title: 'Coupon Applied', description: 'PRO30 applied (Saved ₹3,000)', timeAgo: '2 days ago', instituteName: 'National Skill Center' },
   { id: 'act-6', type: 'refund_initiated', title: 'Refund Initiated', description: '₹2,699 refunded to original source', timeAgo: '3 days ago', instituteName: 'Prime Computer Institute' },
 ];

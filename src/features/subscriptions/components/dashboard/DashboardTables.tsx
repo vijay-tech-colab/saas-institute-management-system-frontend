@@ -27,38 +27,38 @@ export function DashboardTables() {
         </div>
         
         <div className="overflow-x-auto thin-scrollbar">
-          <table className="w-full min-w-[680px] text-sm text-left">
+          <table className="w-full min-w-[740px] text-sm text-left">
             <thead className="bg-slate-50 text-slate-500 font-semibold text-xs uppercase tracking-wider border-b border-slate-100">
               <tr>
-                <th className={cn("px-4 py-3 whitespace-nowrap", TABLE_STICKY.idTh)}>ID</th>
-                <th className="px-4 py-3 whitespace-nowrap">Tenant</th>
-                <th className="px-4 py-3 whitespace-nowrap">Plan</th>
-                <th className="px-4 py-3 whitespace-nowrap">Status</th>
-                <th className="px-4 py-3 whitespace-nowrap">Amount</th>
+                <th className={cn("px-5 py-3 whitespace-nowrap", TABLE_STICKY.idTh)}>ID</th>
+                <th className="px-5 py-3 whitespace-nowrap">Tenant</th>
+                <th className="px-5 py-3 whitespace-nowrap">Plan</th>
+                <th className="px-5 py-3 whitespace-nowrap">Status</th>
+                <th className="px-5 py-3 whitespace-nowrap">Amount</th>
                 <th className={cn("px-4 py-3 whitespace-nowrap text-right", TABLE_STICKY.actionTh)}>Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {recentSubs.map((sub) => (
                 <tr key={sub.id} className="group hover:bg-slate-50 transition-colors">
-                  <td className={cn("px-4 py-3 whitespace-nowrap text-sm font-medium text-slate-700 tabular-nums", TABLE_STICKY.idTd)}>
+                  <td className={cn("px-5 py-3.5 whitespace-nowrap text-sm font-medium text-slate-700 tabular-nums", TABLE_STICKY.idTd)}>
                     {sub.id}
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap">
+                  <td className="px-5 py-3.5 whitespace-nowrap">
                     <p className="font-semibold text-slate-900">{sub.instituteName}</p>
                     <p className="text-[11px] text-slate-500">{sub.email}</p>
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap">
+                  <td className="px-5 py-3.5 whitespace-nowrap">
                     <span className="font-medium text-slate-700">{sub.currentPlan}</span>
                     <span className="text-xs text-slate-400 ml-1">({sub.billingCycle})</span>
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap">
+                  <td className="px-5 py-3.5 whitespace-nowrap">
                     <StatusBadge status={sub.status} />
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap font-medium text-slate-900">
+                  <td className="px-5 py-3.5 whitespace-nowrap font-medium text-slate-900">
                     ₹{sub.monthlyRevenue.toLocaleString()}
                   </td>
-                  <td className={cn("px-4 py-3 whitespace-nowrap text-right", TABLE_STICKY.actionTd)}>
+                  <td className={cn("px-4 py-3.5 whitespace-nowrap text-right", TABLE_STICKY.actionTd)}>
                     <RowActionMenu
                       ariaLabel={`Actions for ${sub.instituteName}`}
                       items={[
@@ -88,38 +88,38 @@ export function DashboardTables() {
         </div>
         
         <div className="overflow-x-auto thin-scrollbar">
-          <table className="w-full min-w-[680px] text-sm text-left">
+          <table className="w-full min-w-[740px] text-sm text-left">
             <thead className="bg-slate-50 text-slate-500 font-semibold text-xs uppercase tracking-wider border-b border-slate-100">
               <tr>
-                <th className={cn("px-4 py-3 whitespace-nowrap", TABLE_STICKY.idTh)}>ID</th>
-                <th className="px-4 py-3 whitespace-nowrap">Invoice</th>
-                <th className="px-4 py-3 whitespace-nowrap">Tenant</th>
-                <th className="px-4 py-3 whitespace-nowrap">Amount</th>
-                <th className="px-4 py-3 whitespace-nowrap">Status</th>
+                <th className={cn("px-5 py-3 whitespace-nowrap", TABLE_STICKY.idTh)}>ID</th>
+                <th className="px-5 py-3 whitespace-nowrap">Invoice</th>
+                <th className="px-5 py-3 whitespace-nowrap">Tenant</th>
+                <th className="px-5 py-3 whitespace-nowrap">Amount</th>
+                <th className="px-5 py-3 whitespace-nowrap">Status</th>
                 <th className={cn("px-4 py-3 whitespace-nowrap text-right", TABLE_STICKY.actionTh)}>Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {recentPayments.map((pay) => (
                 <tr key={pay.id} className="group hover:bg-slate-50 transition-colors">
-                  <td className={cn("px-4 py-3 whitespace-nowrap text-sm font-medium text-slate-700 tabular-nums", TABLE_STICKY.idTd)}>
+                  <td className={cn("px-5 py-3.5 whitespace-nowrap text-sm font-medium text-slate-700 tabular-nums", TABLE_STICKY.idTd)}>
                     {pay.id}
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap">
+                  <td className="px-5 py-3.5 whitespace-nowrap">
                     <p className="font-semibold text-slate-900">{pay.invoiceNumber}</p>
                     <p className="text-[11px] text-slate-500">{format(new Date(pay.paymentDate), 'MMM dd, yyyy')}</p>
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap">
+                  <td className="px-5 py-3.5 whitespace-nowrap">
                     <p className="font-medium text-slate-700">{pay.instituteName}</p>
                     <p className="text-xs text-slate-400">{pay.gateway}</p>
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap font-medium text-slate-900">
+                  <td className="px-5 py-3.5 whitespace-nowrap font-medium text-slate-900">
                     ₹{pay.amount.toLocaleString()}
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap">
+                  <td className="px-5 py-3.5 whitespace-nowrap">
                     <StatusBadge status={pay.status} />
                   </td>
-                  <td className={cn("px-4 py-3 whitespace-nowrap text-right", TABLE_STICKY.actionTd)}>
+                  <td className={cn("px-4 py-3.5 whitespace-nowrap text-right", TABLE_STICKY.actionTd)}>
                     <RowActionMenu
                       ariaLabel={`Actions for payment ${pay.invoiceNumber}`}
                       items={[

@@ -35,21 +35,21 @@ const ITEM_VARIANT_STYLES: Record<NonNullable<RowActionItem["variant"]>, string>
  */
 export const TABLE_STICKY = {
   checkboxTh:
-    "sticky left-0 z-20 bg-slate-50 w-11 min-w-[44px] max-w-[44px]",
+    "sticky left-0 z-20 bg-slate-50 w-12 min-w-[48px] max-w-[48px]",
   checkboxTd:
-    "sticky left-0 z-10 bg-white group-hover:bg-slate-50 w-11 min-w-[44px] max-w-[44px]",
+    "sticky left-0 z-10 bg-white group-hover:bg-slate-50 w-12 min-w-[48px] max-w-[48px]",
   idThWithCheckbox:
-    "sticky left-[44px] z-20 bg-slate-50 border-r border-slate-200/70 shadow-[2px_0_6px_-2px_rgba(15,23,42,0.06)] whitespace-nowrap",
+    "sticky left-[48px] z-20 bg-slate-50 border-r border-slate-200/70 shadow-[2px_0_6px_-2px_rgba(15,23,42,0.06)] whitespace-nowrap",
   idTdWithCheckbox:
-    "sticky left-[44px] z-10 bg-white group-hover:bg-slate-50 border-r border-slate-100 shadow-[2px_0_6px_-2px_rgba(15,23,42,0.05)] whitespace-nowrap",
+    "sticky left-[48px] z-10 bg-white group-hover:bg-slate-50 border-r border-slate-100 shadow-[2px_0_6px_-2px_rgba(15,23,42,0.05)] whitespace-nowrap",
   idTh:
     "sticky left-0 z-20 bg-slate-50 border-r border-slate-200/70 shadow-[2px_0_6px_-2px_rgba(15,23,42,0.06)] whitespace-nowrap",
   idTd:
     "sticky left-0 z-10 bg-white group-hover:bg-slate-50 border-r border-slate-100 shadow-[2px_0_6px_-2px_rgba(15,23,42,0.05)] whitespace-nowrap",
   actionTh:
-    "sticky right-0 z-20 bg-slate-50 border-l border-slate-200/70 shadow-[-2px_0_6px_-2px_rgba(15,23,42,0.06)] text-center w-[64px] min-w-[64px] whitespace-nowrap",
+    "sticky right-0 z-20 bg-slate-50 border-l border-slate-200/70 shadow-[-2px_0_6px_-2px_rgba(15,23,42,0.06)] text-center w-[76px] min-w-[76px] whitespace-nowrap",
   actionTd:
-    "sticky right-0 z-10 bg-white group-hover:bg-slate-50 border-l border-slate-100 shadow-[-2px_0_6px_-2px_rgba(15,23,42,0.05)] text-center w-[64px] min-w-[64px] whitespace-nowrap",
+    "sticky right-0 z-10 bg-white group-hover:bg-slate-50 border-l border-slate-100 shadow-[-2px_0_6px_-2px_rgba(15,23,42,0.05)] text-center w-[76px] min-w-[76px] whitespace-nowrap",
 };
 
 export function RowActionMenu({

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { SegmentedTabs } from '@/components/ui/tabs';
 import { StatusBadge } from '@/features/subscriptions/components/shared/StatusBadge';
 import { mockPlans } from '../../data/mock-data';
 import { Plan } from '../../types';
@@ -239,30 +240,30 @@ function Tab_Subscribers({ plan }: { plan: Plan }) {
           <button className="text-sm font-semibold text-primary hover:text-primary-dark">View All {plan.subscribersCount}</button>
         </div>
         <div className="overflow-x-auto thin-scrollbar">
-          <table className="w-full min-w-[680px] text-left">
+          <table className="w-full min-w-[740px] text-left">
             <thead className="bg-slate-50 border-b border-slate-100">
               <tr>
-                <th className={cn("py-3 px-4 text-xs font-bold text-slate-500 uppercase", TABLE_STICKY.idTh)}>ID</th>
-                <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase">Institute Name</th>
-                <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase">Joined Date</th>
-                <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase">Billing Cycle</th>
-                <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase">Status</th>
-                <th className={cn("py-3 px-4 text-right text-xs font-bold text-slate-500 uppercase", TABLE_STICKY.actionTh)}>Actions</th>
+                <th className={cn("py-3 px-5 text-xs font-bold text-slate-500 uppercase whitespace-nowrap", TABLE_STICKY.idTh)}>ID</th>
+                <th className="py-3 px-5 text-xs font-bold text-slate-500 uppercase whitespace-nowrap">Institute Name</th>
+                <th className="py-3 px-5 text-xs font-bold text-slate-500 uppercase whitespace-nowrap">Joined Date</th>
+                <th className="py-3 px-5 text-xs font-bold text-slate-500 uppercase whitespace-nowrap">Billing Cycle</th>
+                <th className="py-3 px-5 text-xs font-bold text-slate-500 uppercase whitespace-nowrap">Status</th>
+                <th className={cn("py-3 px-4 text-right text-xs font-bold text-slate-500 uppercase whitespace-nowrap", TABLE_STICKY.actionTh)}>Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {[1, 2, 3, 4, 5].map(i => (
                 <tr key={i} className="group hover:bg-slate-50 transition-colors">
-                  <td className={cn("py-3.5 px-4 text-sm font-medium text-slate-700 tabular-nums", TABLE_STICKY.idTd)}>
+                  <td className={cn("py-3.5 px-5 text-sm font-medium text-slate-700 tabular-nums whitespace-nowrap", TABLE_STICKY.idTd)}>
                     SUB-00{i}
                   </td>
-                  <td className="py-3.5 px-4 text-sm font-medium text-slate-900">Institute Name {i}</td>
-                  <td className="py-3.5 px-4 text-sm text-slate-600">{format(new Date(), 'MMM d, yyyy')}</td>
-                  <td className="py-3.5 px-4 text-sm text-slate-600">{i % 2 === 0 ? 'Monthly' : 'Annual'}</td>
-                  <td className="py-3.5 px-4">
+                  <td className="py-3.5 px-5 text-sm font-medium text-slate-900 whitespace-nowrap">Institute Name {i}</td>
+                  <td className="py-3.5 px-5 text-sm text-slate-600 whitespace-nowrap">{format(new Date(), 'MMM d, yyyy')}</td>
+                  <td className="py-3.5 px-5 text-sm text-slate-600 whitespace-nowrap">{i % 2 === 0 ? 'Monthly' : 'Annual'}</td>
+                  <td className="py-3.5 px-5 whitespace-nowrap">
                     <StatusBadge status="active" />
                   </td>
-                  <td className={cn("py-3.5 px-4 text-right", TABLE_STICKY.actionTd)}>
+                  <td className={cn("py-3.5 px-4 text-right whitespace-nowrap", TABLE_STICKY.actionTd)}>
                     <RowActionMenu
                       ariaLabel={`Actions for Institute Name ${i}`}
                       items={[
@@ -381,24 +382,18 @@ export function PlanDetailsView({ planId }: { planId: string }) {
               </div>
             </div>
 
-            <nav className="-mb-5 overflow-x-auto border-t border-slate-100 pt-1 sm:-mb-6" aria-label="Plan details sections">
-              <div className="flex min-w-max items-center gap-6">
-                {TABS.map(tab => (
-                  <button
-                    type="button"
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center gap-2 border-b-2 py-4 text-sm font-semibold whitespace-nowrap transition-colors ${
-                      activeTab === tab.id
-                        ? 'border-indigo-600 text-indigo-700'
-                        : 'border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-800'
-                    }`}
-                  >
-                    {tab.icon} {tab.label}
-                  </button>
-                ))}
-              </div>
-            </nav>
+            <div className="border-t border-slate-100 pt-3.5">
+              <SegmentedTabs
+                ariaLabel="Plan details sections"
+                value={activeTab}
+                onChange={setActiveTab}
+                options={TABS.map(tab => ({
+                  value: tab.id,
+                  label: tab.label,
+                  icon: tab.icon,
+                }))}
+              />
+            </div>
           </div>
         </header>
 

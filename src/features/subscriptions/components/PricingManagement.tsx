@@ -9,6 +9,7 @@ import { PageHeader, Toggle } from './shared/UIComponents';
 import { Checkbox } from "@/components/ui/checkbox";
 import { RowActionMenu, TABLE_STICKY } from "@/components/ui/row-action-menu";
 import { ColumnHeaderLabel, TableColumnDef, TableFieldsButton, useTableColumns } from "@/components/ui/table-configurator";
+import { SegmentedTabs } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { mockPricingTiers, mockPlans } from '../data/mock-data';
 import type { BillingCycle } from '../types';
@@ -151,32 +152,31 @@ export function PricingManagement() {
         breadcrumbs={[{ label: 'Subscriptions' }, { label: 'Pricing' }]}
       />
 
-      {/* Plan Selector */}
-      <div className="flex items-center gap-3 mb-6 flex-wrap">
-        {mockPlans.filter(p => p.status !== 'inactive').map(p => (
-          <button
-            key={p.id}
-            onClick={() => setSelectedPlan(p.id)}
-            className={`px-4 py-2 rounded-xl text-sm font-semibold border transition-all ${selectedPlan === p.id ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm shadow-indigo-200' : 'bg-white text-slate-600 border-slate-200 hover:border-blue-300'}`}
-          >
-            {p.name}
-            {p.status === 'popular' && <Star className="w-3 h-3 inline ml-1 text-current" />}
-          </button>
-        ))}
-      </div>
+      {/* Plan & Billing Cycle Selectors */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+        <SegmentedTabs
+          ariaLabel="Select subscription plan"
+          value={selectedPlan}
+          onChange={setSelectedPlan}
+          options={mockPlans
+            .filter(p => p.status !== 'inactive')
+            .map(p => ({
+              value: p.id,
+              label: p.name,
+              icon: p.status === 'popular' ? <Star className="w-3.5 h-3.5" /> : undefined,
+            }))}
+        />
 
-      {/* Billing Cycle Tabs */}
-      <div className="bg-white border border-slate-100 rounded-xl p-1.5 inline-flex gap-1 mb-6 shadow-sm">
-        {CYCLE_ORDER.map(cycle => (
-          <button
-            key={cycle}
-            onClick={() => setSelectedCycle(cycle)}
-            className={`relative px-4 py-2 rounded-xl text-sm font-semibold transition-all ${selectedCycle === cycle ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-          >
-            {CYCLE_LABELS[cycle]}
-            {cycle === 'yearly' && <span className="absolute -top-2 -right-2 px-1.5 py-0.5 bg-emerald-500 text-white text-[9px] font-bold rounded-full leading-none">BEST</span>}
-          </button>
-        ))}
+        <SegmentedTabs
+          ariaLabel="Select billing cycle"
+          value={selectedCycle}
+          onChange={setSelectedCycle}
+          options={CYCLE_ORDER.map(cycle => ({
+            value: cycle,
+            label: CYCLE_LABELS[cycle],
+            badge: cycle === 'yearly' ? 'Best' : undefined,
+          }))}
+        />
       </div>
 
       {/* Pricing Cards Grid */}
@@ -187,7 +187,7 @@ export function PricingManagement() {
             key={`${selectedPlan}-${selectedCycle}`}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white border border-indigo-100 rounded-xl p-6 shadow-sm ring-2 ring-indigo-50"
+            className="bg-white border border-primary/20 rounded-2xl p-6 shadow-xs ring-2 ring-primary/10"
           >
             {tier.offerBadge && (
               <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-600 text-white text-[11px] font-bold rounded-full mb-4">
@@ -282,7 +282,7 @@ export function PricingManagement() {
           />
         </div>
         <div className="overflow-x-auto thin-scrollbar">
-          <table className="w-full min-w-[820px]">
+          <table className="w-full min-w-[960px]">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-100">
                 <th className={cn("py-3 px-4 text-center align-middle", TABLE_STICKY.checkboxTh)}>
@@ -293,11 +293,11 @@ export function PricingManagement() {
                     />
                   </div>
                 </th>
-                <th className={cn("text-left py-3 px-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap", TABLE_STICKY.idThWithCheckbox)}>
+                <th className={cn("text-left py-3 px-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap", TABLE_STICKY.idThWithCheckbox)}>
                   ID
                 </th>
                 {visibleColumns.map(col => (
-                  <th key={col.id} className="text-left py-3 px-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">
+                  <th key={col.id} className="text-left py-3 px-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">
                     <ColumnHeaderLabel label={col.label} icon={col.icon} />
                   </th>
                 ))}
@@ -335,14 +335,14 @@ export function PricingManagement() {
                       </div>
                     </td>
                     <td className={cn(
-                      "py-3.5 px-4 text-sm font-medium text-slate-700 tabular-nums whitespace-nowrap",
+                      "py-3.5 px-5 text-sm font-medium text-slate-700 tabular-nums whitespace-nowrap",
                       TABLE_STICKY.idTdWithCheckbox,
                       isSelected && "bg-primary-light group-hover:bg-primary-light"
                     )}>
                       {rowId}
                     </td>
                     {visibleColumns.map(col => (
-                      <td key={col.id} className="py-3.5 px-4 whitespace-nowrap">
+                      <td key={col.id} className="py-3.5 px-5 whitespace-nowrap">
                         {col.renderCell(row, idx)}
                       </td>
                     ))}

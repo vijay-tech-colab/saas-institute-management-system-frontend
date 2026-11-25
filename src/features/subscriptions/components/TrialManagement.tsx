@@ -166,7 +166,7 @@ export function TrialManagement() {
             />
           </div>
           <div className="overflow-x-auto thin-scrollbar">
-            <table className="w-full min-w-[920px]">
+            <table className="w-full min-w-[1040px]">
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-100">
                   <th className={cn("py-3 px-4 text-center align-middle", TABLE_STICKY.checkboxTh)}>
@@ -177,11 +177,11 @@ export function TrialManagement() {
                       />
                     </div>
                   </th>
-                  <th className={cn("text-left py-3 px-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap", TABLE_STICKY.idThWithCheckbox)}>
+                  <th className={cn("text-left py-3 px-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap", TABLE_STICKY.idThWithCheckbox)}>
                     ID
                   </th>
                   {visibleColumns.map(col => (
-                    <th key={col.id} className="text-left py-3 px-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">
+                    <th key={col.id} className="text-left py-3 px-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">
                       <ColumnHeaderLabel label={col.label} icon={col.icon} />
                     </th>
                   ))}
@@ -219,14 +219,14 @@ export function TrialManagement() {
                       </div>
                     </td>
                     <td className={cn(
-                      "py-3.5 px-4 text-sm font-medium text-slate-700 tabular-nums whitespace-nowrap",
+                      "py-3.5 px-5 text-sm font-medium text-slate-700 tabular-nums whitespace-nowrap",
                       TABLE_STICKY.idTdWithCheckbox,
                       isSelected && "bg-primary-light group-hover:bg-primary-light"
                     )}>
                       {t.id}
                     </td>
                     {visibleColumns.map(col => (
-                      <td key={col.id} className="py-3.5 px-4 whitespace-nowrap">
+                      <td key={col.id} className="py-3.5 px-5 whitespace-nowrap">
                         {col.renderCell(t, i)}
                       </td>
                     ))}

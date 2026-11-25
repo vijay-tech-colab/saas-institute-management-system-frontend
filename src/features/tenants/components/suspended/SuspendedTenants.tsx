@@ -232,10 +232,10 @@ export function SuspendedTenants() {
 
         {/* Table Body */}
         <div className="flex-1 overflow-x-auto bg-white thin-scrollbar">
-          <table className="w-full min-w-[920px] text-left border-collapse">
+          <table className="w-full min-w-[1040px] text-left border-collapse">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-100">
-                <th className={cn("py-2.5 px-3 text-center align-middle", TABLE_STICKY.checkboxTh)}>
+                <th className={cn("py-3 px-4 text-center align-middle", TABLE_STICKY.checkboxTh)}>
                   <div className="flex items-center justify-center">
                     <Checkbox
                       checked={selectedTenants.size === paginatedData.length && paginatedData.length > 0}
@@ -243,13 +243,13 @@ export function SuspendedTenants() {
                     />
                   </div>
                 </th>
-                <th className={cn("text-left py-2.5 px-3.5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide", TABLE_STICKY.idThWithCheckbox)}>ID</th>
+                <th className={cn("text-left py-3 px-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide", TABLE_STICKY.idThWithCheckbox)}>ID</th>
                 {visibleColumns.map(col => (
-                  <th key={col.id} className="text-left py-2.5 px-3.5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">
+                  <th key={col.id} className="text-left py-3 px-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap">
                     <ColumnHeaderLabel label={col.label} icon={col.icon} />
                   </th>
                 ))}
-                <th className={cn("py-2.5 px-3 text-[11px] font-semibold text-slate-500 uppercase tracking-wide", TABLE_STICKY.actionTh)}>Actions</th>
+                <th className={cn("py-3 px-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wide", TABLE_STICKY.actionTh)}>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -270,7 +270,7 @@ export function SuspendedTenants() {
                     )}
                     onClick={() => toggleSelect(tenant.id)}
                   >
-                    <td className={cn("py-2.5 px-3 text-center align-middle", TABLE_STICKY.checkboxTd, isSelected && "bg-primary-light group-hover:bg-primary-light")}>
+                    <td className={cn("py-3.5 px-4 text-center align-middle", TABLE_STICKY.checkboxTd, isSelected && "bg-primary-light group-hover:bg-primary-light")}>
                       <div className="flex items-center justify-center">
                         <Checkbox
                           checked={isSelected}
@@ -279,15 +279,15 @@ export function SuspendedTenants() {
                         />
                       </div>
                     </td>
-                    <td className={cn("py-2.5 px-3.5 text-[13px] font-medium text-slate-700 tabular-nums", TABLE_STICKY.idTdWithCheckbox, isSelected && "bg-primary-light group-hover:bg-primary-light")}>
+                    <td className={cn("py-3.5 px-5 text-[13px] font-medium text-slate-700 tabular-nums", TABLE_STICKY.idTdWithCheckbox, isSelected && "bg-primary-light group-hover:bg-primary-light")}>
                       {tenant.id}
                     </td>
                     {visibleColumns.map(col => (
-                      <td key={col.id} className="py-2.5 px-3.5 whitespace-nowrap">
+                      <td key={col.id} className="py-3.5 px-5 whitespace-nowrap">
                         {col.renderCell(tenant, i)}
                       </td>
                     ))}
-                    <td className={cn("py-2.5 px-3", TABLE_STICKY.actionTd, isSelected && "bg-primary-light group-hover:bg-primary-light")} onClick={(e) => e.stopPropagation()}>
+                    <td className={cn("py-3.5 px-4", TABLE_STICKY.actionTd, isSelected && "bg-primary-light group-hover:bg-primary-light")} onClick={(e) => e.stopPropagation()}>
                       <RowActionMenu
                         items={[
                           { label: 'Reinstate Tenant', icon: RotateCcw, variant: 'success', onClick: () => {} },

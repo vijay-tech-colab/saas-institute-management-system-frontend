@@ -9,6 +9,7 @@ import {
   FloatingSheetFooter,
   FloatingSheetHeader,
 } from "@/components/ui/floating-sheet"
+import { SegmentedTabs } from "@/components/ui/tabs"
 import {
   INITIAL_PLATFORM_NOTIFICATIONS,
   NotificationEmptyState,
@@ -100,38 +101,17 @@ export function NotificationSheet({
       />
 
       {/* Filter Tabs */}
-      <div className="px-4 py-2.5 border-b border-slate-100 flex items-center gap-1.5 bg-white shrink-0">
-        {(
-          [
-            { id: "all", label: "All", count: notifications.length },
-            { id: "unread", label: "Unread", count: unreadCount },
-          ] as const
-        ).map((tab) => {
-          const active = activeTab === tab.id
-          return (
-            <button
-              key={tab.id}
-              type="button"
-              onClick={() => setActiveTab(tab.id)}
-              className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors cursor-pointer flex items-center gap-1.5 ${
-                active
-                  ? "bg-primary-light text-primary font-semibold"
-                  : "text-slate-500 hover:text-slate-800 hover:bg-slate-100"
-              }`}
-            >
-              <span>{tab.label}</span>
-              <span
-                className={`text-[10px] px-1.5 py-0.5 rounded-full leading-none tabular-nums ${
-                  active
-                    ? "bg-primary/15 text-primary"
-                    : "bg-slate-100 text-slate-500"
-                }`}
-              >
-                {tab.count}
-              </span>
-            </button>
-          )
-        })}
+      <div className="px-4 py-2.5 border-b border-slate-100 bg-white shrink-0">
+        <SegmentedTabs
+          size="sm"
+          ariaLabel="Notification filter"
+          value={activeTab}
+          onChange={setActiveTab}
+          options={[
+            { value: "all", label: "All", count: notifications.length },
+            { value: "unread", label: "Unread", count: unreadCount },
+          ]}
+        />
       </div>
 
       {/* Grouped Notifications List */}

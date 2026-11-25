@@ -60,3 +60,13 @@ Whenever creating or updating any right-side slide-over sheet, drawer, or slider
 2. **Consistent Floating Geometry & Motion**:
    - Sheets must slide smoothly from the right with clean viewport inset margins (`top-3 right-3 bottom-3 sm:top-4 sm:right-3 sm:bottom-4`), `rounded-2xl`, subtle border (`border-slate-200/90`), elevated shadow, and a soft blurred backdrop (`bg-slate-950/15 backdrop-blur-[1.5px]`).
    - Always include the standardized header (`<- Title` + optional count badge + `X` close button) and sticky footer for primary actions (`Done`, `Reset`, `Preferences`, etc.).
+
+---
+
+### Canonical Tabs & Segmented Switcher Standard (Mandatory Across App):
+Whenever creating or updating tabs, filter bars, view switchers, or segmented selectors anywhere in the application, ALWAYS use the unified shared tab primitives:
+1. **Use `<SegmentedTabs />` (or `<Tabs />`, `<TabsList />`, `<TabsTrigger />`) from `@/components/ui/tabs`**:
+   - Never build ad-hoc underline (`border-b-2`) tabs, indigo (`bg-indigo-600` / `text-indigo-600`) tabs, or custom disconnected pill toggles.
+   - For table toolbar status filters, use `<FilterChips />` from `@/features/subscriptions/components/shared/UIComponents`, which wraps `<SegmentedTabs size="sm" />`.
+2. **Consistent Visual Styling**:
+   - All tabs share the `bg-white/95 border border-slate-200/90 rounded-2xl p-1 shadow-[0_1px_2px_rgba(15,23,42,0.04)]` dock with the spring-animated Nordic Teal active capsule (`bg-gradient-to-b from-primary to-primary-hover text-white font-semibold rounded-xl`).

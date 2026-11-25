@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { StatusBadge } from "@/components/ui/status-badge";
+import { SegmentedTabs } from "@/components/ui/tabs";
 import {
   Select,
   SelectContent,
@@ -279,25 +280,15 @@ export function AdminTeamRolesSection() {
           description="Inspect or customize capability access per internal console role."
         >
           <div className="space-y-3">
-            <div className="flex flex-wrap gap-1.5 p-1 rounded-lg bg-slate-100/80 border border-slate-200/80 w-fit">
-              {(Object.keys(ROLE_LABELS) as AdminRoleKey[]).map((roleKey) => {
-                const active = selectedRole === roleKey;
-                return (
-                  <button
-                    key={roleKey}
-                    type="button"
-                    onClick={() => setSelectedRole(roleKey)}
-                    className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer ${
-                      active
-                        ? "bg-primary-light text-primary border border-primary-border shadow-xs font-semibold"
-                        : "text-slate-600 hover:text-slate-900"
-                    }`}
-                  >
-                    {ROLE_LABELS[roleKey]}
-                  </button>
-                );
-              })}
-            </div>
+            <SegmentedTabs
+              ariaLabel="Role permissions filter"
+              value={selectedRole}
+              onChange={(val) => setSelectedRole(val as AdminRoleKey)}
+              options={(Object.keys(ROLE_LABELS) as AdminRoleKey[]).map((roleKey) => ({
+                value: roleKey,
+                label: ROLE_LABELS[roleKey],
+              }))}
+            />
 
             <div className="rounded-lg border border-slate-200/80 bg-white divide-y divide-slate-100">
               {PERMISSION_DEFINITIONS.map((perm) => {

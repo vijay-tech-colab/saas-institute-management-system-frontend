@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom';
 import { Search, X, ChevronDown, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
+import { SegmentedTabs } from '@/components/ui/tabs';
 
 // ─── Search Input ───────────────────────────────────────────
 interface SearchInputProps {
@@ -53,27 +54,13 @@ interface FilterChipsProps {
 
 export function FilterChips({ options, selected, onChange, className }: FilterChipsProps) {
   return (
-    <div className={cn('flex items-center gap-1.5 overflow-x-auto max-w-full pb-0.5 thin-scrollbar', className)}>
-      {options.map(opt => (
-        <button
-          key={opt.value}
-          onClick={() => onChange(opt.value)}
-          className={cn(
-            'px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-150 border whitespace-nowrap shrink-0 cursor-pointer',
-            selected === opt.value
-              ? 'bg-primary text-primary-foreground border-primary shadow-xs font-semibold'
-              : 'bg-white text-slate-600 border-slate-200/90 hover:border-slate-300 hover:text-slate-900 shadow-xs'
-          )}
-        >
-          {opt.label}
-          {opt.count !== undefined && (
-            <span className={cn('ml-1.5 px-1.5 py-0.5 rounded-full text-[10px]', selected === opt.value ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500')}>
-              {opt.count}
-            </span>
-          )}
-        </button>
-      ))}
-    </div>
+    <SegmentedTabs
+      options={options}
+      value={selected}
+      onChange={onChange}
+      size="sm"
+      className={className}
+    />
   );
 }
 

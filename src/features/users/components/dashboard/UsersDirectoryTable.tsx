@@ -25,7 +25,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { DataTablePagination } from "@/components/ui/pagination";
 import { EmptyState } from "@/components/ui/empty-state";
 import { RowActionMenu, TABLE_STICKY } from "@/components/ui/row-action-menu";
-import { TableSkeleton } from "@/components/ui/skeleton";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   ColumnHeaderLabel,
   TableColumnDef,
@@ -269,21 +269,23 @@ export function UsersDirectoryTable() {
 
   const totalCols = visibleColumns.length + 3; // Checkbox + ID + visibleColumns + Actions
 
-  return (
-    <div className="bg-white border border-slate-200/80 rounded-2xl shadow-2xs flex flex-col overflow-hidden">
-      {/* Toolbar */}
-      <div className="p-3.5 sm:p-4 border-b border-slate-100 flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-slate-50/50">
-        <div className="flex items-center gap-2.5 flex-wrap">
-          <div>
-            <h3 className="text-sm sm:text-base font-semibold text-slate-900 tracking-tight">
-              Owners Directory
-            </h3>
-            <p className="text-xs text-slate-500">
-              {filteredUsers.length} registered institute accounts
-            </p>
-          </div>
-        </div>
+  const activeCount = useMemo(
+    () => mockUsers.filter((u) => u.status === "active").length,
+    []
+  );
+  const pendingCount = useMemo(
+    () => mockUsers.filter((u) => u.status === "pending").length,
+    []
+  );
+  const blockedCount = useMemo(
+    () => mockUsers.filter((u) => u.status === "blocked").length,
+    []
+  );
 
+  return (
+    <div className="bg-white border border-slate-200/80 rounded-2xl shadow-2xs flex flex-col flex-1 overflow-hidden min-h-0">
+      {/* Toolbar (matches TenantList & standard data table pattern) */}
+      <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shrink-0 bg-slate-50/50">
         <div className="flex items-center gap-2.5 flex-wrap">
           <SearchInput
             value={search}
@@ -291,22 +293,8 @@ export function UsersDirectoryTable() {
               setSearch(val);
               setPageIndex(0);
             }}
-            placeholder="Search name, email, ID..."
-            className="w-full sm:w-64"
-          />
-
-          <FilterChips
-            options={[
-              { label: "All", value: "all" },
-              { label: "Active", value: "active" },
-              { label: "Pending", value: "pending" },
-              { label: "Blocked", value: "blocked" },
-            ]}
-            selected={statusFilter}
-            onChange={(val) => {
-              setStatusFilter(val);
-              setPageIndex(0);
-            }}
+            placeholder="Search users by name, email, institute, ID..."
+            className="w-full sm:w-72"
           />
 
           <TableFieldsButton
@@ -321,16 +309,62 @@ export function UsersDirectoryTable() {
             idFieldLabel="User ID"
           />
         </div>
+
+        <FilterChips
+          options={[
+            { label: "All", value: "all", count: mockUsers.length },
+            { label: "Active", value: "active", count: activeCount },
+            { label: "Pending", value: "pending", count: pendingCount },
+            { label: "Blocked", value: "blocked", count: blockedCount },
+          ]}
+          selected={statusFilter}
+          onChange={(val) => {
+            setStatusFilter(val);
+            setPageIndex(0);
+          }}
+        />
       </div>
+
+      {/* Bulk Action Bar */}
+      <AnimatePresence>
+        {selectedIds.size > 0 && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="bg-primary-light border-b border-primary-border px-4 py-2.5 flex items-center justify-between overflow-hidden shrink-0"
+          >
+            <span className="text-xs font-semibold text-primary">
+              {selectedIds.size} {selectedIds.size === 1 ? "owner" : "owners"} selected
+            </span>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setSelectedIds(new Set())}
+                className="px-2.5 py-1 text-xs font-medium text-slate-600 hover:text-slate-900 bg-white border border-slate-200 rounded-lg cursor-pointer"
+              >
+                Clear
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedIds(new Set())}
+                className="px-2.5 py-1 text-xs font-semibold text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-lg cursor-pointer"
+              >
+                Suspend Selected
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Table */}
       <div className="overflow-x-auto thin-scrollbar">
-        <table className="w-full min-w-[920px] text-left border-collapse">
+        <table className="w-full min-w-[1080px] text-left border-collapse">
           <thead>
             <tr className="bg-slate-50 border-b border-slate-100">
               <th
                 className={cn(
-                  "py-2.5 px-3 text-center align-middle",
+                  "py-3 px-4 text-center align-middle",
                   TABLE_STICKY.checkboxTh
                 )}
               >
@@ -346,7 +380,7 @@ export function UsersDirectoryTable() {
               </th>
               <th
                 className={cn(
-                  "text-left py-2.5 px-3.5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide",
+                  "text-left py-3 px-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide",
                   TABLE_STICKY.idThWithCheckbox
                 )}
               >
@@ -356,7 +390,7 @@ export function UsersDirectoryTable() {
                 <th
                   key={col.id}
                   className={cn(
-                    "text-left py-2.5 px-3.5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap",
+                    "text-left py-3 px-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap",
                     col.thClassName
                   )}
                 >
@@ -369,7 +403,7 @@ export function UsersDirectoryTable() {
               ))}
               <th
                 className={cn(
-                  "py-2.5 px-3 text-[11px] font-semibold text-slate-500 uppercase tracking-wide",
+                  "py-3 px-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wide",
                   TABLE_STICKY.actionTh
                 )}
               >
@@ -379,9 +413,7 @@ export function UsersDirectoryTable() {
           </thead>
 
           <tbody className="divide-y divide-slate-100">
-            {false ? (
-              <TableSkeleton columns={totalCols} rows={pageSize} />
-            ) : paginatedUsers.length > 0 ? (
+            {paginatedUsers.length > 0 ? (
               paginatedUsers.map((user, idx) => {
                 const isSelected = selectedIds.has(user.id);
                 return (
@@ -397,7 +429,7 @@ export function UsersDirectoryTable() {
                   >
                     <td
                       className={cn(
-                        "py-2.5 px-3 text-center align-middle",
+                        "py-3.5 px-4 text-center align-middle",
                         TABLE_STICKY.checkboxTd,
                         isSelected && "bg-primary-light group-hover:bg-primary-light"
                       )}
@@ -412,7 +444,7 @@ export function UsersDirectoryTable() {
                     </td>
                     <td
                       className={cn(
-                        "py-2.5 px-3.5 text-[13px] font-medium text-slate-700 tabular-nums",
+                        "py-3.5 px-5 text-[13px] font-medium text-slate-700 tabular-nums",
                         TABLE_STICKY.idTdWithCheckbox,
                         isSelected && "bg-primary-light group-hover:bg-primary-light"
                       )}
@@ -422,14 +454,14 @@ export function UsersDirectoryTable() {
                     {visibleColumns.map((col) => (
                       <td
                         key={col.id}
-                        className={cn("py-2.5 px-3.5", col.tdClassName)}
+                        className={cn("py-3.5 px-5 whitespace-nowrap", col.tdClassName)}
                       >
                         {col.renderCell(user, idx)}
                       </td>
                     ))}
                     <td
                       className={cn(
-                        "py-2.5 px-3",
+                        "py-3.5 px-4",
                         TABLE_STICKY.actionTd,
                         isSelected && "bg-primary-light group-hover:bg-primary-light"
                       )}

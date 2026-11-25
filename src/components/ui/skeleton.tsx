@@ -36,7 +36,7 @@ export function TableSkeleton({
 
             if (isCheckbox) {
               return (
-                <td key={colIndex} className={cn("py-3 px-3 text-center align-middle", TABLE_STICKY.checkboxTd)}>
+                <td key={colIndex} className={cn("py-3.5 px-4 text-center align-middle", TABLE_STICKY.checkboxTd)}>
                   <div className="flex items-center justify-center">
                     <Skeleton className="h-4 w-4 rounded-[4px]" />
                   </div>
@@ -49,7 +49,7 @@ export function TableSkeleton({
                 <td
                   key={colIndex}
                   className={cn(
-                    "py-3 px-3.5 align-middle",
+                    "py-3.5 px-5 align-middle",
                     hasCheckbox ? TABLE_STICKY.idTdWithCheckbox : TABLE_STICKY.idTd
                   )}
                 >
@@ -60,7 +60,7 @@ export function TableSkeleton({
 
             if (isLast) {
               return (
-                <td key={colIndex} className={cn("py-3 px-3 align-middle", TABLE_STICKY.actionTd)}>
+                <td key={colIndex} className={cn("py-3.5 px-4 align-middle", TABLE_STICKY.actionTd)}>
                   <div className="flex items-center justify-center">
                     <Skeleton className="h-7 w-7 rounded-lg" />
                   </div>
@@ -69,7 +69,7 @@ export function TableSkeleton({
             }
 
             return (
-              <td key={colIndex} className="py-3 px-3.5 align-middle">
+              <td key={colIndex} className="py-3.5 px-5 align-middle">
                 {isPrimary ? (
                   <div className="space-y-1.5">
                     <Skeleton className="h-3.5 w-32 rounded-md" />

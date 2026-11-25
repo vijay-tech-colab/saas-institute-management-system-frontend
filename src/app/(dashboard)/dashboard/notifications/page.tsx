@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SegmentedTabs } from "@/components/ui/tabs";
 import {
   INITIAL_PLATFORM_NOTIFICATIONS,
   NotificationEmptyState,
@@ -71,38 +72,17 @@ export default function NotificationsPage() {
 
       <div className="bg-white rounded-xl border border-slate-200/80 shadow-xs overflow-hidden">
         {/* Filter Bar */}
-        <div className="px-5 py-2.5 border-b border-slate-100 flex items-center gap-1.5">
-          {(
-            [
-              { id: "all", label: "All", count: notifications.length },
-              { id: "unread", label: "Unread", count: unreadCount },
-            ] as const
-          ).map((tab) => {
-            const active = filter === tab.id;
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                onClick={() => setFilter(tab.id)}
-                className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors cursor-pointer flex items-center gap-1.5 ${
-                  active
-                    ? "bg-primary-light text-primary font-semibold"
-                    : "text-slate-500 hover:text-slate-800 hover:bg-slate-100"
-                }`}
-              >
-                <span>{tab.label}</span>
-                <span
-                  className={`text-[10px] px-1.5 py-0.5 rounded-full leading-none ${
-                    active
-                      ? "bg-primary/15 text-primary"
-                      : "bg-slate-100 text-slate-500"
-                  }`}
-                >
-                  {tab.count}
-                </span>
-              </button>
-            );
-          })}
+        <div className="px-5 py-2.5 border-b border-slate-100">
+          <SegmentedTabs
+            size="sm"
+            ariaLabel="Filter notifications"
+            value={filter}
+            onChange={setFilter}
+            options={[
+              { value: "all", label: "All", count: notifications.length },
+              { value: "unread", label: "Unread", count: unreadCount },
+            ]}
+          />
         </div>
 
         {/* Grouped List */}

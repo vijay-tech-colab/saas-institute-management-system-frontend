@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, CustomSelect, Toggle } from '@/features/subscriptions/components/shared/UIComponents';
+import { SegmentedTabs } from '@/components/ui/tabs';
 import { Download, FileJson, FileSpreadsheet, FileText, Mail, CalendarClock, Settings } from 'lucide-react';
 
 interface NewExportModalProps {
@@ -16,19 +17,17 @@ export function NewExportModal({ isOpen, onClose }: NewExportModalProps) {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Configure Export" size="lg">
-      <div className="flex border-b border-slate-100 p-2 gap-2 bg-slate-50/50">
-        <button
-          onClick={() => setActiveTab('manual')}
-          className={`flex-1 py-2 text-sm font-bold rounded-lg transition-colors ${activeTab === 'manual' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-700'}`}
-        >
-          Manual Export
-        </button>
-        <button
-          onClick={() => setActiveTab('schedule')}
-          className={`flex-1 py-2 text-sm font-bold rounded-lg transition-colors ${activeTab === 'schedule' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-700'}`}
-        >
-          Scheduled Exports
-        </button>
+      <div className="border-b border-slate-100 p-3 bg-slate-50/50">
+        <SegmentedTabs
+          fullWidth
+          ariaLabel="Export mode"
+          value={activeTab}
+          onChange={setActiveTab}
+          options={[
+            { value: 'manual', label: 'Manual Export' },
+            { value: 'schedule', label: 'Scheduled Exports' },
+          ]}
+        />
       </div>
 
       <div className="p-6">

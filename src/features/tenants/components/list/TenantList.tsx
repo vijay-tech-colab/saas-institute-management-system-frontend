@@ -350,10 +350,10 @@ export function TenantList() {
 
         {/* Table Body */}
         <div className="flex-1 overflow-x-auto bg-white thin-scrollbar">
-          <table className="w-full min-w-[960px] text-left border-collapse">
+          <table className="w-full min-w-[1080px] text-left border-collapse">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-100">
-                <th className={cn("py-2.5 px-3 text-center align-middle", TABLE_STICKY.checkboxTh)}>
+                <th className={cn("py-3 px-4 text-center align-middle", TABLE_STICKY.checkboxTh)}>
                   <div className="flex items-center justify-center">
                     <Checkbox
                       checked={selectedTenants.size === paginatedData.length && paginatedData.length > 0}
@@ -363,19 +363,19 @@ export function TenantList() {
                 </th>
                 <th
                   onClick={() => handleSort('id')}
-                  className={cn("text-left py-2.5 px-3.5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide cursor-pointer hover:bg-slate-100 transition-colors select-none", TABLE_STICKY.idThWithCheckbox)}
+                  className={cn("text-left py-3 px-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide cursor-pointer hover:bg-slate-100 transition-colors select-none", TABLE_STICKY.idThWithCheckbox)}
                 >
                   <div className="flex items-center">ID<SortIcon field="id" /></div>
                 </th>
                 {visibleColumns.map((col) => (
                   <th
                     key={col.id}
-                    className="text-left py-2.5 px-3.5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap select-none"
+                    className="text-left py-3 px-5 text-[11px] font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap select-none"
                   >
                     {col.renderHeader ? col.renderHeader() : <ColumnHeaderLabel label={col.label} icon={col.icon} />}
                   </th>
                 ))}
-                <th className={cn("py-2.5 px-3 text-[11px] font-semibold text-slate-500 uppercase tracking-wide", TABLE_STICKY.actionTh)}>
+                <th className={cn("py-3 px-4 text-[11px] font-semibold text-slate-500 uppercase tracking-wide", TABLE_STICKY.actionTh)}>
                   Actions
                 </th>
               </tr>
@@ -397,7 +397,7 @@ export function TenantList() {
                       isSelected ? "bg-primary-light border-primary-border" : "bg-white hover:bg-slate-50 border-slate-100/80"
                     )}
                   >
-                    <td className={cn("py-2.5 px-3 text-center align-middle", TABLE_STICKY.checkboxTd, isSelected && "bg-primary-light group-hover:bg-primary-light")}>
+                    <td className={cn("py-3.5 px-4 text-center align-middle", TABLE_STICKY.checkboxTd, isSelected && "bg-primary-light group-hover:bg-primary-light")}>
                       <div className="flex items-center justify-center">
                         <Checkbox
                           checked={isSelected}
@@ -405,15 +405,15 @@ export function TenantList() {
                         />
                       </div>
                     </td>
-                    <td className={cn("py-2.5 px-3.5 text-[13px] font-medium text-slate-700 tabular-nums", TABLE_STICKY.idTdWithCheckbox, isSelected && "bg-primary-light group-hover:bg-primary-light")}>
+                    <td className={cn("py-3.5 px-5 text-[13px] font-medium text-slate-700 tabular-nums", TABLE_STICKY.idTdWithCheckbox, isSelected && "bg-primary-light group-hover:bg-primary-light")}>
                       {tenant.id}
                     </td>
                     {visibleColumns.map((col) => (
-                      <td key={col.id} className="py-2.5 px-3.5 whitespace-nowrap">
+                      <td key={col.id} className="py-3.5 px-5 whitespace-nowrap">
                         {col.renderCell(tenant, i)}
                       </td>
                     ))}
-                    <td className={cn("py-2.5 px-3", TABLE_STICKY.actionTd, isSelected && "bg-primary-light group-hover:bg-primary-light")}>
+                    <td className={cn("py-3.5 px-4", TABLE_STICKY.actionTd, isSelected && "bg-primary-light group-hover:bg-primary-light")}>
                       <RowActionMenu
                         items={[
                           { label: 'View Details', icon: Eye, onClick: () => router.push(`/dashboard/tenants/${tenant.id}`) },

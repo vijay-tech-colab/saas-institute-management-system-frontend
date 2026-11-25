@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { SegmentedTabs } from '@/components/ui/tabs';
 import { StatusBadge } from '@/features/subscriptions/components/shared/StatusBadge';
 import { mockInvoices } from '../../data/mock-data';
 import { Invoice, InvoiceStatus } from '../../types';
@@ -38,24 +39,24 @@ function Tab_Overview({ invoice }: { invoice: Invoice }) {
 
           <div className="border border-slate-100 rounded-xl overflow-hidden bg-slate-50/50">
             <div className="overflow-x-auto thin-scrollbar">
-              <table className="w-full min-w-[480px] text-left">
+              <table className="w-full min-w-[540px] text-left">
                 <thead className="bg-slate-50 border-b border-slate-100">
                   <tr>
-                    <th className={cn("py-3 px-4 text-xs font-bold text-slate-500 uppercase", TABLE_STICKY.idTh)}>ID</th>
-                    <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase">Description</th>
-                    <th className="py-3 px-4 text-xs font-bold text-slate-500 uppercase text-right">Amount</th>
+                    <th className={cn("py-3 px-5 text-xs font-bold text-slate-500 uppercase whitespace-nowrap", TABLE_STICKY.idTh)}>ID</th>
+                    <th className="py-3 px-5 text-xs font-bold text-slate-500 uppercase whitespace-nowrap">Description</th>
+                    <th className="py-3 px-5 text-xs font-bold text-slate-500 uppercase text-right whitespace-nowrap">Amount</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 bg-white">
                   <tr className="group hover:bg-slate-50 transition-colors">
-                    <td className={cn("py-4 px-4 text-sm font-medium text-slate-700 tabular-nums", TABLE_STICKY.idTd)}>
+                    <td className={cn("py-4 px-5 text-sm font-medium text-slate-700 tabular-nums whitespace-nowrap", TABLE_STICKY.idTd)}>
                       ITEM-01
                     </td>
-                    <td className="py-4 px-4">
+                    <td className="py-4 px-5">
                       <p className="font-semibold text-sm text-slate-900">Subscription: {invoice.planName}</p>
                       <p className="text-xs text-slate-500 mt-0.5">Software subscription fees for the period</p>
                     </td>
-                    <td className="py-4 px-4 text-right text-sm font-semibold text-slate-900">
+                    <td className="py-4 px-5 text-right text-sm font-semibold text-slate-900 whitespace-nowrap">
                       ₹{invoice.amount.toLocaleString('en-IN')}
                     </td>
                   </tr>
@@ -287,24 +288,18 @@ export function InvoiceDetailsView({ invoiceId }: { invoiceId: string }) {
               </div>
             </div>
 
-            <nav className="-mb-5 overflow-x-auto border-t border-slate-100 pt-1 sm:-mb-6" aria-label="Invoice details sections">
-              <div className="flex min-w-max items-center gap-6">
-                {TABS.map(tab => (
-                  <button
-                    type="button"
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center gap-2 border-b-2 py-4 text-sm font-semibold whitespace-nowrap transition-colors ${
-                      activeTab === tab.id
-                        ? 'border-indigo-600 text-indigo-700'
-                        : 'border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-800'
-                    }`}
-                  >
-                    {tab.icon} {tab.label}
-                  </button>
-                ))}
-              </div>
-            </nav>
+            <div className="border-t border-slate-100 pt-3.5">
+              <SegmentedTabs
+                ariaLabel="Invoice details sections"
+                value={activeTab}
+                onChange={setActiveTab}
+                options={TABS.map(tab => ({
+                  value: tab.id,
+                  label: tab.label,
+                  icon: tab.icon,
+                }))}
+              />
+            </div>
           </div>
         </header>
 

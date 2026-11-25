@@ -107,7 +107,7 @@ export const PERMISSION_DEFINITIONS: {
   {
     key: "manage_billing",
     label: "Billing, Invoices & Refunds",
-    description: "Edit subscription plans, coupons, and process refunds.",
+    description: "Edit subscription plans, billing cycles, and process refunds.",
   },
   {
     key: "edit_platform_settings",

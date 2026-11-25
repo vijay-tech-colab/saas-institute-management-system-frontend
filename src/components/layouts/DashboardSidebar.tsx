@@ -377,12 +377,15 @@ export function DashboardSidebar() {
           className={`flex items-center justify-between rounded-2xl border transition-all duration-200 ${
             isCollapsed
               ? "px-0.5 py-0.5 bg-transparent border-transparent"
+              : pathname === "/dashboard/profile"
+              ? "p-2 bg-primary-light/60 border-primary/35 gap-2"
               : "p-2 bg-slate-50/80 border-slate-200/75 hover:border-slate-300/75 gap-2"
           }`}
         >
-          <Tooltip label={`${user.name} · Super Admin`} show={isCollapsed}>
+          <Tooltip label={`${user.name} · View Profile`} show={isCollapsed}>
             <Link
-              href="/dashboard/settings/general"
+              href="/dashboard/profile"
+              onClick={() => setIsMobileOpen(false)}
               className="flex items-center gap-2.5 min-w-0 flex-1 rounded-xl group"
             >
               <div className="relative flex-shrink-0">

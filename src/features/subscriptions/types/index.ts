@@ -7,7 +7,6 @@ export type BillingCycle = 'monthly' | 'quarterly' | 'half-yearly' | 'yearly' | 
 export type SubscriptionStatus = 'active' | 'trial' | 'expired' | 'cancelled' | 'suspended' | 'pending';
 export type PaymentStatus = 'successful' | 'failed' | 'refunded' | 'pending' | 'completed';
 export type InvoiceStatus = 'paid' | 'unpaid' | 'overdue' | 'cancelled';
-export type CouponDiscountType = 'percentage' | 'flat';
 export type TrialStatus = 'active' | 'ending_soon' | 'expired' | 'converted';
 
 // ─── Plan Features ─────────────────────────────────────────
@@ -145,24 +144,6 @@ export interface Payment {
   refundAmount?: number;
 }
 
-// ─── Coupon ────────────────────────────────────────────────
-export interface Coupon {
-  id: string;
-  code: string;
-  discountType: CouponDiscountType;
-  discountValue: number;
-  maxDiscount?: number;
-  applicablePlans: string[];   // plan IDs
-  minimumPurchase: number;
-  maximumUsage: number;
-  usageCount: number;
-  oneTimeUse: boolean;
-  startDate: string;
-  endDate: string;
-  status: 'active' | 'inactive' | 'expired';
-  revenueGenerated: number;
-}
-
 // ─── Renewal ───────────────────────────────────────────────
 export interface Renewal {
   id: string;
@@ -207,7 +188,6 @@ export interface SubscriptionStats {
   todayRevenue: number;
   pendingRenewals: number;
   failedPayments: number;
-  activeCoupons: number;
   mrr: number;
   arr: number;
   trialConversionRate: number;
@@ -258,7 +238,7 @@ export interface AIInsight {
 // ─── Recent Activity ───────────────────────────────────────
 export interface RecentActivity {
   id: string;
-  type: 'subscription_created' | 'subscription_renewed' | 'plan_changed' | 'invoice_generated' | 'coupon_applied' | 'payment_received' | 'refund_initiated' | 'trial_started';
+  type: 'subscription_created' | 'subscription_renewed' | 'plan_changed' | 'invoice_generated' | 'payment_received' | 'refund_initiated' | 'trial_started';
   title: string;
   description: string;
   timeAgo: string;

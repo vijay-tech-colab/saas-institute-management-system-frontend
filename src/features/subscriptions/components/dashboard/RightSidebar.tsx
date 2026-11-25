@@ -3,7 +3,7 @@
 import React from 'react';
 import { mockRecentActivities } from '../../data/mock-data';
 import { 
-  Plus, FileText, Send, Tag, Download, Pause, 
+  Plus, FileText, Send, Layers, Download, Pause, 
   Activity, ArrowUpRight, Play, CheckCircle2,
   RefreshCcw, AlertCircle
 } from 'lucide-react';
@@ -16,7 +16,6 @@ export function RightSidebar() {
       case 'plan_changed': return <ArrowUpRight className="w-3.5 h-3.5 text-purple-500" />;
       case 'payment_received': return <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />;
       case 'trial_started': return <Play className="w-3.5 h-3.5 text-indigo-500" />;
-      case 'coupon_applied': return <Tag className="w-3.5 h-3.5 text-amber-500" />;
       case 'refund_initiated': return <AlertCircle className="w-3.5 h-3.5 text-rose-500" />;
       default: return <Activity className="w-3.5 h-3.5 text-slate-500" />;
     }
@@ -28,7 +27,6 @@ export function RightSidebar() {
       case 'plan_changed': return 'bg-purple-50 border-purple-100';
       case 'payment_received': return 'bg-emerald-50 border-emerald-100';
       case 'trial_started': return 'bg-indigo-50 border-indigo-100';
-      case 'coupon_applied': return 'bg-amber-50 border-amber-100';
       case 'refund_initiated': return 'bg-rose-50 border-rose-100';
       default: return 'bg-slate-50 border-slate-100';
     }
@@ -38,7 +36,7 @@ export function RightSidebar() {
     { icon: <Plus className="w-4 h-4" />, label: 'Create Sub', href: '/dashboard/subscriptions/customers' },
     { icon: <FileText className="w-4 h-4" />, label: 'Invoice', href: '/dashboard/subscriptions/invoices' },
     { icon: <Send className="w-4 h-4" />, label: 'Remind', href: '/dashboard/subscriptions/renewals' },
-    { icon: <Tag className="w-4 h-4" />, label: 'Coupon', href: '/dashboard/subscriptions/coupons' },
+    { icon: <Layers className="w-4 h-4" />, label: 'Plans', href: '/dashboard/subscriptions/plans' },
     { icon: <Download className="w-4 h-4" />, label: 'Export', href: '#' },
     { icon: <Pause className="w-4 h-4" />, label: 'Suspend', href: '/dashboard/subscriptions/customers' },
   ];
