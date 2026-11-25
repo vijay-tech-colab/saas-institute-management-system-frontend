@@ -5,18 +5,24 @@ import { usePathname } from "next/navigation"
 import Link from "next/link"
 import {
   ChevronRight,
+  GraduationCap,
   Home,
   Menu,
   Search,
+  Shield,
 } from "lucide-react"
-import { useSetAtom } from "jotai"
+import { useAtomValue, useSetAtom } from "jotai"
 import { isMobileSidebarOpenAtom } from "@/store/layout-store"
+import { userAtom } from "@/store/user-store"
 import { NotificationDropdown } from "./NotificationDropdown"
 import { getBreadcrumbItems } from "@/config/breadcrumbs"
 
 export function DashboardHeader() {
   const pathname = usePathname()
   const setIsMobileOpen = useSetAtom(isMobileSidebarOpenAtom)
+  const user = useAtomValue(userAtom)
+  const isInstitutePortal =
+    pathname === "/institute" || pathname?.startsWith("/institute/")
 
   // Generate clean, route-aware breadcrumbs from pathname
   const breadcrumbs = getBreadcrumbItems(pathname)
@@ -72,7 +78,34 @@ export function DashboardHeader() {
       </div>
 
       {/* ───── Right: Actions ───── */}
-      <div className="flex items-center gap-1.5 flex-shrink-0">
+      <div className="flex items-center gap-2 flex-shrink-0">
+        {user.role === "SUPER_ADMIN" && (
+          <div className="hidden md:inline-flex items-center rounded-xl bg-slate-100/90 border border-slate-200/80 p-0.5">
+            <Link
+              href="/dashboard"
+              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[10px] text-xs font-medium transition-all ${
+                !isInstitutePortal
+                  ? "bg-white text-slate-900 shadow-2xs font-semibold"
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
+            >
+              <Shield className="w-3.5 h-3.5 text-primary" />
+              Super Admin
+            </Link>
+            <Link
+              href="/institute"
+              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[10px] text-xs font-medium transition-all ${
+                isInstitutePortal
+                  ? "bg-white text-slate-900 shadow-2xs font-semibold"
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
+            >
+              <GraduationCap className="w-3.5 h-3.5 text-primary" />
+              Institute Admin
+            </Link>
+          </div>
+        )}
+
         {/* Search button */}
         <button className="p-2 rounded-lg hover:bg-slate-50 transition-all duration-200 text-slate-400 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 cursor-pointer group hidden sm:block">
           <Search className="w-[18px] h-[18px] group-hover:scale-105 transition-transform" />

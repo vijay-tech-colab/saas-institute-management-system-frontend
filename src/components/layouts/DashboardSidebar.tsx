@@ -7,7 +7,7 @@ import { usePathname, useRouter } from "next/navigation"
 import { useAtom, useAtomValue } from "jotai"
 import { userAtom } from "@/store/user-store"
 import { isMobileSidebarOpenAtom, lastNonSettingsRouteAtom } from "@/store/layout-store"
-import { superAdminNav, superAdminSettingsNav } from "@/config/navigation"
+import { superAdminNav, superAdminSettingsNav, instituteAdminNav } from "@/config/navigation"
 import { useConfirm } from "@/hooks/use-confirm"
 import { useToast } from "@/hooks/use-toast"
 import { motion, AnimatePresence } from "framer-motion"
@@ -16,6 +16,7 @@ import {
   ChevronsLeft,
   ChevronDown,
   ChevronRight,
+  GraduationCap,
   Power,
   Shield,
 } from "lucide-react"
@@ -99,13 +100,23 @@ export function DashboardSidebar() {
   const toast = useToast()
 
   const user = useAtomValue(userAtom)
-  const isSettingsMode = pathname === "/dashboard/settings" || pathname.startsWith("/dashboard/settings/")
+  const isInstituteMode =
+    pathname === "/institute" ||
+    pathname?.startsWith("/institute/") ||
+    user.role === "INSTITUTE_ADMIN"
+  const isSettingsMode =
+    !isInstituteMode &&
+    (pathname === "/dashboard/settings" || pathname.startsWith("/dashboard/settings/"))
 
   useEffect(() => {
-    if (pathname && !pathname.startsWith("/dashboard/settings")) {
+    setIsMobileOpen(false)
+  }, [pathname, setIsMobileOpen])
+
+  useEffect(() => {
+    if (pathname && !isInstituteMode && !pathname.startsWith("/dashboard/settings")) {
       setLastNonSettingsRoute(pathname)
     }
-  }, [pathname, setLastNonSettingsRoute])
+  }, [pathname, isInstituteMode, setLastNonSettingsRoute])
 
   // Keyboard shortcut: Ctrl+B / Cmd+B to toggle sidebar, Escape to close mobile drawer
   useEffect(() => {
@@ -140,7 +151,11 @@ export function DashboardSidebar() {
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [isMobileOpen, setIsMobileOpen])
 
-  const navGroups = isSettingsMode ? superAdminSettingsNav : superAdminNav
+  const navGroups = isInstituteMode
+    ? instituteAdminNav
+    : isSettingsMode
+    ? superAdminSettingsNav
+    : superAdminNav
 
   const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>({})
 
@@ -221,13 +236,20 @@ export function DashboardSidebar() {
           key="main-header"
           className="relative h-16 border-b border-slate-100 flex-shrink-0 flex items-center px-3.5 overflow-hidden"
         >
-          <Tooltip label="CampusOS Super Admin Console" show={isCollapsed}>
+          <Tooltip
+            label={isInstituteMode ? "CampusOS Institute Portal" : "CampusOS Super Admin Console"}
+            show={isCollapsed}
+          >
             <Link
-              href="/dashboard"
+              href={isInstituteMode ? "/institute" : "/dashboard"}
               className="w-full min-w-0 overflow-hidden flex items-center gap-3 rounded-xl hover:bg-slate-50/80 transition-colors duration-200 group"
             >
               <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center font-extrabold text-white flex-shrink-0 shadow-md shadow-primary/25 ring-[1.5px] ring-primary/20">
-                <Shield className="w-5 h-5 text-white" />
+                {isInstituteMode ? (
+                  <GraduationCap className="w-5 h-5 text-white" />
+                ) : (
+                  <Shield className="w-5 h-5 text-white" />
+                )}
               </div>
               <div
                 className={`flex flex-col items-start min-w-0 overflow-hidden whitespace-nowrap transition-[opacity,transform] duration-200 ${
@@ -240,7 +262,7 @@ export function DashboardSidebar() {
                   CampusOS
                 </span>
                 <span className="text-[11px] text-primary font-semibold truncate capitalize leading-tight mt-0.5 flex items-center gap-1">
-                  Super Admin Console
+                  {isInstituteMode ? "Institute Portal" : "Super Admin Console"}
                 </span>
               </div>
             </Link>
@@ -256,27 +278,38 @@ export function DashboardSidebar() {
         <div className={isSettingsMode ? "space-y-4" : "space-y-3.5"}>
           {navGroups.map((group, gIdx) => (
             <div key={gIdx}>
-              <h3
-                className={`px-3 text-[10px] font-bold text-slate-600 uppercase tracking-[0.1em] whitespace-nowrap overflow-hidden transition-[opacity,max-height,margin] duration-200 ease-out ${
-                  isCollapsed
-                    ? "max-h-0 opacity-0 mb-0 pointer-events-none"
-                    : "max-h-5 opacity-100 mb-1.5"
-                }`}
-              >
-                {group.title}
-              </h3>
+              {group.title && (
+                <h3
+                  className={`px-3 text-[10px] font-bold text-slate-600 uppercase tracking-[0.1em] whitespace-nowrap overflow-hidden transition-[opacity,max-height,margin] duration-200 ease-out ${
+                    isCollapsed
+                      ? "max-h-0 opacity-0 mb-0 pointer-events-none"
+                      : "max-h-5 opacity-100 mb-1.5"
+                  }`}
+                >
+                  {group.title}
+                </h3>
+              )}
 
               <div className="space-y-0.5">
                 {group.items.map((item, iIdx) => {
-                  const cleanPath = pathname?.replace(/\/+$/, "") || "/dashboard"
+                  const cleanPath =
+                    pathname?.replace(/\/+$/, "") || (isInstituteMode ? "/institute" : "/dashboard")
                   const isDefaultSettingsMatch =
                     isSettingsMode &&
                     cleanPath === "/dashboard/settings" &&
                     item.href === "/dashboard/settings/general"
+                  const isInstituteSectionMatch =
+                    isInstituteMode &&
+                    item.href !== "/institute" &&
+                    (cleanPath === item.href || cleanPath.startsWith(item.href + "/"))
                   const isActive =
                     cleanPath === item.href ||
                     isDefaultSettingsMatch ||
-                    (!isSettingsMode && item.href.startsWith("/dashboard/settings") && cleanPath.startsWith("/dashboard/settings")) ||
+                    isInstituteSectionMatch ||
+                    (!isSettingsMode &&
+                      !isInstituteMode &&
+                      item.href.startsWith("/dashboard/settings") &&
+                      cleanPath.startsWith("/dashboard/settings")) ||
                     (item.subItems && item.subItems.some((sub) => cleanPath === sub.href))
                   const menuKey = `${group.title}-${item.label}`
 
@@ -377,14 +410,14 @@ export function DashboardSidebar() {
           className={`flex items-center justify-between rounded-2xl border transition-all duration-200 ${
             isCollapsed
               ? "px-0.5 py-0.5 bg-transparent border-transparent"
-              : pathname === "/dashboard/profile"
+              : pathname === (isInstituteMode ? "/institute/profile" : "/dashboard/profile")
               ? "p-2 bg-primary-light/60 border-primary/35 gap-2"
               : "p-2 bg-slate-50/80 border-slate-200/75 hover:border-slate-300/75 gap-2"
           }`}
         >
           <Tooltip label={`${user.name} · View Profile`} show={isCollapsed}>
             <Link
-              href="/dashboard/profile"
+              href={isInstituteMode ? "/institute/profile" : "/dashboard/profile"}
               onClick={() => setIsMobileOpen(false)}
               className="flex items-center gap-2.5 min-w-0 flex-1 rounded-xl group"
             >
@@ -410,7 +443,7 @@ export function DashboardSidebar() {
                   {user.name}
                 </span>
                 <span className="text-[11px] font-medium text-slate-500 truncate leading-tight mt-0.5">
-                  Super Admin
+                  {isInstituteMode ? "Institute Admin" : "Super Admin"}
                 </span>
               </div>
             </Link>

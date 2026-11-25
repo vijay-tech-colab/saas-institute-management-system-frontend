@@ -55,6 +55,72 @@ export const ROUTE_LABELS: Record<string, string> = {
   "/dashboard/settings/notifications": "Email & SMTP / Notifications",
   "/dashboard/settings/integrations": "Integrations & API Keys",
   "/dashboard/settings/security": "System & Security",
+
+  // Institute Admin Portal
+  "/institute": "Dashboard",
+  "/institute/profile": "Admin Profile",
+  "/institute/notifications": "Notifications",
+
+  // Students
+  "/institute/students": "Students",
+  "/institute/students/enquiries": "Enquiries",
+  "/institute/students/admissions": "Admissions",
+  "/institute/students/directory": "All Students",
+
+  // Academics
+  "/institute/academics": "Academics",
+  "/institute/academics/courses": "Courses",
+  "/institute/academics/batches": "Batches",
+  "/institute/academics/subjects": "Subjects & Syllabus",
+  "/institute/academics/timetable": "Timetable",
+  "/institute/academics/exams": "Exams & Results",
+
+  // Attendance
+  "/institute/attendance": "Attendance Records",
+  "/institute/attendance/students": "Mark Attendance",
+  "/institute/attendance/staff": "Staff Attendance",
+  "/institute/attendance/leaves": "Leave Requests",
+
+  // Finance
+  "/institute/finance": "Finance",
+  "/institute/finance/fee-structures": "Fee Management",
+  "/institute/finance/collections": "Payments",
+  "/institute/finance/expenses": "Expenses",
+  "/institute/finance/payroll": "Payroll & Payouts",
+
+  // Staff
+  "/institute/staff": "Staff",
+  "/institute/staff/teachers": "Teachers",
+  "/institute/staff/members": "Staff Members",
+  "/institute/staff/departments": "Departments & Roles",
+
+  // Communication (preserved)
+  "/institute/communication": "Communication",
+  "/institute/communication/whatsapp": "WhatsApp Broadcasts",
+  "/institute/communication/notices": "Notice Board & Alerts",
+  "/institute/communication/templates": "Message Templates",
+
+  // Reports & Analytics (preserved)
+  "/institute/reports": "Reports & Analytics",
+  "/institute/reports/admissions": "Admissions & Growth",
+  "/institute/reports/finance": "Financial Reports",
+  "/institute/reports/academics": "Academic & Attendance",
+
+  // Settings
+  "/institute/settings": "Settings",
+  "/institute/settings/general": "General Settings",
+  "/institute/settings/branches": "Sessions & Branches",
+  "/institute/settings/access-control": "Users & Roles",
+  "/institute/settings/templates": "Certificates & ID Cards",
+
+  // Subscription & Billing
+  "/institute/billing": "Subscription & Billing",
+  "/institute/billing/invoices": "Invoices & Payments",
+  "/institute/billing/upgrade": "Upgrade Plan",
+
+  // Help & Support
+  "/institute/support": "Help & Support",
+  "/institute/support/guides": "Help Center & Guides",
 }
 
 export function getBreadcrumbItems(pathname: string | null): BreadcrumbItem[] {
@@ -63,21 +129,24 @@ export function getBreadcrumbItems(pathname: string | null): BreadcrumbItem[] {
   }
 
   const normalized = pathname.replace(/\/+$/, "") || "/dashboard"
+  const isInstitute = normalized === "/institute" || normalized.startsWith("/institute/")
+  const rootPrefix = isInstitute ? "/institute" : "/dashboard"
 
-  if (normalized === "/dashboard") {
-    return [{ label: "Dashboard", href: "/dashboard", isCurrent: true }]
+  if (normalized === rootPrefix) {
+    return [{ label: "Dashboard", href: rootPrefix, isCurrent: true }]
   }
 
   const segments = normalized.split("/").filter(Boolean)
-  const dashboardIndex = segments.indexOf("dashboard")
-  const relevantSegments = dashboardIndex !== -1 ? segments.slice(dashboardIndex + 1) : segments
+  const rootSegment = isInstitute ? "institute" : "dashboard"
+  const rootIndex = segments.indexOf(rootSegment)
+  const relevantSegments = rootIndex !== -1 ? segments.slice(rootIndex + 1) : segments
 
   if (relevantSegments.length === 0) {
-    return [{ label: "Dashboard", href: "/dashboard", isCurrent: true }]
+    return [{ label: "Dashboard", href: rootPrefix, isCurrent: true }]
   }
 
   const items: BreadcrumbItem[] = []
-  let currentPath = "/dashboard"
+  let currentPath = rootPrefix
 
   for (let i = 0; i < relevantSegments.length; i++) {
     const segment = relevantSegments[i]

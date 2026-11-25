@@ -13,6 +13,9 @@ import {
   Mail,
   KeyRound,
   ShieldCheck,
+  GraduationCap,
+  BookOpen,
+  CalendarCheck,
 } from "lucide-react";
 import { UserRole } from '@/store/user-store';
 
@@ -155,7 +158,81 @@ export const superAdminSettingsNav: NavGroupConfig[] = [
   }
 ];
 
-// Always return super admin navigation
-export const getNavigationByRole = (_role?: UserRole): NavGroupConfig[] => {
+// --- Institute Admin MVP Configuration (Clean 7-Item Daily Operations Sidebar) ---
+
+export const instituteAdminNav: NavGroupConfig[] = [
+  {
+    title: '',
+    items: [
+      { label: 'Dashboard', href: '/institute', icon: <LayoutDashboard /> },
+      {
+        label: 'Students',
+        href: '/institute/students',
+        icon: <GraduationCap />,
+        subItems: [
+          { label: 'Enquiries', href: '/institute/students/enquiries' },
+          { label: 'Admissions', href: '/institute/students/admissions' },
+          { label: 'All Students', href: '/institute/students/directory' },
+        ],
+      },
+      {
+        label: 'Academics',
+        href: '/institute/academics',
+        icon: <BookOpen />,
+        subItems: [
+          { label: 'Courses', href: '/institute/academics/courses' },
+          { label: 'Batches', href: '/institute/academics/batches' },
+          { label: 'Timetable', href: '/institute/academics/timetable' },
+        ],
+      },
+      {
+        label: 'Attendance',
+        href: '/institute/attendance',
+        icon: <CalendarCheck />,
+        subItems: [
+          { label: 'Mark Attendance', href: '/institute/attendance/students' },
+          { label: 'Attendance Records', href: '/institute/attendance' },
+        ],
+      },
+      {
+        label: 'Finance',
+        href: '/institute/finance',
+        icon: <Wallet />,
+        subItems: [
+          { label: 'Fee Management', href: '/institute/finance/fee-structures' },
+          { label: 'Payments', href: '/institute/finance/collections' },
+          { label: 'Expenses', href: '/institute/finance/expenses' },
+        ],
+      },
+      {
+        label: 'Staff',
+        href: '/institute/staff',
+        icon: <Users />,
+        subItems: [
+          { label: 'Teachers', href: '/institute/staff/teachers' },
+          { label: 'Staff Members', href: '/institute/staff/members' },
+        ],
+      },
+      {
+        label: 'Settings',
+        href: '/institute/settings',
+        icon: <Settings />,
+      },
+    ],
+  },
+];
+
+// Return navigation matching either active route portal or user role
+export const getNavigationByRole = (
+  role?: UserRole,
+  pathname?: string | null
+): NavGroupConfig[] => {
+  if (
+    role === 'INSTITUTE_ADMIN' ||
+    pathname === '/institute' ||
+    pathname?.startsWith('/institute/')
+  ) {
+    return instituteAdminNav;
+  }
   return superAdminNav;
 };

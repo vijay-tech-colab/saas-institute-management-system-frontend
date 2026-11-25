@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
 
-export type UserRole = 'SUPER_ADMIN';
+export type UserRole = 'SUPER_ADMIN' | 'INSTITUTE_ADMIN';
 
 export interface UserProfile {
   name: string;
